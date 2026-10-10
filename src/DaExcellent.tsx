@@ -239,6 +239,11 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook, onDeleteWor
     const range=col+from+':'+col+to;
     const nextCol=columnLabel(Math.min(visibleCols-1,colIndex(col)+1));
     const examples:Record<string,string>={
+      IF:'IF('+col+Math.max(1,row-1)+'<>0,"Yes","No")',IFERROR:'IFERROR('+col+Math.max(1,row-1)+',0)',AND:'AND('+col+from+','+col+to+')',OR:'OR('+col+from+','+col+to+')',NOT:'NOT('+col+Math.max(1,row-1)+')',
+      VLOOKUP:'VLOOKUP('+col+Math.max(1,row-1)+',A1:B10,2,FALSE)',HLOOKUP:'HLOOKUP('+col+Math.max(1,row-1)+',A1:J2,2,FALSE)',XLOOKUP:'XLOOKUP('+col+Math.max(1,row-1)+',A1:A10,B1:B10)',INDEX:'INDEX(A1:B10,2,2)',MATCH:'MATCH('+col+Math.max(1,row-1)+',A1:A10,0)',
+      TODAY:'TODAY()',NOW:'NOW()',DATE:'DATE(2026,1,1)',YEAR:'YEAR('+col+Math.max(1,row-1)+')',MONTH:'MONTH('+col+Math.max(1,row-1)+')',DAY:'DAY('+col+Math.max(1,row-1)+')',WEEKDAY:'WEEKDAY('+col+Math.max(1,row-1)+')',
+      CONCAT:'CONCAT('+col+from+','+col+to+')',CONCATENATE:'CONCATENATE('+col+from+','+col+to+')',TEXTJOIN:'TEXTJOIN(", ",TRUE,'+range+')',MID:'MID('+col+Math.max(1,row-1)+',1,3)',SUBSTITUTE:'SUBSTITUTE('+col+Math.max(1,row-1)+',"old","new")',
+      
       COUNTIF:'COUNTIF('+range+',"yes")',
       SUMIF:'SUMIF('+range+',"yes",'+nextCol+from+':'+nextCol+to+')',
       ROUND:'ROUND('+col+Math.max(1,row-1)+',2)',
@@ -342,6 +347,9 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook, onDeleteWor
         {name:'Math, totals & rounding',items:['SUM','SUMPRODUCT','SUMSQ','SUBTOTAL','AGGREGATE','AVERAGE','AVERAGEIF','AVERAGEIFS','MIN','MAX','MINIFS','MAXIFS','PRODUCT','MEDIAN','MODE','STDEV','STDEV.S','STDEV.P','VAR','VAR.S','VAR.P','ROUND','ROUNDUP','ROUNDDOWN','MROUND','CEILING','FLOOR','ABS','SIGN','SQRT','POWER','MOD','QUOTIENT','INT','TRUNC','RAND','RANDBETWEEN','PI','EXP','LN','LOG','LOG10','FACT','COMBIN','GCD','LCM','EVEN','ODD']},
         {name:'Counting & criteria',items:['COUNT','COUNTA','COUNTBLANK','COUNTIF','COUNTIFS','SUMIF','SUMIFS','AVERAGEIF','AVERAGEIFS','IF','IFS','IFERROR','AND','OR','NOT','TRUE','FALSE']},
         {name:'Text',items:['LEN','UPPER','LOWER','PROPER','TRIM','CLEAN','LEFT','RIGHT','MID','FIND','SEARCH','SUBSTITUTE','REPLACE','CONCAT','CONCATENATE','TEXTJOIN','EXACT','REPT','VALUE','TEXT','CHAR','CODE']},
+        {name:'Lookup & reference',items:['INDEX','MATCH','VLOOKUP','HLOOKUP','XLOOKUP','CHOOSE','ROW','ROWS','COLUMN','COLUMNS','ADDRESS','INDIRECT','OFFSET','TRANSPOSE','UNIQUE','SORT','FILTER']},
+        {name:'Date & time',items:['TODAY','NOW','DATE','YEAR','MONTH','DAY','WEEKDAY','WEEKNUM','EDATE','EOMONTH','DAYS','DATEDIF','NETWORKDAYS','WORKDAY','HOUR','MINUTE','SECOND','TIME','DATEVALUE','YEARFRAC']},
+        {name:'Statistics & analysis',items:['RANK','RANK.EQ','PERCENTILE','PERCENTILE.INC','QUARTILE','QUARTILE.INC','LARGE','SMALL','CORREL','SLOPE','INTERCEPT','FORECAST','FREQUENCY','GEOMEAN','HARMEAN','DEVSQ','COUNTUNIQUE']},
       ] as {name:string;items:string[]}[]).map(group=>{const term=functionSearch.trim().toLowerCase();const items=group.items.filter(fn=>fn.toLowerCase().includes(term)||(term.length>0&&group.name.toLowerCase().includes(term)));return items.length?<div className="de-function-column" key={group.name}><h4>{group.name}</h4><div className="de-function-list">{items.map(fn=><button key={fn} title={'Insert '+fn+' formula into '+activeCell} onClick={()=>insertFunction(fn)}><Sigma size={14}/><span>{fn}</span><small>{['SUM','AVERAGE','MIN','MAX','PRODUCT','MEDIAN','STDEV','VAR'].includes(fn)?'Numbers': ['COUNT','COUNTA','COUNTBLANK','COUNTIF','SUMIF'].includes(fn)?'Count':'Text / value'}</small></button>)}</div></div>:null})}</div>
       <div className="de-formula-help">Choose a function to insert a starter formula into <b>{activeCell}</b>. You can edit the cell references and ranges in the formula bar.</div>
     </div>}
