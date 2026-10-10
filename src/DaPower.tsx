@@ -15,12 +15,7 @@ const themes:Record<string,{bg:string;accent:string;ink:string;muted:string}> = 
   Midnight:{bg:'#111827',accent:'#60a5fa',ink:'#f8fafc',muted:'#cbd5e1'}
 };
 const id=()=> 'slide-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
-const starter=():Deck=>({id:'deck-'+Date.now().toString(36),title:'My presentation',theme:'Ocean',updatedAt:Date.now(),slides:[
-{id:id(),layout:'title',kicker:'INTRODUCTION',title:'Ideas worth sharing',body:'A presentation made with DaPower'},
-{id:id(),layout:'content',kicker:'01  /  THE BIG IDEA',title:'Start with a clear message',body:'Keep each slide focused on one main point.\nUse short, meaningful phrases.\nSupport the message with examples.'},
-{id:id(),layout:'quote',kicker:'A THOUGHT TO REMEMBER',title:'“Great things are done by a series of small things brought together.”',body:'— Vincent van Gogh'},
-{id:id(),layout:'content',kicker:'02  /  NEXT STEPS',title:'Turn ideas into action',body:'Agree on the goal.\nChoose the next practical step.\nReview progress and keep improving.'}
-]});
+const starter=():Deck=>({id:'deck-'+Date.now().toString(36),title:'Untitled presentation',theme:'Ocean',updatedAt:Date.now(),slides:[{id:id(),layout:'title',kicker:'',title:'',body:''}]});
 const safe=(s:string)=>s.trim().replaceAll(String.fromCharCode(92),'').replaceAll('/','').replaceAll(':','').replaceAll('*','').replaceAll('?','').replaceAll('"','').replaceAll('<','').replaceAll('>','').replaceAll('|','').slice(0,80)||'Untitled presentation';
 const cleanRich=(value:string)=>value.replace(/<(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\/\1>/gi,'').replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/javascript\s*:/gi,'').replace(/<(?!\/?(?:b|strong|i|em|u|span|font|br|div|p|ul|ol|li)\b)[^>]*>/gi,'');
 function readDeck(file?:IdaFile):Deck|null{try{if(!file?.data)return null;const d=JSON.parse(file.data);if(Array.isArray(d.slides)&&d.slides.length)return {...d,id:file.id,title:file.name.replace(/\.dapower$/i,'')};}catch{}return null}
