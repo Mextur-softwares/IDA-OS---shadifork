@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode, type MouseEvent as ReactMouseEvent } from 'react';
-import { Bold, Check, Download, FilePlus2, FileSpreadsheet, Italic, Plus, Printer, Search, Sigma, Underline } from 'lucide-react';
+import { Bold, Check, Download, FilePlus2, FileSpreadsheet, Italic, Plus, Printer, Search, Sigma, Underline, FolderOpen, Save, Trash2 } from 'lucide-react';
 
 type Cell = { value: string; bold?: boolean; italic?: boolean; underline?: boolean; color?: string; fill?: string; fontFamily?: string; fontSize?: number; format?: 'general'|'currency'|'percent' };
 type SheetData = { id: string; name: string; cells: Record<string, Cell> };
 type Workbook = { id: string; title: string; sheets: SheetData[]; activeSheet: string; updatedAt: number; rowCount?:number; colCount?:number };
 type IdaFile = { id: string; name: string; kind: 'file'|'note'; location: string; mime?: string; data?: string; createdAt: number };
-type Props = { files: IdaFile[]; fileId?: string; onSaveWorkbook: (file: IdaFile) => void };
+type Props = { files: IdaFile[]; fileId?: string; onSaveWorkbook: (file: IdaFile) => void; onDeleteWorkbook?: (id:string)=>void };
 const MIME = 'application/x-daexcellent';
 const columnLabel = (index:number) => { let n=index+1, label=''; while(n>0){const r=(n-1)%26;label=String.fromCharCode(65+r)+label;n=Math.floor((n-1)/26)}return label; };
 const COLS = Array.from({ length: 52 }, (_, i) => columnLabel(i));
@@ -132,10 +132,10 @@ function parseWorkbook(file?: IdaFile): Workbook | null {
   try { const data = JSON.parse(file.data); if (data && Array.isArray(data.sheets) && data.sheets.length) return { ...data, id: file.id, title: file.name.replace(/\.daexcel$/i, '') }; } catch {}
   return null;
 }
-export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
+export default function DaExcellent({ files, fileId, onSaveWorkbook, onDeleteWorkbook }: Props) {
   const initialFile = files.find(f => f.id === fileId && f.mime === MIME);
   const [book, setBook] = useState<Workbook>(() => parseWorkbook(initialFile) || starter());
-  const autoCreatedRef=useRef(false);
+  const autoCreatedRef=useRef(false); const manualOpenRef=useRef(false); const [showOpen,setShowOpen]=useState(false);
   const [activeCell, setActiveCell] = useState('A1');
   const [editing, setEditing] = useState('');
   const [editMode, setEditMode] = useState(false);
@@ -161,7 +161,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   useEffect(() => {
     const latest = files.filter(f => f.mime === MIME);
     const desired = fileId ? latest.find(f => f.id === fileId) : undefined;
-    const parsed = parseWorkbook(desired);
+    const parsed = manualOpenRef.current ? null : parseWorkbook(desired);
     if (parsed && parsed.id !== book.id) { setBook(parsed); setSelectedSheet(parsed.activeSheet || parsed.sheets[0].id); }
     if (!desired && !autoCreatedRef.current) {
       autoCreatedRef.current=true;
@@ -186,6 +186,10 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   const addSheet = () => { const n=book.sheets.length+1; const s={...emptySheet(),name:'Sheet'+n}; const next={...book,sheets:[...book.sheets,s],activeSheet:s.id}; save(next); setSelectedSheet(s.id); setActiveCell('A1'); };
   const duplicateSheet = () => { const copy={...sheet,id:'sheet-'+Date.now().toString(36),name:(sheet.name+' copy').slice(0,31),cells:{...sheet.cells}};const next={...book,sheets:[...book.sheets,copy],activeSheet:copy.id};save(next);setSelectedSheet(copy.id);setActiveCell('A1'); };
   const newWorkbook = () => { const next = { ...starter(), title: 'Untitled workbook' }; setSelectedSheet(next.sheets[0].id); setActiveCell('A1'); save(next); };
+  const applyTemplate=(name?:string)=>{const choice=name||window.prompt('Template: Budget, Gradebook, Task tracker, Inventory','Budget')||'';const next=starter();next.title=choice+' template';const sh=next.sheets[0];const templates:Record<string,Record<string,Cell>>={Budget:{A1:{value:'Item',bold:true,fill:'#dbeafe'},B1:{value:'Quantity',bold:true,fill:'#dbeafe'},C1:{value:'Unit price',bold:true,fill:'#dbeafe'},D1:{value:'Total',bold:true,fill:'#dbeafe'},A2:{value:'Notebook'},B2:{value:'4'},C2:{value:'2.50',format:'currency'},D2:{value:'=B2*C2',format:'currency'},A3:{value:'Pens'},B3:{value:'10'},C3:{value:'0.80',format:'currency'},D3:{value:'=B3*C3',format:'currency'},C5:{value:'Grand total',bold:true},D5:{value:'=SUM(D2:D4)',format:'currency',bold:true}},Gradebook:{A1:{value:'Student',bold:true,fill:'#dbeafe'},B1:{value:'Assignment 1',bold:true,fill:'#dbeafe'},C1:{value:'Assignment 2',bold:true,fill:'#dbeafe'},D1:{value:'Average',bold:true,fill:'#dbeafe'},A2:{value:'Student 1'},B2:{value:'85'},C2:{value:'92'},D2:{value:'=AVERAGE(B2:C2)'}},'Task tracker':{A1:{value:'Task',bold:true,fill:'#dcfce7'},B1:{value:'Owner',bold:true,fill:'#dcfce7'},C1:{value:'Status',bold:true,fill:'#dcfce7'},D1:{value:'Due date',bold:true,fill:'#dcfce7'},A2:{value:'First task'},C2:{value:'Not started'}},Inventory:{A1:{value:'SKU',bold:true,fill:'#fef3c7'},B1:{value:'Product',bold:true,fill:'#fef3c7'},C1:{value:'In stock',bold:true,fill:'#fef3c7'},D1:{value:'Reorder at',bold:true,fill:'#fef3c7'},E1:{value:'Reorder?',bold:true,fill:'#fef3c7'},A2:{value:'SKU-001'},B2:{value:'Product'},C2:{value:'5'},D2:{value:'10'},E2:{value:'=IF(C2<D2,"Reorder","OK")'}}};if(!templates[choice])return;sh.cells=templates[choice];setSelectedSheet(sh.id);setActiveCell('A1');manualOpenRef.current=false;save(next)};
+  const saveAsWorkbook=()=>{const title=window.prompt('Save workbook as',book.title+' copy');if(!title?.trim())return;const next={...book,id:'workbook-'+Date.now().toString(36),title:title.trim(),updatedAt:Date.now()};manualOpenRef.current=true;save(next)};
+  const openWorkbook=(file:IdaFile)=>{const next=parseWorkbook(file);if(!next)return;manualOpenRef.current=true;setBook(next);setSelectedSheet(next.activeSheet||next.sheets[0].id);setActiveCell('A1');setShowOpen(false);setStatus('Opened '+file.name)};
+
   const format = (patch: Partial<Cell>) => updateCell(activeCell, patch);
   const resizeColumn=(e:ReactMouseEvent,col:string)=>{e.preventDefault();e.stopPropagation();const startX=e.clientX,startWidth=columnWidths[col]||100;const move=(ev:MouseEvent)=>setColumnWidths(prev=>({...prev,[col]:Math.max(48,Math.min(420,startWidth+ev.clientX-startX))}));const up=()=>{window.removeEventListener('mousemove',move);window.removeEventListener('mouseup',up)};window.addEventListener('mousemove',move);window.addEventListener('mouseup',up)};
   const resizeRow=(e:React.MouseEvent,row:number)=>{e.preventDefault();e.stopPropagation();const startY=e.clientY,startHeight=rowHeights[row]||25;const move=(ev:MouseEvent)=>setRowHeights(prev=>({...prev,[row]:Math.max(18,Math.min(180,startHeight+ev.clientY-startY))}));const up=()=>{window.removeEventListener('mousemove',move);window.removeEventListener('mouseup',up)};window.addEventListener('mousemove',move);window.addEventListener('mouseup',up)};
