@@ -178,6 +178,31 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook, onDeleteWor
     save({ ...book, activeSheet: selectedSheet, sheets: book.sheets.map(s => s.id === selectedSheet ? nextSheet : s) });
   };
   const commitEdit = () => { updateCell(activeCell, { value: editing }); setEditMode(false); };
+  const insertFunction = (fn:string) => {
+    const match=activeCell.match(/^([A-Z]+)(\d+)$/)!;
+    const row=Number(match[2]), col=match[1];
+    const from=Math.max(1,row-3), to=Math.max(1,row-1);
+    const range=col+from+':'+col+to;
+    const nextCol=columnLabel(Math.min(visibleCols-1,colIndex(col)+1));
+    const examples:Record<string,string>={
+      COUNTIF:'COUNTIF('+range+',"yes")',
+      SUMIF:'SUMIF('+range+',"yes",'+nextCol+from+':'+nextCol+to+')',
+      ROUND:'ROUND('+col+Math.max(1,row-1)+',2)',
+      ROUNDUP:'ROUNDUP('+col+Math.max(1,row-1)+',0)',
+      ROUNDDOWN:'ROUNDDOWN('+col+Math.max(1,row-1)+',0)',
+      ABS:'ABS('+col+Math.max(1,row-1)+')', SQRT:'SQRT('+col+Math.max(1,row-1)+')',
+      POWER:'POWER('+col+Math.max(1,row-1)+',2)', MOD:'MOD('+col+Math.max(1,row-1)+',2)',
+      INT:'INT('+col+Math.max(1,row-1)+')', LEN:'LEN('+col+Math.max(1,row-1)+')',
+      UPPER:'UPPER('+col+Math.max(1,row-1)+')', LOWER:'LOWER('+col+Math.max(1,row-1)+')',
+      TRIM:'TRIM('+col+Math.max(1,row-1)+')', LEFT:'LEFT('+col+Math.max(1,row-1)+',3)',
+      RIGHT:'RIGHT('+col+Math.max(1,row-1)+',3)', CONCAT:'CONCAT('+col+Math.max(1,row-1)+','+nextCol+Math.max(1,row-1)+')'
+    };
+    setEditing('='+ (examples[fn]||fn+'('+range+')'));
+    setEditMode(true);
+    gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+activeCell+'"]')?.focus();
+  };
+  useEffect(()=>{const stop=()=>{dragSelectingRef.current=false};window.addEventListener('mouseup',stop);return()=>window.removeEventListener('mouseup',stop)},[]);
+
   const move = (dr: number, dc: number) => {
     const m = activeCell.match(/^([A-Z]+)(\d+)$/); if (!m) return;
     const row = Number(m[2]), col = colIndex(m[1]); const nr = Math.max(1, Math.min(visibleRows, row + dr)), nc = Math.max(0, Math.min(visibleCols-1, col + dc));
