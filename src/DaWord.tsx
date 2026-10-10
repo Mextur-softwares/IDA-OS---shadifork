@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Bold, Check, ChevronDown, FilePlus2, FileText, FolderOpen, Highlighter, Italic, List, ListOrdered, Minus, Printer, Redo2, Save, Strikethrough, Underline, Undo2, Download, Plus, Search, Type, X } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, Bold, Check, FilePlus2, FileText, FolderOpen, Highlighter, Italic, List, ListOrdered, Minus, Printer, Redo2, Strikethrough, Underline, Undo2, Download, Plus, Search, Type, X } from 'lucide-react';
 
 type WordDoc = { id: string; title: string; content: string; updatedAt: number };
 type DaWordFile = { id: string; name: string; kind: 'file'|'note'; location: string; mime?: string; data?: string; createdAt: number };
@@ -8,7 +8,7 @@ const starterContent = '<h1>Welcome to DaWord</h1><p>Your ideas deserve a proper
 
 function readDocuments(files: DaWordFile[]): WordDoc[] {
   const saved = files.filter(file => file.mime === 'application/x-daword' && typeof file.data === 'string').map(file => ({
-    id: file.id, title: file.name.replace(/\\.daword$/i, ''), content: file.data || '<p><br></p>', updatedAt: file.createdAt
+    id: file.id, title: file.name.replace(/\.daword$/i, ''), content: file.data || '<p><br></p>', updatedAt: file.createdAt
   }));
   return saved.length ? saved : [{ id: 'doc-welcome', title: 'Welcome to DaWord', content: starterContent, updatedAt: Date.now() }];
 }
