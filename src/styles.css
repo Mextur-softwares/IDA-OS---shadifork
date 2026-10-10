@@ -471,7 +471,7 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-floating-chart-head button{border:0;background:transparent;padding:4px;color:#526174;cursor:pointer}
 .de-floating-chart-head button:hover{background:#fee2e2;color:#b91c1c}
 .de-floating-chart img{display:block;width:100%;height:calc(100% - 30px);object-fit:contain;pointer-events:none}
-.de-functions-popup{position:absolute;z-index:40;top:148px;left:125px;width:min(720px,calc(100% - 145px));max-height:420px;overflow:auto;background:#fff;border:1px solid #cbd5e1;border-radius:9px;box-shadow:0 16px 42px #0f172a30;padding:12px}
+.de-functions-popup{position:fixed;z-index:1000;top:165px;left:clamp(145px,18vw,260px);width:min(720px,calc(100vw - 165px));max-height:min(420px,calc(100vh - 190px));overflow:auto;background:#fff;border:1px solid #cbd5e1;border-radius:9px;box-shadow:0 16px 42px #0f172a30;padding:12px}
 .de-functions-popup-head{display:flex;align-items:center;justify-content:space-between;padding:0 2px 8px;border-bottom:1px solid #e2e8f0;color:#1e293b}
 .de-functions-popup-head button{display:flex;border:0;background:transparent;border-radius:5px;padding:5px;cursor:pointer}
 .de-functions-popup-head button:hover{background:#f1f5f9}
