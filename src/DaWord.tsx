@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, Bold, Check, ChevronDown, FilePlus2, FileText, FolderOpen, Highlighter, Italic, List, ListOrdered, Minus, Printer, Redo2, Save, Strikethrough, Underline, Undo2, Download, Plus, Search, Type, X } from 'lucide-react';
 
 type WordDoc = { id: string; title: string; content: string; updatedAt: number };
-const STORAGE_KEY = 'ida-daword-documents-v1';
+type DaWordFile = { id: string; name: string; kind: 'file'|'note'; location: string; mime?: string; data?: string; createdAt: number };
+type DaWordProps = { files: DaWordFile[]; onSaveDocument: (file: DaWordFile) => void; fileId?: string };
 const starterContent = '<h1>Welcome to DaWord</h1><p>Your ideas deserve a proper page.</p><p>Start writing here. Your document saves automatically in this browser.</p><p><br></p><h2>Make it yours</h2><p>Use the ribbon above to format text, add lists, change alignment, or insert a table. When you are ready, download a copy or print it to PDF.</p>';
 
 function readDocuments(): WordDoc[] {
@@ -52,7 +53,14 @@ export default function DaWord() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   });
-  function patchActive(patch: Partial<WordDoc>) { setDocuments(old => old.map(doc => doc.id === activeId ? { ...doc, ...patch, updatedAt: Date.now() } : doc)); }
+  function patchActive(patch: Partial<WordDoc>) {
+    const current = documents.find(doc => doc.id === activeId) || documents[0];
+    if (!current) return;
+    const updated = { ...current, ...patch, updatedAt: Date.now() };
+    setDocuments(old => old.some(doc => doc.id === activeId) ? old.map(doc => doc.id === activeId ? updated : doc) : [updated, ...old]);
+    onSaveDocument({ id: updated.id, name: cleanFilename(updated.title) + '.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: updated.content, createdAt: updated.updatedAt });
+    setSavedAt(Date.now());
+  }
   function runCommand(command: string, value?: string) {
     editorRef.current?.focus();
     document.execCommand(command, false, value);
