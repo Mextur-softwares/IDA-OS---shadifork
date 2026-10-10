@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import { DaApps } from './App'
 import { Wifi, Music2, Scale } from 'lucide-react'
 
-const SUPABASE_URL = 'https://roxnnwrmgbxnhmwjolep.supabase.co'
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_-x-g50GLtgo3Ut9fcNbStA_OUz4eBjw'
+const SUPABASE_URL = 'https://hcvpnvzznmoxhklguxhh.supabase.co'
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_L0sVGo7ZgCe-A_6EOTzYrQ_52xnGIhh'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
