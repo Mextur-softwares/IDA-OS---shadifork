@@ -4,13 +4,13 @@ import { AlignCenter, AlignLeft, AlignRight, Bold, Check, FilePlus2, FileText, F
 type WordDoc = { id: string; title: string; content: string; updatedAt: number };
 type DaWordFile = { id: string; name: string; kind: 'file'|'note'; location: string; mime?: string; data?: string; createdAt: number };
 type DaWordProps = { files: DaWordFile[]; onSaveDocument: (file: DaWordFile) => void; fileId?: string };
-const starterContent = '<h1>Welcome to DaWord</h1><p>Your ideas deserve a proper page.</p><p>Start writing here. Your document saves automatically in this browser.</p><p><br></p><h2>Make it yours</h2><p>Use the ribbon above to format text, add lists, change alignment, or insert a table. When you are ready, download a copy or print it to PDF.</p>';
+const starterContent = '<p><br></p>';
 
 function readDocuments(files: DaWordFile[]): WordDoc[] {
   const saved = files.filter(file => file.mime === 'application/x-daword' && typeof file.data === 'string').map(file => ({
     id: file.id, title: file.name.replace(/\.daword$/i, ''), content: file.data || '<p><br></p>', updatedAt: file.createdAt
   }));
-  return saved.length ? saved : [{ id: 'doc-welcome', title: 'Welcome to DaWord', content: starterContent, updatedAt: Date.now() }];
+  return saved.length ? saved : [{ id: 'doc-' + Date.now().toString(36), title: 'Untitled document', content: starterContent, updatedAt: Date.now() }];
 }
 function cleanFilename(value: string) { return value.trim().replace(/[\\/:*?"<>|]+/g, '').slice(0, 90) || 'Untitled document'; }
 
@@ -57,7 +57,7 @@ export default function DaWord({ files, onSaveDocument, fileId }: DaWordProps) {
     const onKey = (event: KeyboardEvent) => {
       if (!(event.ctrlKey || event.metaKey)) return;
       const key = event.key.toLowerCase();
-      if (key === 's') { event.preventDefault(); downloadDocument('html'); }
+      if (key === 's') { event.preventDefault(); if (editorRef.current) patchActive({ content: editorRef.current.innerHTML }); }
       if (key === 'n') { event.preventDefault(); newDocument(); }
       if (key === 'p') { event.preventDefault(); window.print(); }
       if (key === 'f') { event.preventDefault(); setSearchOpen(true); window.setTimeout(() => document.getElementById('daword-find')?.focus(), 0); }
