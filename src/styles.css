@@ -447,3 +447,11 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-grid td.de-selected.de-range-selected{outline:2px solid #16834a;outline-offset:-2px;z-index:2}
 @media(max-width:850px){.de-function-columns{grid-template-columns:repeat(2,minmax(160px,1fr))}.de-functions-layout{max-height:300px}}
 @media(max-width:540px){.de-function-columns{grid-template-columns:minmax(0,1fr)}.de-function-list{grid-template-columns:repeat(2,minmax(0,1fr))}.de-functions-layout{padding:9px;max-height:340px}}
+
+/* DaExcellent worksheet tabs and per-sheet delete controls */
+.de-sheetbar .de-sheet-tab{display:inline-flex;align-items:center;gap:0;flex:none;border:1px solid transparent;border-radius:5px;background:transparent}
+.de-sheetbar .de-sheet-tab.active{background:#fff;border-color:#d4e1d8;border-bottom:2px solid #16834a}
+.de-sheetbar .de-sheet-tab .de-sheet-tab-name{border:0;background:transparent;padding:6px 8px}
+.de-sheetbar .de-sheet-tab.active .de-sheet-tab-name{color:#14703a;font-weight:700}
+.de-sheetbar .de-sheet-tab .de-sheet-delete{border:0;background:transparent;padding:5px 6px;color:#7b8794;border-radius:4px}
+.de-sheetbar .de-sheet-tab .de-sheet-delete:hover{background:#fee2e2;color:#b91c1c}
