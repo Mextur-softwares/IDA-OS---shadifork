@@ -75,7 +75,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     }
     if (fn === 'COUNTIF' && args.length >= 2 && isRange(args[0])) {
       const criterion=args.slice(1).join(',').replace(/^"|"$/g,'').toLowerCase();
-      return String(vals(args[0]).filter(v => { const rawValue=v.raw.toLowerCase(); const op=criterion.match(/^(>=|<=|<>|>|<|=)(.*)$/); if(op){const rhs=op[2].replace(/^"|"$/g,'');const a=Number(rawValue),b=Number(rhs);if(Number.isFinite(a)&&Number.isFinite(b)){switch(op[1]){case '>':return a>b;case '<':return a<b;case '>=':return a>=b;case '<=':return a<=b;case '<>':return a!==b;default:return a===b}}return op[1]==='<'?rawValue<rhs:op[1]==='>'?rawValue>rhs:op[1]==='<> '?rawValue!==rhs:rawValue===rhs;} return rawValue===criterion; }).length);
+      return String(vals(args[0]).filter(v => { const rawValue=v.raw.toLowerCase(); const op=criterion.match(/^(>=|<=|<>|>|<|=)(.*)$/); if(op){const rhs=op[2].replace(/^"|"$/g,'');const a=Number(rawValue),b=Number(rhs);if(Number.isFinite(a)&&Number.isFinite(b)){switch(op[1]){case '>':return a>b;case '<':return a<b;case '>=':return a>=b;case '<=':return a<=b;case '<>':return a!==b;default:return a===b}}return op[1]==='<'?rawValue<rhs:op[1]==='>'?rawValue>rhs:op[1]==='<>'?rawValue!==rhs:rawValue===rhs;} return rawValue===criterion; }).length);
     }
     if (fn === 'SUMIF' && args.length >= 2 && isRange(args[0])) {
       const criteria=args[1].replace(/^"|"$/g,'').toLowerCase(); const candidates=vals(args[0]); const sums=args[2]&&isRange(args[2])?vals(args[2]):candidates;
