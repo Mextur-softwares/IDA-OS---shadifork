@@ -84,13 +84,19 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     };
     const textArg=(arg:string):string=>{const clean=arg.trim();const ref=clean.match(/^\$?([A-Z]+)\$?(\d+)$/i);return ref?evaluate(ref[1].toUpperCase()+ref[2],sheet,new Set(seen)):clean.replace(/^"|"$/g,'');};
     const a=scalar(args[0]||'0'), b=scalar(args[1]||'0');
-    if(fn==='IF'){const test=args[0]||'FALSE',op=test.match(/^(.*?)\s*(>=|<=|<>|=|>|<)\s*(.*?)$/);let yes=false;if(op){const l=textArg(op[1]),r=textArg(op[3]),ln=Number(l),rn=Number(r);switch(op[2]){case '>':yes=ln>rn;break;case '<':yes=ln<rn;break;case '>=':yes=ln>=rn;break;case '<=':yes=ln<=rn;break;case '<>':yes=l!==r;break;default:yes=l===r||ln===rn;}}else yes=!!scalar(test);return textArg(args[yes?1:2]||'FALSE');}
+    if(fn==='IF'){const test=args[0]||'FALSE',op=test.match(/^(.*?)\s*(>=|<=|<>|=|>|<)\s*(.*?)$/);let yes=false;if(op){const l=textArg(op[1]),r=textArg(op[3]),ln=Number(l),rn=Number(r);switch(op[2]){case '>':yes=ln>rn;break;case '<':yes=ln<rn;break;case '>=':yes=ln>=rn;break;case '<=':yes=ln<=rn;break;case '<>':yes=l!==r;break;default:yes=l===r||ln===rn;}}else yes=textArg(test).toUpperCase()==='TRUE'||scalar(test)!==0;return textArg(args[yes?1:2]||'FALSE');}
     if(fn==='IFERROR'){const v=args[0]||'';const ref=v.match(/^([A-Z]+\d+)$/i);const result=ref?evaluate(ref[1].toUpperCase(),sheet,new Set(seen)):v;if(result.startsWith('#'))return textArg(args[1]||'');return result;}
     if(fn==='AND')return String(args.every(v=>['TRUE','1'].includes(textArg(v).toUpperCase())||scalar(v)!==0));
     if(fn==='OR')return String(args.some(v=>['TRUE','1'].includes(textArg(v).toUpperCase())||scalar(v)!==0));
     if(fn==='NOT')return String(!(scalar(args[0]||'0')!==0||textArg(args[0]||'').toUpperCase()==='TRUE'));
     if(fn==='TRUE')return 'TRUE';if(fn==='FALSE')return 'FALSE';if(fn==='PI')return String(Math.PI);
     if(fn==='SIGN')return String(Math.sign(a));if(fn==='TRUNC')return String(Math.trunc(a));if(fn==='QUOTIENT')return b===0?'#DIV/0!':String(Math.trunc(a/b));
+    if(fn==='RAND')return String(Math.random());
+    if(fn==='MROUND')return b===0?'#DIV/0!':String(Math.round(a/b)*b);
+    if(fn==='EVEN')return String(Math.sign(a)*Math.ceil(Math.abs(a)/2)*2);if(fn==='ODD')return String(Math.sign(a)*Math.ceil((Math.abs(a)-1)/2)*2+Math.sign(a));
+    if(fn==='COMBIN'){if(a<0||b<0||b>a)return '#NUM!';let n=1;for(let i=1;i<=Math.min(b,a-b);i++)n=n*(Math.floor(a)-i+1)/i;return String(Math.round(n));}
+    if(fn==='GCD'||fn==='LCM'){const ns=args.flatMap(arg=>isRange(arg)?vals(arg).map(v=>Math.abs(Math.trunc(v.value))):[Math.abs(Math.trunc(scalar(arg)))]).filter(n=>n>0);if(!ns.length)return '0';const gcd=(x:number,y:number):number=>y?gcd(y,x%y):x;const g=ns.reduce((x,y)=>gcd(x,y));return String(fn==='GCD'?g:ns.reduce((x,y)=>x/gcd(x,y)*y,1));}
+
     if(fn==='EXP')return String(Math.exp(a));if(fn==='LN')return a<=0?'#NUM!':String(Math.log(a));if(fn==='LOG')return a<=0?'#NUM!':String(Math.log(a)/Math.log(b||10));if(fn==='LOG10')return a<=0?'#NUM!':String(Math.log10(a));
     if(fn==='FACT'){if(a<0||a>170)return '#NUM!';let n=1;for(let i=2;i<=Math.floor(a);i++)n*=i;return String(n);}
     if(fn==='RANDBETWEEN')return String(Math.floor(Math.random()*(Math.floor(b)-Math.ceil(a)+1))+Math.ceil(a));
