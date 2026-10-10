@@ -482,3 +482,9 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-function-suggestions button{display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;border:0;border-radius:4px;background:#fff;text-align:left;cursor:pointer;color:#26384c}
 .de-function-suggestions button:hover{background:#eaf4ed}
 .de-function-suggestions button span{margin-left:auto;color:#8793a2;font-size:10px}
+
+.de-grid td{position:relative}
+.de-cell-function-suggestions{position:absolute;z-index:60;top:23px;left:4px;width:210px;max-height:210px;overflow:auto;background:#fff;border:1px solid #b9c8d7;border-radius:6px;box-shadow:0 8px 22px #0f172a2b;padding:4px}
+.de-cell-function-suggestions button{display:flex;align-items:center;gap:8px;width:100%;padding:6px 7px;border:0;border-radius:4px;background:#fff;text-align:left;cursor:pointer;color:#26384c;font-size:11px}
+.de-cell-function-suggestions button:hover{background:#eaf4ed}
+.de-cell-function-suggestions button span{margin-left:auto;color:#8793a2;font-size:10px}
