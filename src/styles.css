@@ -461,3 +461,24 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-chart-card button{border:0;background:transparent;color:#64748b;font-size:20px;cursor:pointer}
 .de-chart-card button:hover{color:#b91c1c}
 .de-chart-card img{display:block;width:100%;height:auto;margin-top:8px}
+
+/* DaExcellent Office-style floating chart objects and formula assistant */
+.de-grid-wrap{position:relative}
+.de-floating-chart{position:absolute;z-index:8;display:flex;flex-direction:column;background:#fff;border:1px solid #8aa0b8;border-radius:7px;box-shadow:0 8px 24px #172b4d35;overflow:hidden;min-width:280px;min-height:180px;resize:both;cursor:move}
+.de-floating-chart-head{height:30px;flex:none;display:flex;align-items:center;gap:10px;padding:0 8px;background:#edf3f9;border-bottom:1px solid #d7e1eb;color:#26384c;font-size:11px}
+.de-floating-chart-head strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.de-floating-chart-head span{margin-left:auto;color:#718096;font-size:10px}
+.de-floating-chart-head button{border:0;background:transparent;padding:4px;color:#526174;cursor:pointer}
+.de-floating-chart-head button:hover{background:#fee2e2;color:#b91c1c}
+.de-floating-chart img{display:block;width:100%;height:calc(100% - 30px);object-fit:contain;pointer-events:none}
+.de-functions-popup{position:absolute;z-index:40;top:148px;left:125px;width:min(720px,calc(100% - 145px));max-height:420px;overflow:auto;background:#fff;border:1px solid #cbd5e1;border-radius:9px;box-shadow:0 16px 42px #0f172a30;padding:12px}
+.de-functions-popup-head{display:flex;align-items:center;justify-content:space-between;padding:0 2px 8px;border-bottom:1px solid #e2e8f0;color:#1e293b}
+.de-functions-popup-head button{display:flex;border:0;background:transparent;border-radius:5px;padding:5px;cursor:pointer}
+.de-functions-popup-head button:hover{background:#f1f5f9}
+.de-formula-bar{position:relative}
+.de-fx{display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;color:#64748b;cursor:pointer;border-radius:4px;padding:4px}
+.de-fx:hover{background:#e5f0e8;color:#14703a}
+.de-function-suggestions{position:absolute;z-index:45;top:100%;left:105px;width:250px;max-height:240px;overflow:auto;background:#fff;border:1px solid #b9c8d7;border-radius:6px;box-shadow:0 8px 22px #0f172a2b;padding:4px}
+.de-function-suggestions button{display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;border:0;border-radius:4px;background:#fff;text-align:left;cursor:pointer;color:#26384c}
+.de-function-suggestions button:hover{background:#eaf4ed}
+.de-function-suggestions button span{margin-left:auto;color:#8793a2;font-size:10px}
