@@ -35,7 +35,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
   }
   if (seen.has(ref)) return '#CYCLE!'; seen.add(ref);
   const formula = raw.slice(1).trim();
-  const rangeMatch = formula.match(/^(SUM|AVERAGE|MIN|MAX|COUNT)\\(([A-Z]+)(\\d+):([A-Z]+)(\\d+)\\)$/i);
+  const rangeMatch = formula.match(/^(SUM|AVERAGE|MIN|MAX|COUNT)\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/i);
   if (rangeMatch) {
     const [, fn, c1, r1, c2, r2] = rangeMatch; const vals: number[] = [];
     for (let r = Math.min(Number(r1), Number(r2)); r <= Math.max(Number(r1), Number(r2)); r++) for (let c = Math.min(colIndex(c1.toUpperCase()), colIndex(c2.toUpperCase())); c <= Math.max(colIndex(c1.toUpperCase()), colIndex(c2.toUpperCase())); c++) {
@@ -48,29 +48,29 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     if (fn.toUpperCase() === 'MIN') return String(Math.min(...vals));
     return String(Math.max(...vals));
   }
-  const substituted = formula.replace(/([A-Z]+\\d+)/gi, token => {
+  const substituted = formula.replace(/([A-Z]+\d+)/gi, token => {
     const value = evaluate(token.toUpperCase(), sheet, new Set(seen));
     return value === '' || value.startsWith('#') ? '0' : String(numeric(value));
   });
-  if (!/^[\\d+\\-*/().%\\s]+$/.test(substituted)) return '#VALUE!';
+  if (!/^[\d+\\-*/().%\s]+$/.test(substituted)) return '#VALUE!';
   try {
-    const tokens = substituted.match(/\\d+(?:\\.\\d+)?|[()+*/-]/g) || [];
+    const tokens = substituted.match(/\d+(?:\.\d+)?|[()+*/-]/g) || [];
     const output: string[] = []; const ops: string[] = []; const precedence: Record<string,number> = {'+':1,'-':1,'*':2,'/':2};
     for (const token of tokens) {
-      if (/^\\d/.test(token)) output.push(token);
+      if (/^\d/.test(token)) output.push(token);
       else if (token === '(') ops.push(token);
       else if (token === ')') { while (ops.length && ops[ops.length-1] !== '(') output.push(ops.pop()!); ops.pop(); }
       else { while (ops.length && precedence[ops[ops.length-1]] >= precedence[token]) output.push(ops.pop()!); ops.push(token); }
     }
     while (ops.length) output.push(ops.pop()!);
     const stack: number[] = [];
-    for (const token of output) { if (/^\\d/.test(token)) stack.push(Number(token)); else { const b=stack.pop()||0; const a=stack.pop()||0; stack.push(token==='+'?a+b:token==='-'?a-b:token==='*'?a*b:b===0?NaN:a/b); } }
+    for (const token of output) { if (/^\d/.test(token)) stack.push(Number(token)); else { const b=stack.pop()||0; const a=stack.pop()||0; stack.push(token==='+'?a+b:token==='-'?a-b:token==='*'?a*b:b===0?NaN:a/b); } }
     const result = stack[0]; return Number.isFinite(result) ? String(Number(result.toFixed(8))) : '#DIV/0!';
   } catch { return '#VALUE!'; }
 }
 function parseWorkbook(file?: IdaFile): Workbook | null {
   if (!file?.data) return null;
-  try { const data = JSON.parse(file.data); if (data && Array.isArray(data.sheets) && data.sheets.length) return { ...data, id: file.id, title: file.name.replace(/\\.daexcel$/i, '') }; } catch {}
+  try { const data = JSON.parse(file.data); if (data && Array.isArray(data.sheets) && data.sheets.length) return { ...data, id: file.id, title: file.name.replace(/\.daexcel$/i, '') }; } catch {}
   return null;
 }
 export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
@@ -116,7 +116,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   };
   const commitEdit = () => { updateCell(activeCell, { value: editing }); setEditMode(false); };
   const move = (dr: number, dc: number) => {
-    const m = activeCell.match(/^([A-Z]+)(\\d+)$/); if (!m) return;
+    const m = activeCell.match(/^([A-Z]+)(\d+)$/); if (!m) return;
     const row = Number(m[2]), col = colIndex(m[1]); const nr = Math.max(1, Math.min(ROWS.length, row + dr)), nc = Math.max(0, Math.min(COLS.length-1, col + dc));
     setActiveCell(keyOf(nr,nc)); gridRef.current?.querySelector<HTMLInputElement>('[data-cell="' + keyOf(nr,nc) + '"]')?.focus();
   };
@@ -125,16 +125,16 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   const addRow = () => { /* the grid grows to 50 rows; the extra visible rows remain editable */ setStatus('Select a cell and type to enter data'); };
   const format = (patch: Partial<Cell>) => updateCell(activeCell, patch);
   const exportCsv = () => {
-    const used = Object.keys(sheet.cells).filter(k => sheet.cells[k]?.value).map(k => { const m=k.match(/^([A-Z]+)(\\d+)$/)!; return { c:colIndex(m[1]), r:Number(m[2]) }; });
+    const used = Object.keys(sheet.cells).filter(k => sheet.cells[k]?.value).map(k => { const m=k.match(/^([A-Z]+)(\d+)$/)!; return { c:colIndex(m[1]), r:Number(m[2]) }; });
     const maxR = Math.max(1,...used.map(v=>v.r)), maxC = Math.max(0,...used.map(v=>v.c));
     const lines = Array.from({length:maxR},(_,ri)=>Array.from({length:maxC+1},(_,ci)=>{ const v=display(keyOf(ri+1,ci)); return '"' + v.replace(/"/g,'""') + '"'; }).join(','));
-    const blob = new Blob([lines.join('\\r\\n')],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=cleanName(book.title)+'.csv'; a.click(); URL.revokeObjectURL(url);
+    const blob = new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=cleanName(book.title)+'.csv'; a.click(); URL.revokeObjectURL(url);
   };
   const exportWorkbook = () => { const blob=new Blob([JSON.stringify(book,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=cleanName(book.title)+'.daexcellent.json'; a.click(); URL.revokeObjectURL(url); };
   const importFile = (file: File) => {
-    const reader=new FileReader(); reader.onload=()=>{ const text=String(reader.result||''); const rows=text.replace(/\\r/g,'').split('\\n').filter(Boolean).map(line=>{ const out:string[]=[]; let value=''; let quoted=false; for(let i=0;i<line.length;i++){const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){value+='"';i++;}else if(ch==='"')quoted=!quoted;else if(ch===','&&!quoted){out.push(value);value='';}else value+=ch;}out.push(value);return out;}); const s={...emptySheet(),name:'Imported data',cells:{} as Record<string,Cell>}; rows.slice(0,50).forEach((row,r)=>row.slice(0,26).forEach((value,c)=>{if(value!=='')s.cells[keyOf(r+1,c)]={value};})); save({...book,title:file.name.replace(/\\.[^.]+$/,''),sheets:[s],activeSheet:s.id});setSelectedSheet(s.id);setActiveCell('A1');setCsvImport(false); }; reader.readAsText(file);
+    const reader=new FileReader(); reader.onload=()=>{ const text=String(reader.result||''); const rows=text.replace(/\r/g,'').split('\n').filter(Boolean).map(line=>{ const out:string[]=[]; let value=''; let quoted=false; for(let i=0;i<line.length;i++){const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){value+='"';i++;}else if(ch==='"')quoted=!quoted;else if(ch===','&&!quoted){out.push(value);value='';}else value+=ch;}out.push(value);return out;}); const s={...emptySheet(),name:'Imported data',cells:{} as Record<string,Cell>}; rows.slice(0,50).forEach((row,r)=>row.slice(0,26).forEach((value,c)=>{if(value!=='')s.cells[keyOf(r+1,c)]={value};})); save({...book,title:file.name.replace(/\.[^.]+$/,''),sheets:[s],activeSheet:s.id});setSelectedSheet(s.id);setActiveCell('A1');setCsvImport(false); }; reader.readAsText(file);
   };
-  const findNext = () => { if (!query) return; const entries=Object.entries(sheet.cells).sort((a,b)=>{const ma=a[0].match(/^([A-Z]+)(\\d+)$/)!,mb=b[0].match(/^([A-Z]+)(\\d+)$/)!;return Number(ma[2])-Number(mb[2])||colIndex(ma[1])-colIndex(mb[1]);}); const found=entries.find(([ref,cell])=>ref!==activeCell&&cell.value.toLowerCase().includes(query.toLowerCase())); if(found){setActiveCell(found[0]);gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+found[0]+'"]')?.focus();} else setStatus('No matches found'); };
+  const findNext = () => { if (!query) return; const entries=Object.entries(sheet.cells).sort((a,b)=>{const ma=a[0].match(/^([A-Z]+)(\d+)$/)!,mb=b[0].match(/^([A-Z]+)(\d+)$/)!;return Number(ma[2])-Number(mb[2])||colIndex(ma[1])-colIndex(mb[1]);}); const found=entries.find(([ref,cell])=>ref!==activeCell&&cell.value.toLowerCase().includes(query.toLowerCase())); if(found){setActiveCell(found[0]);gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+found[0]+'"]')?.focus();} else setStatus('No matches found'); };
   const actionButton = (label:string, icon:ReactNode, action:()=>void, activeState=false) => <button type="button" title={label} aria-label={label} className={'de-tool'+(activeState?' selected':'')} onClick={action}>{icon}</button>;
   return <div className="daexcellent">
     <header className="de-titlebar">
@@ -145,9 +145,9 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
     </header>
     <nav className="de-tabs">{(['Home','Insert','Formulas','View'] as const).map(t=><button key={t} className={tab===t?'active':''} onClick={()=>setTab(t)}>{t}</button>)}<span className="de-tabs-spacer"/><button onClick={()=>setShowFind(v=>!v)}><Search size={14}/> Find</button></nav>
     <section className="de-ribbon">
-      {tab==='Home'&&<><div className="de-group"><div className="de-tools">{actionButton('Bold',<Bold size={16}/>,()=>format({bold:!active.bold}),!!active.bold)}{actionButton('Italic',<Italic size={16}/>,()=>format({italic:!active.italic}),!!active.italic)}{actionButton('Underline',<Underline size={16}/>,()=>format({underline:!active.underline}),!!active.underline)}<select aria-label="Font colour" value={active.color||'#202938'} onChange={e=>format({color:e.target.value})}><option value="#202938">Text colour</option><option value="#dc2626">Red</option><option value="#2563eb">Blue</option><option value="#15803d">Green</option><option value="#7c3aed">Purple</option></select><select aria-label="Cell fill" value={active.fill||''} onChange={e=>format({fill:e.target.value||undefined})}><option value="">Cell fill</option><option value="#fef3c7">Yellow</option><option value="#dbeafe">Blue</option><option value="#dcfce7">Green</option><option value="#f3e8ff">Purple</option></select></div><small>Font & cell style</small></div><div className="de-group"><div className="de-tools"><select aria-label="Number format" value={active.format||'general'} onChange={e=>format({format:e.target.value as Cell['format']})}><option value="general">General</option><option value="currency">Currency ($)</option><option value="percent">Percent</option></select><button onClick={()=>format({format:'currency'})}>$</button><button onClick={()=>format({format:'percent'})}>%</button></div><small>Number format</small></div><div className="de-group"><div className="de-tools"><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\\d+)$/)!;setActiveCell(keyOf(Math.max(1,Number(m[2])-1),colIndex(m[1])));}}>↑</button><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\\d+)$/)!;setActiveCell(keyOf(Math.min(50,Number(m[2])+1),colIndex(m[1])));}}>↓</button><button onClick={()=>format({fill:'#dcfce7'})}>Highlight</button></div><small>Cell tools</small></div></>}
-      {tab==='Insert'&&<><div className="de-group"><div className="de-tools"><button onClick={addSheet}><Plus size={15}/> New sheet</button><button onClick={()=>{const ref=activeCell;updateCell(ref,{value:active.value+'\\t'});}}><Plus size={15}/> Add tab</button><button onClick={()=>importRef.current?.click()}>Import CSV</button></div><small>Tables & sheets</small></div><div className="de-group"><div className="de-tools"><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\\d+)$/)!;const r=Number(m[2]),c=colIndex(m[1]);updateCell(keyOf(r,c),{value:'=SUM('+keyOf(Math.max(1,r-2),c)+':'+keyOf(Math.max(1,r-1),c)+')'});}}><Sigma size={15}/> Quick sum</button><button onClick={exportWorkbook}><Download size={15}/> Backup workbook</button></div><small>Tools</small></div></>}
-      {tab==='Formulas'&&<><div className="de-group"><div className="de-tools">{['SUM','AVERAGE','MIN','MAX','COUNT'].map(fn=><button key={fn} onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\\d+)$/)!;const r=Number(m[2]),c=m[1];setEditing('='+fn+'('+c+Math.max(1,r-3)+':'+c+Math.max(1,r-1)+')');setEditMode(true);}}><FunctionSquare size={14}/>{fn}</button>)}</div><small>Functions</small></div><div className="de-formula-help">Start a formula with =. Example: <b>=SUM(B2:B8)</b> or <b>=A1*B1</b>.</div></>}
+      {tab==='Home'&&<><div className="de-group"><div className="de-tools">{actionButton('Bold',<Bold size={16}/>,()=>format({bold:!active.bold}),!!active.bold)}{actionButton('Italic',<Italic size={16}/>,()=>format({italic:!active.italic}),!!active.italic)}{actionButton('Underline',<Underline size={16}/>,()=>format({underline:!active.underline}),!!active.underline)}<select aria-label="Font colour" value={active.color||'#202938'} onChange={e=>format({color:e.target.value})}><option value="#202938">Text colour</option><option value="#dc2626">Red</option><option value="#2563eb">Blue</option><option value="#15803d">Green</option><option value="#7c3aed">Purple</option></select><select aria-label="Cell fill" value={active.fill||''} onChange={e=>format({fill:e.target.value||undefined})}><option value="">Cell fill</option><option value="#fef3c7">Yellow</option><option value="#dbeafe">Blue</option><option value="#dcfce7">Green</option><option value="#f3e8ff">Purple</option></select></div><small>Font & cell style</small></div><div className="de-group"><div className="de-tools"><select aria-label="Number format" value={active.format||'general'} onChange={e=>format({format:e.target.value as Cell['format']})}><option value="general">General</option><option value="currency">Currency ($)</option><option value="percent">Percent</option></select><button onClick={()=>format({format:'currency'})}>$</button><button onClick={()=>format({format:'percent'})}>%</button></div><small>Number format</small></div><div className="de-group"><div className="de-tools"><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\d+)$/)!;setActiveCell(keyOf(Math.max(1,Number(m[2])-1),colIndex(m[1])));}}>↑</button><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\d+)$/)!;setActiveCell(keyOf(Math.min(50,Number(m[2])+1),colIndex(m[1])));}}>↓</button><button onClick={()=>format({fill:'#dcfce7'})}>Highlight</button></div><small>Cell tools</small></div></>}
+      {tab==='Insert'&&<><div className="de-group"><div className="de-tools"><button onClick={addSheet}><Plus size={15}/> New sheet</button><button onClick={()=>{const ref=activeCell;updateCell(ref,{value:active.value+'\t'});}}><Plus size={15}/> Add tab</button><button onClick={()=>importRef.current?.click()}>Import CSV</button></div><small>Tables & sheets</small></div><div className="de-group"><div className="de-tools"><button onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\d+)$/)!;const r=Number(m[2]),c=colIndex(m[1]);updateCell(keyOf(r,c),{value:'=SUM('+keyOf(Math.max(1,r-2),c)+':'+keyOf(Math.max(1,r-1),c)+')'});}}><Sigma size={15}/> Quick sum</button><button onClick={exportWorkbook}><Download size={15}/> Backup workbook</button></div><small>Tools</small></div></>}
+      {tab==='Formulas'&&<><div className="de-group"><div className="de-tools">{['SUM','AVERAGE','MIN','MAX','COUNT'].map(fn=><button key={fn} onClick={()=>{const m=activeCell.match(/^([A-Z]+)(\d+)$/)!;const r=Number(m[2]),c=m[1];setEditing('='+fn+'('+c+Math.max(1,r-3)+':'+c+Math.max(1,r-1)+')');setEditMode(true);}}><FunctionSquare size={14}/>{fn}</button>)}</div><small>Functions</small></div><div className="de-formula-help">Start a formula with =. Example: <b>=SUM(B2:B8)</b> or <b>=A1*B1</b>.</div></>}
       {tab==='View'&&<><div className="de-group"><div className="de-tools"><button onClick={()=>setZoom(v=>Math.max(70,v-10))}>−</button><span className="de-zoom">{zoom}%</span><button onClick={()=>setZoom(v=>Math.min(140,v+10))}>+</button><button onClick={()=>setZoom(100)}>Reset zoom</button></div><small>Zoom</small></div><div className="de-group"><div className="de-tools"><button onClick={()=>setShowFind(v=>!v)}><Search size={15}/> Find cells</button><button onClick={exportCsv}><Download size={15}/> Download CSV</button></div><small>Workbook</small></div></>}
     </section>
     {showFind&&<div className="de-find"><Search size={15}/><input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==='Enter'&&findNext()} placeholder="Find in this sheet"/><button onClick={findNext}>Find next</button><button onClick={()=>setShowFind(false)}>Close</button></div>}
