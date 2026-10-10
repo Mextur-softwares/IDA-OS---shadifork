@@ -22,7 +22,7 @@ const starter = (): Workbook => {
   };
   return { id: 'workbook-' + Date.now().toString(36), title: 'Budget workbook', sheets: [sheet], activeSheet: sheet.id, updatedAt: Date.now() };
 };
-const cleanName = (value: string) => value.trim().replace(/[\\/:*?"<>|]+/g, '').slice(0, 80) || 'Untitled workbook';
+const cleanName = (value: string) => value.trim().replace(/[/:*?"<>|]/g, '').replaceAll(String.fromCharCode(92), '').slice(0, 80) || 'Untitled workbook';
 function colIndex(name: string) { let n = 0; for (const ch of name) n = n * 26 + ch.charCodeAt(0) - 64; return n - 1; }
 function cellRaw(sheet: SheetData, ref: string): string { return sheet.cells[ref]?.value || ''; }
 function numeric(value: string): number { const n = Number(value.replace(/[$,%]/g, '')); return Number.isFinite(n) ? n : 0; }
