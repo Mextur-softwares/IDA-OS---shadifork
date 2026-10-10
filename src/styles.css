@@ -336,3 +336,24 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .dp-canvas-wrap{filter:drop-shadow(0 12px 24px #1e293b1c)}
 .dp-speaker-notes{border:1px solid #dbe3ef;border-radius:10px;background:#fff;padding:10px 12px}
 .dp-speaker-notes textarea{border:1px solid #dce4ef;border-radius:7px;padding:8px}
+
+/* DaPower ribbon tabs, rich text editing and draggable objects */
+.dp-ribbon{display:flex;align-items:center;gap:5px;padding:8px 14px;background:linear-gradient(180deg,#fff,#f8faff);border-bottom:1px solid #dce4ef}
+.dp-ribbon>button{border:1px solid transparent;border-radius:8px;padding:9px 14px;background:transparent;color:#526176;font-weight:650;transition:all .16s}
+.dp-ribbon>button:hover{background:#eef4ff;color:#1d4ed8}
+.dp-ribbon>button.active{background:#e8f0ff;color:#1d4ed8;border-color:#d2e1ff;box-shadow:inset 0 -2px #3b82f6}
+.dp-text-ribbon,.dp-arrange-ribbon{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.dp-text-ribbon>button,.dp-arrange-ribbon>button{display:inline-flex;align-items:center;gap:6px;border:1px solid #dce4ef;border-radius:8px;background:#fff;padding:8px 10px;color:#344256;font-weight:600}
+.dp-text-ribbon>button:hover,.dp-arrange-ribbon>button:hover{border-color:#9bbaf4;background:#eff6ff;color:#1d4ed8}
+.dp-text-ribbon small,.dp-arrange-ribbon small{flex-basis:100%;color:#64748b}
+.dp-rich-text{outline:none;white-space:pre-wrap;overflow-wrap:anywhere;cursor:text}
+.dp-rich-text:focus{outline:2px solid #93c5fd;outline-offset:4px;border-radius:3px}
+.dp-rich-text:empty:before{content:attr(data-placeholder);color:#94a3b8}
+.dp-slide [data-field="title"]{min-height:1.15em}
+.dp-slide [data-field="body"]{min-height:2em}
+.dp-slide>div[contenteditable="true"]{user-select:text}
+.dp-slide>div[style*="position: absolute"]{user-select:none;box-shadow:0 2px 10px #0f172a12}
+.dp-slide>div[style*="position: absolute"] [contenteditable="true"]{display:block;width:100%;height:100%;outline:none;cursor:text;user-select:text}
+.dp-actions button{border-radius:9px}
+.dp-actions button:hover{transform:translateY(-1px)}
+@media(max-width:820px){.dp-design{overflow-x:auto;flex-wrap:wrap}.dp-text-ribbon,.dp-arrange-ribbon{align-items:flex-start}.dp-rich-text:focus{outline-offset:1px}}
