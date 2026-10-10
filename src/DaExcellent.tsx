@@ -205,7 +205,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
       <div className="de-appmark"><FileSpreadsheet size={23}/></div>
       <div className="de-brand"><strong>DaExcellent</strong><span>Spreadsheets, made simple</span></div>
       <div className="de-bookname"><FileSpreadsheet size={16}/><input aria-label="Workbook name" value={book.title} onChange={e=>save({...book,title:e.target.value||'Untitled workbook'})}/><Check size={14}/></div>
-      <div className="de-title-actions"><button onClick={newWorkbook}><FilePlus2 size={16}/> New</button><button onClick={exportCsv}><Download size={16}/> Export CSV</button><button onClick={()=>window.print()}><Printer size={16}/> Print</button></div>
+      <div className="de-title-actions"><button onClick={newWorkbook}><FilePlus2 size={16}/> New</button><button onClick={()=>save(book)}><Check size={16}/> Save</button><button onClick={exportCsv}><Download size={16}/> Export CSV</button><button onClick={()=>window.print()}><Printer size={16}/> Print</button></div>
     </header>
     <nav className="de-tabs">{(['Home','Insert','Formulas','View'] as const).map(t=><button key={t} className={tab===t?'active':''} onClick={()=>setTab(t)}>{t}</button>)}<span className="de-tabs-spacer"/><button onClick={()=>setShowFind(v=>!v)}><Search size={14}/> Find</button></nav>
     <section className="de-ribbon">
