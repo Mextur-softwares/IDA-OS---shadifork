@@ -23,7 +23,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
   const [savedAt, setSavedAt] = useState(Date.now());
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [showDocs, setShowDocs] = useState(false); const [openSearch,setOpenSearch]=useState('');
+  const [showDocs, setShowDocs] = useState(false); const [openSearch,setOpenSearch]=useState(''); const [templateOpen,setTemplateOpen]=useState(false); const [templateChoice,setTemplateChoice]=useState('Report'); const [saveAsOpen,setSaveAsOpen]=useState(false); const [saveAsTitle,setSaveAsTitle]=useState(''); const [saveAsLocation,setSaveAsLocation]=useState('Documents');
   const [pageWidth, setPageWidth] = useState<'page'|'wide'>('page');
   const [locked,setLocked]=useState(false); const [columns,setColumns]=useState(1); const [pageColor,setPageColor]=useState('#ffffff'); const [pageMargin,setPageMargin]=useState(48);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -45,7 +45,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
         const value = JSON.parse(localStorage.getItem('ida-daword-documents-v1') || 'null');
         if (Array.isArray(value)) legacy = value.filter(doc => doc && typeof doc.id === 'string' && typeof doc.content === 'string' && typeof doc.title === 'string');
       } catch {}
-      const initial = legacy.length ? legacy : readDocuments([]);
+      const initial = legacy.length ? legacy : [];
       setDocuments(initial);
       if (!fileId) {
         launchBlankCreated.current=true;
@@ -86,7 +86,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
     if (!current) return;
     const updated = { ...current, ...patch, updatedAt: Date.now() };
     setDocuments(old => old.some(doc => doc.id === activeId) ? old.map(doc => doc.id === activeId ? updated : doc) : [updated, ...old]);
-    onSaveDocument({ id: updated.id, name: cleanFilename(updated.title) + '.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: updated.content, createdAt: updated.updatedAt });
+    if (files.some(file=>file.id===updated.id)) onSaveDocument({ id: updated.id, name: cleanFilename(updated.title) + '.daword', kind: 'file', location: files.find(file=>file.id===updated.id)?.location||'Documents', mime: 'application/x-daword', data: updated.content, createdAt: updated.updatedAt });
     setSavedAt(Date.now());
   }
   function runCommand(command: string, value?: string) {
@@ -102,7 +102,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
   function newDocument() {
     const id = 'doc-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const doc = { id, title: 'Untitled document', content: '<p><br></p>', updatedAt: Date.now() };
-    manuallySelectedRef.current=true; setDocuments(old => [doc, ...old]); onSaveDocument({ id, name: 'Untitled document.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: doc.content, createdAt: doc.updatedAt }); setActiveId(id); setShowDocs(false); setTab('Home');
+    manuallySelectedRef.current=true; setDocuments(old => [doc, ...old]); setActiveId(id); setShowDocs(false); setTab('Home');
     window.setTimeout(() => editorRef.current?.focus(), 50);
   }
   function replaceText() { const find=window.prompt('Find text'); if(!find)return; const replacement=window.prompt('Replace with','')??''; const editor=editorRef.current;if(!editor)return;const html=editor.innerHTML.split(find).join(replacement);editor.innerHTML=html;patchActive({content:html}); }
@@ -133,7 +133,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
       <div className="dw-document-name"><FileText size={15}/><input ref={titleRef} key={active.id} defaultValue={active.title} aria-label="Document title" onChange={e => updateTitle(e.target.value)} /><span className="dw-save-state"><Check size={13}/> {locked?'Read-only':'Saved'}</span></div>
       <div className="dw-title-actions">
         <button type="button" title="New document" onClick={newDocument}><FilePlus2 size={17}/><span>New</span></button>
-        <button type="button" title="Open documents" onClick={() => setShowDocs(v => !v)}><FolderOpen size={17}/><span>Open</span></button><button type="button" title="Templates" onClick={()=>{const choice=window.prompt("Template: Letter, Report, Resume, Meeting","Report");const templates:Record<string,string>={Letter:"<h1>Letter title</h1><p>Date: "+new Date().toLocaleDateString()+"</p><p>Dear [Name],</p><p>Write your message here.</p><p>Sincerely,</p><p>Your name</p>",Report:"<h1>Report title</h1><h2>Executive summary</h2><p>Summarize the main findings.</p><h2>Background</h2><p>Provide context.</p><h2>Findings</h2><p>Describe evidence.</p><h2>Recommendations</h2><p>List next steps.</p>",Resume:"<h1>Your Name</h1><p>Email · Phone · City</p><h2>Professional summary</h2><p>Your profile…</p><h2>Experience</h2><p>Role · Company · Dates</p><ul><li>Achievement with impact</li></ul><h2>Education</h2><p>Degree · School</p><h2>Skills</h2><p>Skills…</p>",Meeting:"<h1>Meeting minutes</h1><p>Date: "+new Date().toLocaleDateString()+" · Attendees:</p><h2>Agenda</h2><ul><li>Topic one</li><li>Topic two</li></ul><h2>Discussion</h2><p>Notes…</p><h2>Decisions</h2><p>Decision and owner…</p><h2>Action items</h2><ul><li>Task · Owner · Due date</li></ul>"};const content=templates[choice||""];if(content){const id="doc-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const title=choice==="Meeting"?"Meeting minutes":choice||"Template";const doc={id,title,content,updatedAt:Date.now()};manuallySelectedRef.current=true;setDocuments(old=>[doc,...old]);setActiveId(id);onSaveDocument({id,name:cleanFilename(title)+".daword",kind:"file",location:"Documents",mime:"application/x-daword",data:content,createdAt:doc.updatedAt});}}}><FileText size={17}/><span>Templates</span></button><button type="button" title="Save a copy" onClick={()=>{const title=window.prompt("Save a copy as",(active?.title||"Untitled document")+" copy");if(!title?.trim())return;const id="doc-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const content=editorRef.current?.innerHTML||active?.content||"<p><br></p>";const doc={id,title:title.trim(),content,updatedAt:Date.now()};setDocuments(old=>[doc,...old]);setActiveId(id);onSaveDocument({id,name:cleanFilename(doc.title)+".daword",kind:"file",location:"Documents",mime:"application/x-daword",data:content,createdAt:doc.updatedAt});}}><Download size={17}/><span>Save as</span></button>
+        <button type="button" title="Open documents" onClick={() => setShowDocs(v => !v)}><FolderOpen size={17}/><span>Open</span></button><button type="button" title="Templates" onClick={()=>setTemplateOpen(true)} data-template-handler-unusedconst templates:Record<string,string>={Letter:"<h1>Letter title</h1><p>Date: "+new Date().toLocaleDateString()+"</p><p>Dear [Name],</p><p>Write your message here.</p><p>Sincerely,</p><p>Your name</p>",Report:"<h1>Report title</h1><h2>Executive summary</h2><p>Summarize the main findings.</p><h2>Background</h2><p>Provide context.</p><h2>Findings</h2><p>Describe evidence.</p><h2>Recommendations</h2><p>List next steps.</p>",Resume:"<h1>Your Name</h1><p>Email · Phone · City</p><h2>Professional summary</h2><p>Your profile…</p><h2>Experience</h2><p>Role · Company · Dates</p><ul><li>Achievement with impact</li></ul><h2>Education</h2><p>Degree · School</p><h2>Skills</h2><p>Skills…</p>",Meeting:"<h1>Meeting minutes</h1><p>Date: "+new Date().toLocaleDateString()+" · Attendees:</p><h2>Agenda</h2><ul><li>Topic one</li><li>Topic two</li></ul><h2>Discussion</h2><p>Notes…</p><h2>Decisions</h2><p>Decision and owner…</p><h2>Action items</h2><ul><li>Task · Owner · Due date</li></ul>"};const content=templates[choice||""];if(content){const id="doc-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const title=choice==="Meeting"?"Meeting minutes":choice||"Template";const doc={id,title,content,updatedAt:Date.now()};manuallySelectedRef.current=true;setDocuments(old=>[doc,...old]);setActiveId(id);onSaveDocument({id,name:cleanFilename(title)+".daword",kind:"file",location:"Documents",mime:"application/x-daword",data:content,createdAt:doc.updatedAt});}}}><FileText size={17}/><span>Templates</span></button><button type="button" title="Save a copy" onClick={()=>{setSaveAsTitle((active?.title||"Untitled document")+" copy");setSaveAsLocation("Documents");setSaveAsOpen(true)}}><Download size={17}/><span>Save as</span></button>
         <button type="button" title="Download as HTML" onClick={() => downloadDocument('html')}><Download size={17}/><span>Export</span></button>
       </div>
     </header>
