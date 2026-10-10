@@ -46,7 +46,7 @@ export default function DaWord({ files, onSaveDocument, fileId }: DaWordProps) {
       } catch {}
       const initial = legacy.length ? legacy : readDocuments([]);
       setDocuments(initial);
-      if (!fileId) setActiveId(initial[0]?.id || '');
+      if (!fileId) { setActiveId(initial[0]?.id || ''); launchBlankCreated.current=true; }
       initial.forEach(doc => onSaveDocument({ id: doc.id, name: cleanFilename(doc.title) + '.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: doc.content, createdAt: doc.updatedAt || Date.now() }));
     }
     if (fileId) setActiveId(fileId);
