@@ -88,7 +88,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   const importRef = useRef<HTMLInputElement>(null);
   const sheet = book.sheets.find(s => s.id === selectedSheet) || book.sheets[0];
   const active = sheet.cells[activeCell] || { value: '' };
-  const display = (ref: string) => evaluate(ref, sheet);
+  const display = (ref: string) => { const raw = evaluate(ref, sheet); const cell = sheet.cells[ref]; if (cell?.value.trim().startsWith('=') && raw !== '' && !raw.startsWith('#') && Number.isFinite(Number(raw))) { if (cell.format === 'currency') return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(Number(raw)); if (cell.format === 'percent') return (Number(raw) * 100).toLocaleString() + '%'; } return raw; };
   const save = (next: Workbook) => {
     const updated = { ...next, updatedAt: Date.now() }; setBook(updated); setStatus('Saving…');
     onSaveWorkbook({ id: updated.id, name: cleanName(updated.title) + '.daexcel', kind: 'file', location: 'Documents', mime: MIME, data: JSON.stringify(updated), createdAt: updated.updatedAt });
