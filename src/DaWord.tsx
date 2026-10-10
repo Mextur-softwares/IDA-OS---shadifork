@@ -58,7 +58,7 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
       initial.forEach(doc => onSaveDocument({ id: doc.id, name: cleanFilename(doc.title) + '.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: doc.content, createdAt: doc.updatedAt || Date.now() }));
     }
     if (fileId && !manuallySelectedRef.current) setActiveId(fileId);
-    else if (shared.length && !launchBlankCreated.current) {
+    else if (!fileId && !manuallySelectedRef.current && shared.length && !launchBlankCreated.current) {
       launchBlankCreated.current=true;
       const doc:WordDoc={id:'doc-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'Untitled document',content:'<p><br></p>',updatedAt:Date.now()};
       setDocuments(old=>[doc,...old]); setActiveId(doc.id);
