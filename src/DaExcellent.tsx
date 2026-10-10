@@ -35,7 +35,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
   if (seen.has(ref)) return '#CYCLE!'; seen.add(ref);
   const formula = raw.slice(1).trim();
   const parseRange = (address: string): string[] => {
-    const m = address.trim().match(/^([A-Z]+)(\\d+):([A-Z]+)(\\d+)$/i);
+    const m = address.trim().match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/i);
     if (!m) return [address.trim().toUpperCase()];
     const [, ca, ra, cb, rb] = m;
     const values: string[] = [];
@@ -49,11 +49,11 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     const displayed = evaluate(key, sheet, new Set(seen));
     return { raw: source, value: numeric(displayed) };
   });
-  const functionMatch = formula.match(/^([A-Z]+)\\((.*)\\)$/i);
+  const functionMatch = formula.match(/^([A-Z]+)\((.*)\)$/i);
   if (functionMatch) {
     const fn = functionMatch[1].toUpperCase();
     const args = functionMatch[2].split(',').map(x => x.trim());
-    const isRange = (v: string) => /^[A-Z]+\\d+:[A-Z]+\\d+$/i.test(v);
+    const isRange = (v: string) => /^[A-Z]+\d+:[A-Z]+\d+$/i.test(v);
     const vals = (arg: string) => rangeValues(arg);
     const numbers = (arg: string) => (isRange(arg) ? vals(arg) : [{ raw: arg, value: numeric(arg.startsWith('"') ? arg.slice(1,-1) : arg.startsWith('=') ? arg.slice(1) : arg) }]);
     const firstRange = args.find(isRange);
@@ -82,7 +82,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
       return String(candidates.reduce((sum,v,i)=>sum+(v.raw.toLowerCase()===criteria?numeric(sums[i]?.raw||'0'):0),0));
     }
     const scalar = (arg: string): number => {
-      const ref=arg.match(/^([A-Z]+\\d+)$/i);
+      const ref=arg.match(/^([A-Z]+\d+)$/i);
       if(ref)return numeric(evaluate(ref[1].toUpperCase(),sheet,new Set(seen)));
       const n=Number(arg);return Number.isFinite(n)?n:0;
     };
@@ -96,9 +96,9 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     if(fn==='LEN')return String((args[0]||'').replace(/^"|"$/g,'').length);
     if(fn==='UPPER')return (args[0]||'').replace(/^"|"$/g,'').toUpperCase();
     if(fn==='LOWER')return (args[0]||'').replace(/^"|"$/g,'').toLowerCase();
-    if(fn==='TRIM')return (args[0]||'').replace(/^"|"$/g,'').trim().replace(/\\s+/g,' ');
+    if(fn==='TRIM')return (args[0]||'').replace(/^"|"$/g,'').trim().replace(/\s+/g,' ');
     if(fn==='LEFT'||fn==='RIGHT'){const textValue=(args[0]||'').replace(/^"|"$/g,'');return fn==='LEFT'?textValue.slice(0,b||1):textValue.slice(- (b||1));}
-    if(fn==='CONCAT'||fn==='CONCATENATE')return args.map(arg=>{const ref=arg.match(/^([A-Z]+\\d+)$/i);return ref?evaluate(ref[1].toUpperCase(),sheet,new Set(seen)):arg.replace(/^"|"$/g,'');}).join('');
+    if(fn==='CONCAT'||fn==='CONCATENATE')return args.map(arg=>{const ref=arg.match(/^([A-Z]+\d+)$/i);return ref?evaluate(ref[1].toUpperCase(),sheet,new Set(seen)):arg.replace(/^"|"$/g,'');}).join('');
   }
   const rangeMatch = formula.match(/^(SUM|AVERAGE|MIN|MAX|COUNT)\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/i);
   if (rangeMatch) {
