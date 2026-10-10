@@ -298,3 +298,41 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 @keyframes dp-slide-in{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:translateX(0)}}
 @keyframes dp-zoom-in{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.dp-transition-fade,.dp-transition-slide,.dp-transition-zoom{animation:none!important}}
+
+/* DaWord ribbon polish */
+.daword-shell{background:#eef2f7}
+.dw-titlebar{background:linear-gradient(110deg,#fff 0%,#f8fbff 100%);border-bottom:1px solid #d8e0ec;box-shadow:0 2px 8px #23334d0a}
+.dw-app-mark{box-shadow:0 3px 10px #2563eb24}
+.dw-tabs{background:#fff;border-bottom:1px solid #dce3ee;padding-left:12px;gap:5px}
+.dw-tabs button{border-radius:8px 8px 0 0;padding:9px 15px;transition:background .15s,color .15s}
+.dw-tabs button:hover{background:#eff6ff;color:#1d4ed8}
+.dw-tabs button.active{background:#eaf2ff;color:#1d4ed8;box-shadow:inset 0 -2px #2563eb}
+.dw-ribbon{background:#fff;border-bottom:1px solid #dbe3ee;gap:10px;padding:12px 14px;align-items:stretch}
+.dw-ribbon-group{border:1px solid #e5eaf2;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfcff);padding:8px 10px;box-shadow:0 2px 5px #1f293708}
+.dw-tool-row{gap:4px;flex-wrap:wrap}
+.dw-tool,.dw-ribbon button,.dw-insert-grid button{border-radius:7px;transition:background .15s,border-color .15s,transform .15s}
+.dw-tool:hover,.dw-ribbon button:hover,.dw-insert-grid button:hover{background:#edf4ff;border-color:#c7d9fb;color:#1d4ed8}
+.dw-tool:active{transform:translateY(1px)}
+.dw-ribbon select,.dw-setting select{border:1px solid #d7e0ed;border-radius:7px;background:#fff;padding:6px 8px;color:#243044;max-width:170px}
+.dw-workspace{background:radial-gradient(ellipse at top,#f8fafc 0%,#e9eef5 75%)}
+.dw-page{border:1px solid #e1e7ef;border-radius:3px;box-shadow:0 12px 38px #1e293b18,0 2px 5px #1e293b0a}
+.dw-editor:focus{outline:none}
+.dw-statusbar{background:#fff;border-top:1px solid #dbe3ee;color:#526176}
+.dw-color-picker{border:1px solid #dce4ef;border-radius:7px;background:#f8fafc;padding:4px 7px;display:inline-flex;align-items:center;gap:5px}
+.dw-insert-grid{gap:10px;padding:6px}
+.dw-insert-grid button{border:1px solid #dce4ef;background:#fff;padding:9px 12px;box-shadow:0 1px 2px #1e293b08}
+@media(max-width:760px){.dw-ribbon{overflow-x:auto;align-items:flex-start}.dw-ribbon-group{min-width:max-content}.dw-title-actions button span{display:none}}
+/* DaPower design controls */
+.dp-design{gap:9px;padding:12px 14px;background:linear-gradient(180deg,#fff,#f8faff);border-bottom:1px solid #dbe3ef}
+.dp-design>button{border:1px solid #e0e6ef;border-radius:10px;padding:7px 9px;background:#fff;transition:all .15s}
+.dp-design>button:hover{border-color:#93b4f5;transform:translateY(-1px);box-shadow:0 4px 12px #1e40af12}
+.dp-design>button.chosen{border-color:#3b82f6;background:#eff6ff;box-shadow:0 0 0 2px #3b82f61a}
+.dp-design-control{border:1px solid #e0e6ef;border-radius:10px;background:#fff;padding:7px 9px;gap:5px}
+.dp-design-control select{border:1px solid #d8e1ed;border-radius:6px;padding:5px;background:#f9fbff;max-width:140px}
+.dp-style-toggle>span:last-child{display:flex;gap:4px}
+.dp-style-toggle button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #dce4ef;background:#fff;border-radius:6px;padding:5px;cursor:pointer}
+.dp-style-toggle button.selected{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
+.dp-stage{background:radial-gradient(ellipse at top,#f8fafc 0%,#e9eef6 100%)}
+.dp-canvas-wrap{filter:drop-shadow(0 12px 24px #1e293b1c)}
+.dp-speaker-notes{border:1px solid #dbe3ef;border-radius:10px;background:#fff;padding:10px 12px}
+.dp-speaker-notes textarea{border:1px solid #dce4ef;border-radius:7px;padding:8px}
