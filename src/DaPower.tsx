@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bold, Check, ChevronLeft, ChevronRight, Copy, Download, FilePlus2, FileText, Italic, Palette, Play, Plus, Printer, Trash2, Underline } from 'lucide-react';
+import { Bold, Check, ChevronLeft, ChevronRight, Copy, Download, FilePlus2, FileText, Italic, Palette, Play, Plus, Printer, Trash2 } from 'lucide-react';
 
 type Slide = { id:string; title:string; body:string; kicker?:string; notes?:string; layout:'title'|'content'|'quote'; fontFamily?:string; titleSize?:number; bodySize?:number; textColor?:string; background?:string; titleBold?:boolean; titleItalic?:boolean; bodyBold?:boolean; bodyItalic?:boolean };
 type Deck = { id:string; title:string; slides:Slide[]; theme:string; transition?:'fade'|'slide'|'zoom'|'none'; updatedAt:number };
