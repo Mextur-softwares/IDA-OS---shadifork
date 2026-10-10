@@ -45,7 +45,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     const displayed = evaluate(key, sheet, new Set(seen));
     return { raw: source, value: numeric(displayed) };
   });
-  const functionMatch = formula.match(/^([A-Z]+)\((.*)\)$/i);
+  const functionMatch = formula.match(/^([A-Z.]+)\((.*)\)$/i);
   if (functionMatch) {
     const fn = functionMatch[1].toUpperCase();
     const args = functionMatch[2].split(',').map(x => x.trim());
@@ -82,7 +82,29 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
       if(ref)return numeric(evaluate(ref[1].toUpperCase(),sheet,new Set(seen)));
       const n=Number(arg);return Number.isFinite(n)?n:0;
     };
+    const textArg=(arg:string):string=>{const clean=arg.trim();const ref=clean.match(/^\$?([A-Z]+)\$?(\d+)$/i);return ref?evaluate(ref[1].toUpperCase()+ref[2],sheet,new Set(seen)):clean.replace(/^"|"$/g,'');};
     const a=scalar(args[0]||'0'), b=scalar(args[1]||'0');
+    if(fn==='IF'){const test=args[0]||'FALSE',op=test.match(/^(.*?)\s*(>=|<=|<>|=|>|<)\s*(.*?)$/);let yes=false;if(op){const l=textArg(op[1]),r=textArg(op[3]),ln=Number(l),rn=Number(r);switch(op[2]){case '>':yes=ln>rn;break;case '<':yes=ln<rn;break;case '>=':yes=ln>=rn;break;case '<=':yes=ln<=rn;break;case '<>':yes=l!==r;break;default:yes=l===r||ln===rn;}}else yes=!!scalar(test);return textArg(args[yes?1:2]||'FALSE');}
+    if(fn==='IFERROR'){const v=args[0]||'';const ref=v.match(/^([A-Z]+\d+)$/i);const result=ref?evaluate(ref[1].toUpperCase(),sheet,new Set(seen)):v;if(result.startsWith('#'))return textArg(args[1]||'');return result;}
+    if(fn==='AND')return String(args.every(v=>['TRUE','1'].includes(textArg(v).toUpperCase())||scalar(v)!==0));
+    if(fn==='OR')return String(args.some(v=>['TRUE','1'].includes(textArg(v).toUpperCase())||scalar(v)!==0));
+    if(fn==='NOT')return String(!(scalar(args[0]||'0')!==0||textArg(args[0]||'').toUpperCase()==='TRUE'));
+    if(fn==='TRUE')return 'TRUE';if(fn==='FALSE')return 'FALSE';if(fn==='PI')return String(Math.PI);
+    if(fn==='SIGN')return String(Math.sign(a));if(fn==='TRUNC')return String(Math.trunc(a));if(fn==='QUOTIENT')return b===0?'#DIV/0!':String(Math.trunc(a/b));
+    if(fn==='EXP')return String(Math.exp(a));if(fn==='LN')return a<=0?'#NUM!':String(Math.log(a));if(fn==='LOG')return a<=0?'#NUM!':String(Math.log(a)/Math.log(b||10));if(fn==='LOG10')return a<=0?'#NUM!':String(Math.log10(a));
+    if(fn==='FACT'){if(a<0||a>170)return '#NUM!';let n=1;for(let i=2;i<=Math.floor(a);i++)n*=i;return String(n);}
+    if(fn==='RANDBETWEEN')return String(Math.floor(Math.random()*(Math.floor(b)-Math.ceil(a)+1))+Math.ceil(a));
+    if(fn==='PROPER')return textArg(args[0]||'').toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+    if(fn==='MID')return textArg(args[0]||'').slice(Math.max(0,scalar(args[1]||'1')-1),Math.max(0,scalar(args[1]||'1')-1)+Math.max(0,scalar(args[2]||'1')));
+    if(fn==='FIND'||fn==='SEARCH'){const needle=textArg(args[0]||''),hay=textArg(args[1]||''),pos=(fn==='FIND'?hay.indexOf(needle):hay.toLowerCase().indexOf(needle.toLowerCase()));return pos<0?'#VALUE!':String(pos+1);}
+    if(fn==='SUBSTITUTE'){const source=textArg(args[0]||''),old=textArg(args[1]||''),rep=textArg(args[2]||''),nth=Number(args[3]||0);if(!old)return source;const parts=source.split(old);return parts.slice(0,-1).map((part,i)=>part+(nth&&i+1!==nth?old:rep)).join('')+parts[parts.length-1];}
+    if(fn==='REPLACE'){const source=textArg(args[0]||''),start=Math.max(1,scalar(args[1]||'1')),count=Math.max(0,scalar(args[2]||'0'));return source.slice(0,start-1)+textArg(args[3]||'')+source.slice(start-1+count);}
+    if(fn==='REPT')return textArg(args[0]||'').repeat(Math.max(0,Math.min(1000,Math.floor(b))));
+    if(fn==='EXACT')return String(textArg(args[0]||'')===textArg(args[1]||''));
+    if(fn==='VALUE')return Number.isFinite(Number(textArg(args[0]||'')))?String(Number(textArg(args[0]||''))):'#VALUE!';
+    if(fn==='TEXTJOIN'){const sep=textArg(args[0]||'');const skip=textArg(args[1]||'TRUE').toUpperCase()!=='FALSE';return args.slice(2).flatMap(arg=>isRange(arg)?vals(arg).map(v=>v.raw):[textArg(arg)]).filter(v=>!skip||v!=='').join(sep);}
+    if(fn==='SUMSQ'){const all=args.flatMap(arg=>isRange(arg)?vals(arg):numbers(arg));return String(all.reduce((sum,v)=>sum+v.value*v.value,0));}
+    if(fn==='SUMPRODUCT'){const arrays=args.map(arg=>isRange(arg)?vals(arg).map(v=>v.value):[scalar(arg)]);const count=Math.max(0,...arrays.map(v=>v.length));let sum=0;for(let i=0;i<count;i++)sum+=arrays.reduce((prod,arr)=>prod*(arr[i]??0),1);return String(sum);}
     if(fn==='ABS')return String(Math.abs(a)); if(fn==='SQRT')return a<0?'#NUM!':String(Math.sqrt(a));
     if(fn==='POWER')return String(Math.pow(a,b)); if(fn==='MOD')return b===0?'#DIV/0!':String(a%b);
     if(fn==='INT')return String(Math.floor(a)); if(fn==='ROUND')return String(Number(a.toFixed(Math.max(-10,Math.min(10,b)))));
@@ -289,7 +311,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook, onDeleteWor
   };
   const findNext = () => { if (!query) return; const entries=Object.entries(sheet.cells).sort((a,b)=>{const ma=a[0].match(/^([A-Z]+)(\d+)$/)!,mb=b[0].match(/^([A-Z]+)(\d+)$/)!;return Number(ma[2])-Number(mb[2])||colIndex(ma[1])-colIndex(mb[1]);}); const found=entries.find(([ref,cell])=>ref!==activeCell&&cell.value.toLowerCase().includes(query.toLowerCase())); if(found){setActiveCell(found[0]);gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+found[0]+'"]')?.focus();} else setStatus('No matches found'); };
   const formulaDraft = editMode ? editing : active.value;
-  const functionSuggestions = formulaDraft.startsWith('=') ? ['SUM','AVERAGE','COUNT','COUNTA','MAX','MIN','IF','IFERROR','AND','OR','NOT','SUMIF','SUMIFS','COUNTIF','COUNTIFS','AVERAGEIF','ROUND','ROUNDUP','ROUNDDOWN','ABS','SQRT','POWER','MOD','PRODUCT','MEDIAN','STDEV','VAR','CONCAT','CONCATENATE','TEXTJOIN','LEFT','RIGHT','MID','LEN','TRIM','UPPER','LOWER','PROPER','SUBSTITUTE','FIND','SEARCH','INDEX','MATCH','VLOOKUP','HLOOKUP','XLOOKUP','TODAY','NOW','DATE','YEAR','MONTH','DAY','NETWORKDAYS','WEEKDAY','RANK','PERCENTILE','QUARTILE','CORREL','SLOPE','INTERCEPT'].filter(fn=>fn.startsWith(formulaDraft.slice(1).split('(')[0].toUpperCase())).slice(0,8) : [];
+  const functionSuggestions = /^=[A-Z.]*$/i.test(formulaDraft) ? ['SUM','AVERAGE','COUNT','COUNTA','MAX','MIN','IF','IFERROR','AND','OR','NOT','SUMIF','SUMIFS','COUNTIF','COUNTIFS','AVERAGEIF','ROUND','ROUNDUP','ROUNDDOWN','ABS','SQRT','POWER','MOD','PRODUCT','MEDIAN','STDEV','VAR','CONCAT','CONCATENATE','TEXTJOIN','LEFT','RIGHT','MID','LEN','TRIM','UPPER','LOWER','PROPER','SUBSTITUTE','FIND','SEARCH','INDEX','MATCH','VLOOKUP','HLOOKUP','XLOOKUP','TODAY','NOW','DATE','YEAR','MONTH','DAY','NETWORKDAYS','WEEKDAY','RANK','PERCENTILE','QUARTILE','CORREL','SLOPE','INTERCEPT'].filter(fn=>fn.startsWith(formulaDraft.slice(1).split('(')[0].toUpperCase())).slice(0,8) : [];
   const actionButton = (label:string, icon:ReactNode, action:()=>void, activeState=false) => <button type="button" title={label} aria-label={label} className={'de-tool'+(activeState?' selected':'')} onClick={action}>{icon}</button>;
   return <div className="daexcellent">
     <header className="de-titlebar">
