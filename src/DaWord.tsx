@@ -6,18 +6,17 @@ type DaWordFile = { id: string; name: string; kind: 'file'|'note'; location: str
 type DaWordProps = { files: DaWordFile[]; onSaveDocument: (file: DaWordFile) => void; fileId?: string };
 const starterContent = '<h1>Welcome to DaWord</h1><p>Your ideas deserve a proper page.</p><p>Start writing here. Your document saves automatically in this browser.</p><p><br></p><h2>Make it yours</h2><p>Use the ribbon above to format text, add lists, change alignment, or insert a table. When you are ready, download a copy or print it to PDF.</p>';
 
-function readDocuments(): WordDoc[] {
-  try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (Array.isArray(value) && value.length) return value;
-  } catch {}
-  return [{ id: 'doc-welcome', title: 'Welcome to DaWord', content: starterContent, updatedAt: Date.now() }];
+function readDocuments(files: DaWordFile[]): WordDoc[] {
+  const saved = files.filter(file => file.mime === 'application/x-daword' && typeof file.data === 'string').map(file => ({
+    id: file.id, title: file.name.replace(/\\.daword$/i, ''), content: file.data || '<p><br></p>', updatedAt: file.createdAt
+  }));
+  return saved.length ? saved : [{ id: 'doc-welcome', title: 'Welcome to DaWord', content: starterContent, updatedAt: Date.now() }];
 }
 function cleanFilename(value: string) { return value.trim().replace(/[\\/:*?"<>|]+/g, '').slice(0, 90) || 'Untitled document'; }
 
-export default function DaWord() {
-  const [documents, setDocuments] = useState<WordDoc[]>(readDocuments);
-  const [activeId, setActiveId] = useState(() => { try { const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); return Array.isArray(saved) && saved[0]?.id ? saved[0].id : 'doc-welcome'; } catch { return 'doc-welcome'; } });
+export default function DaWord({ files, onSaveDocument, fileId }: DaWordProps) {
+  const [documents, setDocuments] = useState<WordDoc[]>(() => readDocuments(files));
+  const [activeId, setActiveId] = useState(() => fileId || readDocuments(files)[0]?.id || 'doc-welcome');
   const [tab, setTab] = useState<'Home'|'Insert'|'Layout'|'View'>('Home');
   const [zoom, setZoom] = useState(100);
   const [savedAt, setSavedAt] = useState(Date.now());
@@ -35,8 +34,9 @@ export default function DaWord() {
   const charCount = useMemo(() => (active?.content || '').replace(/<[^>]*>/g, '').length, [active?.content]);
 
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(documents)); setSavedAt(Date.now()); } catch { /* Browser storage can be full; downloads remain available. */ }
-  }, [documents]);
+    if (files.some(file => file.mime === 'application/x-daword')) setDocuments(readDocuments(files));
+    if (fileId) setActiveId(fileId);
+  }, [files, fileId]);
   useEffect(() => {
     if (editorRef.current && active && editorRef.current.innerHTML !== active.content) editorRef.current.innerHTML = active.content;
     if (titleRef.current && active && titleRef.current.value !== active.title) titleRef.current.value = active.title;
@@ -74,7 +74,7 @@ export default function DaWord() {
   function newDocument() {
     const id = 'doc-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const doc = { id, title: 'Untitled document', content: '<p><br></p>', updatedAt: Date.now() };
-    setDocuments(old => [doc, ...old]); setActiveId(id); setShowDocs(false); setTab('Home');
+    setDocuments(old => [doc, ...old]); onSaveDocument({ id, name: 'Untitled document.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: doc.content, createdAt: doc.updatedAt }); setActiveId(id); setShowDocs(false); setTab('Home');
     window.setTimeout(() => editorRef.current?.focus(), 50);
   }
   function downloadDocument(format: 'html'|'txt') {
