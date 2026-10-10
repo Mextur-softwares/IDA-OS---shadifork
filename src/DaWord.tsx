@@ -117,7 +117,7 @@ export default function DaWord({ files, onSaveDocument, fileId }: DaWordProps) {
       <div className="dw-title-actions">
         <button type="button" title="New document" onClick={newDocument}><FilePlus2 size={17}/><span>New</span></button>
         <button type="button" title="Open documents" onClick={() => setShowDocs(v => !v)}><FolderOpen size={17}/><span>Open</span></button>
-        <button type="button" title="Download as HTML" onClick={() => downloadDocument('html')}><Download size={17}/><span>Export</span></button>
+        <button type="button" title="Save document to IDA Documents" onClick={() => { if(editorRef.current) patchActive({content:editorRef.current.innerHTML}); setSavedAt(Date.now()); }}><Check size={17}/><span>Save</span></button><button type="button" title="Download as HTML" onClick={() => downloadDocument('html')}><Download size={17}/><span>Export</span></button>
       </div>
     </header>
     <nav className="dw-tabs" aria-label="Ribbon tabs">{(['Home','Insert','Layout','View'] as const).map(item => <button type="button" key={item} className={tab===item?'active':''} onClick={() => setTab(item)}>{item}</button>)}<div className="dw-tabs-spacer"/><button type="button" className="dw-search-toggle" onClick={() => setSearchOpen(v => !v)}><Search size={15}/> Find</button></nav>
