@@ -34,7 +34,19 @@ export default function DaWord({ files, onSaveDocument, fileId }: DaWordProps) {
   const charCount = useMemo(() => (active?.content || '').replace(/<[^>]*>/g, '').length, [active?.content]);
 
   useEffect(() => {
-    if (files.some(file => file.mime === 'application/x-daword')) setDocuments(readDocuments(files));
+    const shared = files.filter(file => file.mime === 'application/x-daword');
+    if (shared.length) {
+      setDocuments(readDocuments(files));
+    } else {
+      let legacy: WordDoc[] = [];
+      try {
+        const value = JSON.parse(localStorage.getItem('ida-daword-documents-v1') || 'null');
+        if (Array.isArray(value)) legacy = value.filter(doc => doc && typeof doc.id === 'string' && typeof doc.content === 'string' && typeof doc.title === 'string');
+      } catch {}
+      const initial = legacy.length ? legacy : readDocuments([]);
+      setDocuments(initial);
+      initial.forEach(doc => onSaveDocument({ id: doc.id, name: cleanFilename(doc.title) + '.daword', kind: 'file', location: 'Documents', mime: 'application/x-daword', data: doc.content, createdAt: doc.updatedAt || Date.now() }));
+    }
     if (fileId) setActiveId(fileId);
   }, [files, fileId]);
   useEffect(() => {
