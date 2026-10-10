@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Bold, Check, ChevronDown, Download, FilePlus2, FileSpreadsheet, FolderOpen, FunctionSquare, Italic, Plus, Printer, Search, Sheet, Sigma, Type, Underline } from 'lucide-react';
+import { Bold, Check, Download, FilePlus2, FileSpreadsheet, FunctionSquare, Italic, Plus, Printer, Search, Sheet, Sigma, Underline } from 'lucide-react';
 
 type Cell = { value: string; bold?: boolean; italic?: boolean; underline?: boolean; color?: string; fill?: string; format?: 'general'|'currency'|'percent' };
 type SheetData = { id: string; name: string; cells: Record<string, Cell> };
@@ -24,7 +24,6 @@ const starter = (): Workbook => {
 };
 const cleanName = (value: string) => value.trim().replaceAll(String.fromCharCode(92), '').replaceAll('/', '').replaceAll(':', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').slice(0, 80) || 'Untitled workbook';
 function colIndex(name: string) { let n = 0; for (const ch of name) n = n * 26 + ch.charCodeAt(0) - 64; return n - 1; }
-function cellRaw(sheet: SheetData, ref: string): string { return sheet.cells[ref]?.value || ''; }
 function numeric(value: string): number { const n = Number(value.replace(/[$,%]/g, '')); return Number.isFinite(n) ? n : 0; }
 function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): string {
   const cell = sheet.cells[ref]; if (!cell || !cell.value) return '';
@@ -52,7 +51,7 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
     const value = evaluate(token.toUpperCase(), sheet, new Set(seen));
     return value === '' || value.startsWith('#') ? '0' : String(numeric(value));
   });
-  if (!/^[\d+\\-*/().%\s]+$/.test(substituted)) return '#VALUE!';
+  if (!/^[\d+*/().%\s-]+$/.test(substituted)) return '#VALUE!';
   try {
     const tokens = substituted.match(/\d+(?:\.\d+)?|[()+*/-]/g) || [];
     const output: string[] = []; const ops: string[] = []; const precedence: Record<string,number> = {'+':1,'-':1,'*':2,'/':2};
@@ -85,7 +84,6 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   const [showFind, setShowFind] = useState(false);
   const [zoom, setZoom] = useState(100);
   const [status, setStatus] = useState('All changes saved');
-  const [csvImport, setCsvImport] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
   const sheet = book.sheets.find(s => s.id === selectedSheet) || book.sheets[0];
@@ -122,7 +120,6 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   };
   const addSheet = () => { const n=book.sheets.length+1; const s={...emptySheet(),name:'Sheet'+n}; const next={...book,sheets:[...book.sheets,s],activeSheet:s.id}; save(next); setSelectedSheet(s.id); setActiveCell('A1'); };
   const newWorkbook = () => { const next = { ...starter(), title: 'Untitled workbook' }; setSelectedSheet(next.sheets[0].id); setActiveCell('A1'); save(next); };
-  const addRow = () => { /* the grid grows to 50 rows; the extra visible rows remain editable */ setStatus('Select a cell and type to enter data'); };
   const format = (patch: Partial<Cell>) => updateCell(activeCell, patch);
   const exportCsv = () => {
     const used = Object.keys(sheet.cells).filter(k => sheet.cells[k]?.value).map(k => { const m=k.match(/^([A-Z]+)(\d+)$/)!; return { c:colIndex(m[1]), r:Number(m[2]) }; });
@@ -132,7 +129,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   };
   const exportWorkbook = () => { const blob=new Blob([JSON.stringify(book,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=cleanName(book.title)+'.daexcellent.json'; a.click(); URL.revokeObjectURL(url); };
   const importFile = (file: File) => {
-    const reader=new FileReader(); reader.onload=()=>{ const text=String(reader.result||''); const rows=text.replace(/\r/g,'').split('\n').filter(Boolean).map(line=>{ const out:string[]=[]; let value=''; let quoted=false; for(let i=0;i<line.length;i++){const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){value+='"';i++;}else if(ch==='"')quoted=!quoted;else if(ch===','&&!quoted){out.push(value);value='';}else value+=ch;}out.push(value);return out;}); const s={...emptySheet(),name:'Imported data',cells:{} as Record<string,Cell>}; rows.slice(0,50).forEach((row,r)=>row.slice(0,26).forEach((value,c)=>{if(value!=='')s.cells[keyOf(r+1,c)]={value};})); save({...book,title:file.name.replace(/\.[^.]+$/,''),sheets:[s],activeSheet:s.id});setSelectedSheet(s.id);setActiveCell('A1');setCsvImport(false); }; reader.readAsText(file);
+    const reader=new FileReader(); reader.onload=()=>{ const text=String(reader.result||''); const rows=text.replace(/\r/g,'').split('\n').filter(Boolean).map(line=>{ const out:string[]=[]; let value=''; let quoted=false; for(let i=0;i<line.length;i++){const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){value+='"';i++;}else if(ch==='"')quoted=!quoted;else if(ch===','&&!quoted){out.push(value);value='';}else value+=ch;}out.push(value);return out;}); const s={...emptySheet(),name:'Imported data',cells:{} as Record<string,Cell>}; rows.slice(0,50).forEach((row,r)=>row.slice(0,26).forEach((value,c)=>{if(value!=='')s.cells[keyOf(r+1,c)]={value};})); save({...book,title:file.name.replace(/\.[^.]+$/,''),sheets:[s],activeSheet:s.id});setSelectedSheet(s.id);setActiveCell('A1');}; reader.readAsText(file);
   };
   const findNext = () => { if (!query) return; const entries=Object.entries(sheet.cells).sort((a,b)=>{const ma=a[0].match(/^([A-Z]+)(\d+)$/)!,mb=b[0].match(/^([A-Z]+)(\d+)$/)!;return Number(ma[2])-Number(mb[2])||colIndex(ma[1])-colIndex(mb[1]);}); const found=entries.find(([ref,cell])=>ref!==activeCell&&cell.value.toLowerCase().includes(query.toLowerCase())); if(found){setActiveCell(found[0]);gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+found[0]+'"]')?.focus();} else setStatus('No matches found'); };
   const actionButton = (label:string, icon:ReactNode, action:()=>void, activeState=false) => <button type="button" title={label} aria-label={label} className={'de-tool'+(activeState?' selected':'')} onClick={action}>{icon}</button>;
