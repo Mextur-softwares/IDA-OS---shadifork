@@ -22,7 +22,7 @@ const starter=():Deck=>({id:'deck-'+Date.now().toString(36),title:'My presentati
 {id:id(),layout:'content',kicker:'02  /  NEXT STEPS',title:'Turn ideas into action',body:'Agree on the goal.\nChoose the next practical step.\nReview progress and keep improving.'}
 ]});
 const safe=(s:string)=>s.trim().replaceAll(String.fromCharCode(92),'').replaceAll('/','').replaceAll(':','').replaceAll('*','').replaceAll('?','').replaceAll('"','').replaceAll('<','').replaceAll('>','').replaceAll('|','').slice(0,80)||'Untitled presentation';
-const cleanRich=(value:string)=>value.replace(/<(script|style|iframe|object|embed)[^>]*>[\\s\\S]*?<\\/\\1>/gi,'').replace(/\\s+on[a-z]+\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^\\s>]+)/gi,'').replace(/javascript\\s*:/gi,'').replace(/<(?!\\/?(?:b|strong|i|em|u|span|font|br|div|p|ul|ol|li)\\b)[^>]*>/gi,'');
+const cleanRich=(value:string)=>value.replace(/<(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\/\1>/gi,'').replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/javascript\s*:/gi,'').replace(/<(?!\/?(?:b|strong|i|em|u|span|font|br|div|p|ul|ol|li)\b)[^>]*>/gi,'');
 function readDeck(file?:IdaFile):Deck|null{try{if(!file?.data)return null;const d=JSON.parse(file.data);if(Array.isArray(d.slides)&&d.slides.length)return {...d,id:file.id,title:file.name.replace(/\.dapower$/i,'')};}catch{}return null}
 export default function DaPower({files,fileId,onSaveDeck}:Props){
  const initial=files.find(f=>f.id===fileId&&f.mime===MIME)||files.find(f=>f.mime===MIME);
