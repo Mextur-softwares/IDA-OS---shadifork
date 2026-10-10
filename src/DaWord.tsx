@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Document, HeadingLevel, Packer, Paragraph, TextRun } from 'docx';
+import { Document, HeadingLevel, ImageRun, Packer, Paragraph, TextRun } from 'docx';
 import { askForChart, chartDataUri } from './chartUtils';
 import { AlignCenter, AlignLeft, AlignRight, Bold, Check, FilePlus2, FileText, FolderOpen, Highlighter, Italic, List, ListOrdered, Minus, Printer, Redo2, Strikethrough, Underline, Undo2, Download, Plus, Search, Type, X, Trash2, Table2, Link2, ImagePlus, CalendarDays, Quote, Replace } from 'lucide-react';
 
@@ -108,15 +108,18 @@ export default function DaWord({ files, onSaveDocument, onDeleteDocument, fileId
   async function exportDocx() {
     const root=document.createElement('div'); root.innerHTML=editorRef.current?.innerHTML||active?.content||'';
     const children:Paragraph[]=[];
-    const walk=(node:Node)=>{ if(node.nodeType===Node.TEXT_NODE){const t=node.textContent||'';if(t.trim())children.push(new Paragraph({children:[new TextRun(t)]}));return;} if(!(node instanceof HTMLElement))return;
+    const imageBytes=async(src:string):Promise<Uint8Array>=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>{try{const canvas=document.createElement('canvas');const width=Math.min(1000,image.naturalWidth||640),height=Math.max(1,Math.round(width*(image.naturalHeight||360)/(image.naturalWidth||640)));canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable');ctx.drawImage(image,0,0,width,height);canvas.toBlob(async blob=>{if(!blob){reject(new Error('Image conversion failed'));return;}resolve(new Uint8Array(await blob.arrayBuffer()));},'image/png');}catch(error){reject(error);}};image.onerror=()=>reject(new Error('Image could not be loaded'));image.src=src;});
+    const appendImage=async(node:HTMLImageElement)=>{try{const data=await imageBytes(node.src);const ratio=(node.naturalHeight||360)/(node.naturalWidth||640);const width=5.8*96;children.push(new Paragraph({children:[new ImageRun({data,transformation:{width,height:Math.max(80,Math.round(width*ratio))}})],spacing:{after:160}}));}catch{}};
+    const walk=async(node:Node):Promise<void>=>{if(node.nodeType===Node.TEXT_NODE){const t=node.textContent||'';if(t.trim())children.push(new Paragraph({children:[new TextRun(t)]}));return;}if(!(node instanceof HTMLElement))return;
+      if(node.tagName==='IMG'){await appendImage(node as HTMLImageElement);return;}
       if(node.tagName==='BR'){children.push(new Paragraph(''));return;}
-      if(['P','DIV','H1','H2','H3','LI','BLOCKQUOTE'].includes(node.tagName)){const text=node.innerText||node.textContent||'';const heading=node.tagName==='H1'?HeadingLevel.HEADING_1:node.tagName==='H2'?HeadingLevel.HEADING_2:node.tagName==='H3'?HeadingLevel.HEADING_3:undefined;children.push(new Paragraph({text,heading,bullet:node.tagName==='LI'?{indent:360}:undefined,spacing:{after:160}}));return;}
-      Array.from(node.childNodes).forEach(walk);
+      if(['P','DIV','H1','H2','H3','LI','BLOCKQUOTE'].includes(node.tagName)){const text=(node.innerText||node.textContent||'').trim();const heading=node.tagName==='H1'?HeadingLevel.HEADING_1:node.tagName==='H2'?HeadingLevel.HEADING_2:node.tagName==='H3'?HeadingLevel.HEADING_3:undefined;if(text)children.push(new Paragraph({text,heading,bullet:node.tagName==='LI'?{indent:360}:undefined,spacing:{after:160}}));for(const img of Array.from(node.querySelectorAll('img')))await appendImage(img);return;}
+      for(const child of Array.from(node.childNodes))await walk(child);
     };
-    Array.from(root.childNodes).forEach(walk); if(!children.length)children.push(new Paragraph(''));
+    for(const child of Array.from(root.childNodes))await walk(child); if(!children.length)children.push(new Paragraph(''));
     const doc=new Document({sections:[{children}]}); const blob=await Packer.toBlob(doc); const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=cleanFilename(active?.title||'Untitled document')+'.docx';a.click();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
-  function insertChart() { const chart=askForChart(); if(!chart)return; insertHtml('<p><img alt="'+chart.title.replace(/["<>]/g,'')+'" style="max-width:100%;height:auto" src="'+chartDataUri(chart.svg)+'"></p><p><br></p>'); }
+  function insertChart() { const chart=askForChart(); if(!chart)return; insertHtml('<p><img alt="'+chart.title.replace(/["<>]/g,'')+'" style="width:520px;max-width:100%;height:auto;cursor:move" draggable="true" src="'+chartDataUri(chart.svg)+'"></p><p><br></p>'); }
   function insertTable() {
     const rows = Array.from({ length: 3 }, (_, i) => '<tr>' + Array.from({ length: 3 }, () => '<td>' + (i === 0 ? '<strong>Heading</strong>' : '<br>') + '</td>').join('') + '</tr>').join('');
     insertHtml('<table style="border-collapse:collapse;width:100%;margin:12px 0" border="1"><tbody>' + rows + '</tbody></table><p><br></p>');
