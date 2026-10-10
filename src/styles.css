@@ -375,3 +375,8 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-grid-wrap{cursor:crosshair}
 .dp-rich-text:focus{outline:none!important}
 .dp-slide>div[style*="position: absolute"]{box-shadow:none}
+
+.dw-doc-entry{display:flex;align-items:center;gap:8px;width:100%}
+.dw-doc-entry>.dw-doc-open{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;border:0;background:transparent;color:inherit;padding:12px}
+.dw-doc-entry>button:last-child{flex:0 0 auto;border:0;background:transparent;color:#f87171;padding:10px;cursor:pointer}
+.dw-doc-entry>button:last-child:hover{background:#ef444422;border-radius:8px}
