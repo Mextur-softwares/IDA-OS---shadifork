@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, Bold, Check, ChevronDown, FilePlus2, FileText, FolderOpen, Highlighter, Italic, List, ListOrdered, Minus, Printer, Redo2, Save, Strikethrough, Underline, Undo2, Download, Plus, Search, Type, X } from 'lucide-react';
 
 type WordDoc = { id: string; title: string; content: string; updatedAt: number };
@@ -86,7 +86,7 @@ export default function DaWord() {
   function updateTitle(value: string) { patchActive({ title: value || 'Untitled document' }); }
   if (!active) return null;
 
-  const tool = (label: string, icon: React.ReactNode, onClick: () => void, activeState = false) => <button type="button" className={'dw-tool' + (activeState ? ' is-active' : '')} title={label} aria-label={label} onMouseDown={e => e.preventDefault()} onClick={onClick}>{icon}</button>;
+  const tool = (label: string, icon: ReactNode, onClick: () => void, activeState = false) => <button type="button" className={'dw-tool' + (activeState ? ' is-active' : '')} title={label} aria-label={label} onMouseDown={e => e.preventDefault()} onClick={onClick}>{icon}</button>;
   const menuButton = (label: string, action: () => void) => <button type="button" className="dw-menu-button" onClick={action}>{label}</button>;
 
   return <div className="daword-shell">
