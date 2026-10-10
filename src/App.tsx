@@ -1151,7 +1151,7 @@ function DaFileExplorer({folder,setFolder,files,folders,folderApps,appLabels,app
   const [view,setView]=useState<'list'|'grid'>('list');
   const [dragged,setDragged]=useState<{type:'file'|'folder'|'app';id:string}|null>(null);
   const [notice,setNotice]=useState('');
-  const roots=[['Home','Home'],['Recent','Recent'],['Desktop','Desktop'],['Documents','Documents'],['Photos','Pictures'],['Music','Music'],['Videos','Videos']] as const;
+  const roots=[['Home','Home'],['Recently saved','Recent'],['Desktop','Desktop'],['Documents','Documents'],['Photos','Pictures'],['Music','Music'],['Videos','Videos']] as const;
   const currentFolder=folders.find(item=>item.id===folder);
   const parentFolder=currentFolder?.parent||'Desktop';
   const isRoot=['Home','Recent','Desktop','Documents','Pictures','Music','Videos'].includes(folder);
