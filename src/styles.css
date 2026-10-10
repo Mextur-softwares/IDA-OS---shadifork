@@ -380,3 +380,18 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .dw-doc-entry>.dw-doc-open{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;border:0;background:transparent;color:inherit;padding:12px}
 .dw-doc-entry>button:last-child{flex:0 0 auto;border:0;background:transparent;color:#f87171;padding:10px;cursor:pointer}
 .dw-doc-entry>button:last-child:hover{background:#ef444422;border-radius:8px}
+
+/* Office open dialogs, templates, and Excel-style white selection cursor */
+.de-open-backdrop,.dp-open-backdrop{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:rgba(4,10,20,.58);backdrop-filter:blur(5px);padding:20px}
+.de-open-dialog,.dp-open-dialog{width:min(560px,94vw);max-height:min(72vh,680px);overflow:auto;background:#111827;color:#f8fafc;border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:16px;box-shadow:0 24px 80px #0008}
+.de-open-dialog>header,.dp-open-dialog>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:8px}
+.de-open-dialog button,.dp-open-dialog button{cursor:pointer}
+.de-open-entry,.dp-open-entry{display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.08);padding:5px 0}
+.de-open-entry>button:first-child,.dp-open-entry>button:first-child{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;background:transparent;border:0;color:inherit;padding:10px}
+.de-open-entry>button:first-child span,.dp-open-entry>button:first-child span{display:flex;flex-direction:column;gap:3px;overflow-wrap:anywhere}
+.de-open-entry small,.dp-open-entry small{opacity:.65;font-size:11px}
+.de-open-entry>button:last-child,.dp-open-entry>button:last-child{background:transparent;border:0;color:#f87171;padding:10px}
+.de-open-entry>button:last-child:hover,.dp-open-entry>button:last-child:hover{background:#ef444422;border-radius:8px}
+.de-open-entry:hover,.dp-open-entry:hover{background:#ffffff0b}
+.de-grid-wrap,.de-grid td input{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 2V22M2 12H22' stroke='%23000' stroke-width='6' stroke-linecap='square'/%3E%3Cpath d='M12 2V22M2 12H22' stroke='%23fff' stroke-width='3.5' stroke-linecap='square'/%3E%3C/svg%3E") 12 12,crosshair}
+.de-grid td input:focus{cursor:text}
