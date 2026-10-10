@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Bold, Check, ChevronDown, Download, FilePlus2, FileSpreadsheet, FolderOpen, FunctionSquare, Italic, Plus, Printer, Search, Sheet, Sigma, Type, Underline } from 'lucide-react';
 
 type Cell = { value: string; bold?: boolean; italic?: boolean; underline?: boolean; color?: string; fill?: string; format?: 'general'|'currency'|'percent' };
@@ -121,6 +121,7 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
     setActiveCell(keyOf(nr,nc)); gridRef.current?.querySelector<HTMLInputElement>('[data-cell="' + keyOf(nr,nc) + '"]')?.focus();
   };
   const addSheet = () => { const n=book.sheets.length+1; const s={...emptySheet(),name:'Sheet'+n}; const next={...book,sheets:[...book.sheets,s],activeSheet:s.id}; save(next); setSelectedSheet(s.id); setActiveCell('A1'); };
+  const newWorkbook = () => { const next = { ...starter(), title: 'Untitled workbook' }; setSelectedSheet(next.sheets[0].id); setActiveCell('A1'); save(next); };
   const addRow = () => { /* the grid grows to 50 rows; the extra visible rows remain editable */ setStatus('Select a cell and type to enter data'); };
   const format = (patch: Partial<Cell>) => updateCell(activeCell, patch);
   const exportCsv = () => {
@@ -134,13 +135,13 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
     const reader=new FileReader(); reader.onload=()=>{ const text=String(reader.result||''); const rows=text.replace(/\\r/g,'').split('\\n').filter(Boolean).map(line=>{ const out:string[]=[]; let value=''; let quoted=false; for(let i=0;i<line.length;i++){const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){value+='"';i++;}else if(ch==='"')quoted=!quoted;else if(ch===','&&!quoted){out.push(value);value='';}else value+=ch;}out.push(value);return out;}); const s={...emptySheet(),name:'Imported data',cells:{} as Record<string,Cell>}; rows.slice(0,50).forEach((row,r)=>row.slice(0,26).forEach((value,c)=>{if(value!=='')s.cells[keyOf(r+1,c)]={value};})); save({...book,title:file.name.replace(/\\.[^.]+$/,''),sheets:[s],activeSheet:s.id});setSelectedSheet(s.id);setActiveCell('A1');setCsvImport(false); }; reader.readAsText(file);
   };
   const findNext = () => { if (!query) return; const entries=Object.entries(sheet.cells).sort((a,b)=>{const ma=a[0].match(/^([A-Z]+)(\\d+)$/)!,mb=b[0].match(/^([A-Z]+)(\\d+)$/)!;return Number(ma[2])-Number(mb[2])||colIndex(ma[1])-colIndex(mb[1]);}); const found=entries.find(([ref,cell])=>ref!==activeCell&&cell.value.toLowerCase().includes(query.toLowerCase())); if(found){setActiveCell(found[0]);gridRef.current?.querySelector<HTMLInputElement>('[data-cell="'+found[0]+'"]')?.focus();} else setStatus('No matches found'); };
-  const actionButton = (label:string, icon:React.ReactNode, action:()=>void, activeState=false) => <button type="button" title={label} aria-label={label} className={'de-tool'+(activeState?' selected':'')} onClick={action}>{icon}</button>;
+  const actionButton = (label:string, icon:ReactNode, action:()=>void, activeState=false) => <button type="button" title={label} aria-label={label} className={'de-tool'+(activeState?' selected':'')} onClick={action}>{icon}</button>;
   return <div className="daexcellent">
     <header className="de-titlebar">
       <div className="de-appmark"><FileSpreadsheet size={23}/></div>
       <div className="de-brand"><strong>DaExcellent</strong><span>Spreadsheets, made simple</span></div>
       <div className="de-bookname"><FileSpreadsheet size={16}/><input aria-label="Workbook name" value={book.title} onChange={e=>save({...book,title:e.target.value||'Untitled workbook'})}/><Check size={14}/></div>
-      <div className="de-title-actions"><button onClick={()=>save({...starter(),title:'Untitled workbook'})}><FilePlus2 size={16}/> New</button><button onClick={exportCsv}><Download size={16}/> Export CSV</button><button onClick={()=>window.print()}><Printer size={16}/> Print</button></div>
+      <div className="de-title-actions"><button onClick={newWorkbook}><FilePlus2 size={16}/> New</button><button onClick={exportCsv}><Download size={16}/> Export CSV</button><button onClick={()=>window.print()}><Printer size={16}/> Print</button></div>
     </header>
     <nav className="de-tabs">{(['Home','Insert','Formulas','View'] as const).map(t=><button key={t} className={tab===t?'active':''} onClick={()=>setTab(t)}>{t}</button>)}<span className="de-tabs-spacer"/><button onClick={()=>setShowFind(v=>!v)}><Search size={14}/> Find</button></nav>
     <section className="de-ribbon">
