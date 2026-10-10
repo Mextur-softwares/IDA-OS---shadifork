@@ -34,6 +34,72 @@ function evaluate(ref: string, sheet: SheetData, seen = new Set<string>()): stri
   }
   if (seen.has(ref)) return '#CYCLE!'; seen.add(ref);
   const formula = raw.slice(1).trim();
+  const parseRange = (address: string): string[] => {
+    const m = address.trim().match(/^([A-Z]+)(\\d+):([A-Z]+)(\\d+)$/i);
+    if (!m) return [address.trim().toUpperCase()];
+    const [, ca, ra, cb, rb] = m;
+    const values: string[] = [];
+    for (let r = Math.min(Number(ra), Number(rb)); r <= Math.max(Number(ra), Number(rb)); r++) {
+      for (let c = Math.min(colIndex(ca.toUpperCase()), colIndex(cb.toUpperCase())); c <= Math.max(colIndex(ca.toUpperCase()), colIndex(cb.toUpperCase())); c++) values.push(keyOf(r, c));
+    }
+    return values;
+  };
+  const rangeValues = (address: string): { raw: string; value: number }[] => parseRange(address).map(key => {
+    const source = sheet.cells[key]?.value ?? '';
+    const displayed = evaluate(key, sheet, new Set(seen));
+    return { raw: source, value: numeric(displayed) };
+  });
+  const functionMatch = formula.match(/^([A-Z]+)\\((.*)\\)$/i);
+  if (functionMatch) {
+    const fn = functionMatch[1].toUpperCase();
+    const args = functionMatch[2].split(',').map(x => x.trim());
+    const isRange = (v: string) => /^[A-Z]+\\d+:[A-Z]+\\d+$/i.test(v);
+    const vals = (arg: string) => rangeValues(arg);
+    const numbers = (arg: string) => (isRange(arg) ? vals(arg) : [{ raw: arg, value: numeric(arg.startsWith('"') ? arg.slice(1,-1) : arg.startsWith('=') ? arg.slice(1) : arg) }]);
+    const firstRange = args.find(isRange);
+    if (['SUM','AVERAGE','MIN','MAX','COUNT','COUNTA','COUNTBLANK','PRODUCT','MEDIAN','STDEV','VAR'].includes(fn) && (firstRange || args.length)) {
+      const all = args.flatMap(arg => isRange(arg) ? vals(arg) : numbers(arg));
+      const ns = all.filter(v => v.raw.trim() !== '' && Number.isFinite(v.value)).map(v => v.value);
+      if (fn === 'COUNT') return String(all.filter(v => v.raw.trim() !== '' && Number.isFinite(Number(v.raw))).length);
+      if (fn === 'COUNTA') return String(all.filter(v => v.raw.trim() !== '').length);
+      if (fn === 'COUNTBLANK') return String(all.filter(v => v.raw.trim() === '').length);
+      if (fn === 'PRODUCT') return String(ns.reduce((a,b)=>a*b,1));
+      if (!ns.length) return '0';
+      if (fn === 'SUM') return String(ns.reduce((a,b)=>a+b,0));
+      if (fn === 'AVERAGE') return String(ns.reduce((a,b)=>a+b,0)/ns.length);
+      if (fn === 'MIN') return String(Math.min(...ns));
+      if (fn === 'MAX') return String(Math.max(...ns));
+      if (fn === 'MEDIAN') { const sorted=[...ns].sort((a,b)=>a-b); const mid=Math.floor(sorted.length/2); return String(sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2); }
+      const mean=ns.reduce((a,b)=>a+b,0)/ns.length; const variance=ns.reduce((a,b)=>a+(b-mean)**2,0)/ns.length;
+      return String(fn==='STDEV'?Math.sqrt(variance):variance);
+    }
+    if (fn === 'COUNTIF' && args.length >= 2 && isRange(args[0])) {
+      const criterion=args.slice(1).join(',').replace(/^"|"$/g,'').toLowerCase();
+      return String(vals(args[0]).filter(v => { const rawValue=v.raw.toLowerCase(); const op=criterion.match(/^(>=|<=|<>|>|<|=)(.*)$/); if(op){const rhs=op[2].replace(/^"|"$/g,'');const a=Number(rawValue),b=Number(rhs);if(Number.isFinite(a)&&Number.isFinite(b)){switch(op[1]){case '>':return a>b;case '<':return a<b;case '>=':return a>=b;case '<=':return a<=b;case '<>':return a!==b;default:return a===b}}return op[1]==='<'?rawValue<rhs:op[1]==='>'?rawValue>rhs:op[1]==='<> '?rawValue!==rhs:rawValue===rhs;} return rawValue===criterion; }).length);
+    }
+    if (fn === 'SUMIF' && args.length >= 2 && isRange(args[0])) {
+      const criteria=args[1].replace(/^"|"$/g,'').toLowerCase(); const candidates=vals(args[0]); const sums=args[2]&&isRange(args[2])?vals(args[2]):candidates;
+      return String(candidates.reduce((sum,v,i)=>sum+(v.raw.toLowerCase()===criteria?numeric(sums[i]?.raw||'0'):0),0));
+    }
+    const scalar = (arg: string): number => {
+      const ref=arg.match(/^([A-Z]+\\d+)$/i);
+      if(ref)return numeric(evaluate(ref[1].toUpperCase(),sheet,new Set(seen)));
+      const n=Number(arg);return Number.isFinite(n)?n:0;
+    };
+    const a=scalar(args[0]||'0'), b=scalar(args[1]||'0');
+    if(fn==='ABS')return String(Math.abs(a)); if(fn==='SQRT')return a<0?'#NUM!':String(Math.sqrt(a));
+    if(fn==='POWER')return String(Math.pow(a,b)); if(fn==='MOD')return b===0?'#DIV/0!':String(a%b);
+    if(fn==='INT')return String(Math.floor(a)); if(fn==='ROUND')return String(Number(a.toFixed(Math.max(-10,Math.min(10,b)))));
+    if(fn==='ROUNDUP')return String(Math.sign(a)*Math.ceil(Math.abs(a)*10**b)/10**b);
+    if(fn==='ROUNDDOWN')return String(Math.sign(a)*Math.floor(Math.abs(a)*10**b)/10**b);
+    if(fn==='CEILING')return String(Math.ceil(a/(b||1))*(b||1)); if(fn==='FLOOR')return String(Math.floor(a/(b||1))*(b||1));
+    if(fn==='LEN')return String((args[0]||'').replace(/^"|"$/g,'').length);
+    if(fn==='UPPER')return (args[0]||'').replace(/^"|"$/g,'').toUpperCase();
+    if(fn==='LOWER')return (args[0]||'').replace(/^"|"$/g,'').toLowerCase();
+    if(fn==='TRIM')return (args[0]||'').replace(/^"|"$/g,'').trim().replace(/\\s+/g,' ');
+    if(fn==='LEFT'||fn==='RIGHT'){const textValue=(args[0]||'').replace(/^"|"$/g,'');return fn==='LEFT'?textValue.slice(0,b||1):textValue.slice(- (b||1));}
+    if(fn==='CONCAT'||fn==='CONCATENATE')return args.map(arg=>{const ref=arg.match(/^([A-Z]+\\d+)$/i);return ref?evaluate(ref[1].toUpperCase(),sheet,new Set(seen)):arg.replace(/^"|"$/g,'');}).join('');
+  }
   const rangeMatch = formula.match(/^(SUM|AVERAGE|MIN|MAX|COUNT)\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/i);
   if (rangeMatch) {
     const [, fn, c1, r1, c2, r2] = rangeMatch; const vals: number[] = [];
