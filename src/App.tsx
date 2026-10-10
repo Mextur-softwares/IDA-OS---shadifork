@@ -37,7 +37,7 @@ const APPS: AppItem[] = [
   { name: 'DaFile Explorer', kind: 'explorer', tone: 'blue' },
   { name: 'DaNotes', kind: 'notes', tone: 'slate' },
   { name: 'DaWord', kind: 'word', tone: 'blue' },
-  { name: 'DaExcellent', kind: 'excellent', tone: 'green' }, 
+  { name: 'DaExcellent', kind: 'excellent', tone: 'blue' }, 
   { name: 'DaSettings', kind: 'settings', tone: 'slate' },
   { name: 'DaTrash', kind: 'trash', tone: 'blue' },
   { name: 'DaMedia', kind: 'media', tone: 'blue' },
@@ -133,7 +133,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
   const [files, setFiles] = useState<UserFile[]>([])
   const [folders, setFolders] = useState<UserFolder[]>([])
   const [folderApps, setFolderApps] = useState<Record<string,string[]>>({})
-  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaMusic','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord'])
+  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaMusic','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord','DaExcellent'])
   const [clipboard, setClipboard] = useState<{type:'app'|'file'|'folder';id:string;mode:'copy'|'cut'}|null>(null)
   const [trash, setTrash] = useState<Array<{type:'app'|'file'|'folder';id:string;name:string;app?:AppItem;file?:UserFile;folder?:UserFolder;deletedAt:number}>>([])
   const [appLabels, setAppLabels] = useState<Record<string,string>>({})
