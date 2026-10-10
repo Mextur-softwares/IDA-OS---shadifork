@@ -135,6 +135,7 @@ function parseWorkbook(file?: IdaFile): Workbook | null {
 export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
   const initialFile = files.find(f => f.id === fileId && f.mime === MIME);
   const [book, setBook] = useState<Workbook>(() => parseWorkbook(initialFile) || starter());
+  const autoCreatedRef=useRef(false);
   const [activeCell, setActiveCell] = useState('A1');
   const [editing, setEditing] = useState('');
   const [editMode, setEditMode] = useState(false);
@@ -162,7 +163,8 @@ export default function DaExcellent({ files, fileId, onSaveWorkbook }: Props) {
     const desired = fileId ? latest.find(f => f.id === fileId) : undefined;
     const parsed = parseWorkbook(desired);
     if (parsed && parsed.id !== book.id) { setBook(parsed); setSelectedSheet(parsed.activeSheet || parsed.sheets[0].id); }
-    if (!desired) {
+    if (!desired && !autoCreatedRef.current) {
+      autoCreatedRef.current=true;
       const created = { ...book, id: book.id || 'workbook-' + Date.now().toString(36) };
       onSaveWorkbook({ id: created.id, name: cleanName(created.title) + '.daexcel', kind: 'file', location: 'Documents', mime: MIME, data: JSON.stringify(created), createdAt: Date.now() });
     }
