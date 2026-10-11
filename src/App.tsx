@@ -226,7 +226,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
       setFiles(readFiles())
       const savedFolders = localStorage.getItem('ida-folders-v1'); if(savedFolders) setFolders(JSON.parse(savedFolders))
       const savedFolderApps = localStorage.getItem('ida-folder-apps-v1'); if(savedFolderApps) setFolderApps(JSON.parse(savedFolderApps))
-      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter(Boolean); setDesktopApps(Array.from(new Set([...normalized,'DaWord']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaWord'])))) } catch {} }
+      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter(Boolean); setDesktopApps(Array.from(new Set([...normalized,'DaWord','Da C++ Studio']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaWord'])))) } catch {} }
       const savedLabels = localStorage.getItem('ida-app-labels'); if (savedLabels) setAppLabels(JSON.parse(savedLabels))
       const savedNotes = localStorage.getItem('ida-notes-v2'); if (savedNotes) setNotes(JSON.parse(savedNotes))
       const savedTrash = localStorage.getItem('ida-trash-v1'); if (savedTrash) setTrash(JSON.parse(savedTrash))
