@@ -1092,8 +1092,30 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
         }catch(err){lastError=err;}
       }
       if(!videos.length){
-        if(lastError)throw new Error('Video search services could not be reached from this app. Please try again later.');
-        throw new Error('No videos found. Try a different search.');
+        // Last resort: use IDA's existing same-origin-permitted DaScope backend and
+        // turn any YouTube video links it returns into in-app playable results.
+        try{
+          const response=await fetch('https://roxnnwrmgbxnhmwjolep.supabase.co/functions/v1/dascope-ai',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','apikey':'sb_publishable_-x-g50GLtgo3Ut9fcNbStA_OUz4eBjw'},
+            body:JSON.stringify({query:'Find YouTube videos about: '+q+'. Return direct youtube.com/watch?v=VIDEO_ID links.'})
+          });
+          if(response.ok){
+            const data=await response.json();
+            const sources=Array.isArray(data.sources)?data.sources:[];
+            const mapped=sources.map((item:any)=>{
+              const link=String(item.url||item.link||'');
+              let id='';
+              try{const url=new URL(link);id=url.searchParams.get('v')|| (url.hostname==='youtu.be'?url.pathname.slice(1):'');}catch{}
+              return id?{type:'video',videoId:id,title:item.title||'YouTube video',author:item.source||'YouTube',videoThumbnails:[{quality:'medium',url:'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg'}]}:null;
+            }).filter(Boolean).slice(0,24);
+            if(mapped.length)videos=mapped;
+          }
+        }catch{}
+      }
+      if(!videos.length){
+        if(lastError)throw new Error('In-app video search could not reach its search providers. Video playback still works if you paste a YouTube link above.');
+        throw new Error('No playable YouTube video results found. Try another search or paste a video link above.');
       }
       setResults(videos);
     }catch(err){setError(err instanceof Error?err.message:'Could not search videos right now.');}
