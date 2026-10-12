@@ -1065,10 +1065,39 @@ function DaTVLogo({size=38}:{size?:number}){return <span style={{width:size,heig
 type DaSearchHit={title:string;url:string;snippet:string};
 function parseDaSearchResults(body:string,youtubeOnly=false):DaSearchHit[]{const found:DaSearchHit[]=[];const seen=new Set<string>();const add=(title:string,url:string,snippet='')=>{let clean=url.trim();while('),.;'.includes(clean.slice(-1)))clean=clean.slice(0,-1);try{const u=new URL(clean);if(u.protocol!=='https:'&&u.protocol!=='http:')return;if(youtubeOnly&&!(/(^|\.)youtube\.com$/i.test(u.hostname)||u.hostname==='youtu.be'))return;if(clean.includes('s.jina.ai')||seen.has(clean))return}catch{return}seen.add(clean);found.push({title:title.replace(/\*\*/g,'').trim()||clean,url:clean,snippet:snippet.trim().slice(0,240)})};try{const parsed=JSON.parse(body);const rows=Array.isArray(parsed)?parsed:(Array.isArray(parsed.data)?parsed.data:[]);for(const row of rows){if(row&&typeof row.url==='string')add(String(row.title||row.name||row.url),row.url,String(row.description||row.content||''))}}catch{}for(const m of body.matchAll(/Title:\s*([^\n]+)\s*\nURL Source:\s*(https?:\/\/[^\s]+)(?:\s*\n(?:Published Time|Markdown Content):\s*([^\n]+))?/g))add(m[1],m[2],m[3]||'');for(const m of body.matchAll(/\[([^\]]{2,180})\]\((https?:\/\/[^)\s]+)\)/g))add(m[1],m[2]);return found.slice(0,12)}
 function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;volume?:number;onDownloadVideo?:(file:{name:string;mime:string;blob:Blob})=>Promise<void>|void}){
+  const [query,setQuery]=useState('');
+  const [videoInput,setVideoInput]=useState('');
+  const [videoId,setVideoId]=useState('');
+  const [error,setError]=useState('');
+  const loadVideo=(value:string)=>{
+    const raw=value.trim();
+    if(!raw){setError('Paste a YouTube video link or video ID.');return}
+    let id=raw;
+    try{
+      const url=new URL(raw.startsWith('http')?raw:'https://www.youtube.com/watch?v='+raw);
+      if(url.hostname==='youtu.be')id=url.pathname.slice(1);
+      else if(url.searchParams.get('v'))id=url.searchParams.get('v')||'';
+      else {const match=url.pathname.match(/\\/embed\\/([^/?]+)/);if(match)id=match[1];else if(url.pathname.startsWith('/shorts/'))id=url.pathname.split('/')[2]||''}
+    }catch{}
+    if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){setError('That does not look like a valid YouTube video link or ID.');return}
+    setVideoId(id);setVideoInput(raw);setError('');
+  };
   if(offline)return <div style={{height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:10,background:'#11151d',color:'#fff',textAlign:'center'}}><Wifi size={42} opacity={.75}/><strong style={{fontSize:22}}>Waiting for Wi-Fi connection</strong><span style={{opacity:.65}}>Connect to Wi-Fi to use DaTV.</span></div>;
-  return <div style={{height:'100%',minHeight:0,display:'flex',flexDirection:'column',background:'#10131a',color:'#fff',overflow:'hidden'}}>
-    <iframe title="YouTube in DaTV" src="https://www.youtube.com/" style={{width:'100%',height:'100%',minHeight:0,flex:1,border:0,background:'#fff'}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/>
-    <div style={{padding:'7px 10px',fontSize:12,background:'#171b24',color:'#cbd5e1'}}>If YouTube blocks the embedded page, <a href="https://www.youtube.com/" target="_blank" rel="noreferrer" style={{color:'#ff5966'}}>open YouTube in a new tab</a>.</div>
+  return <div style={{height:'100%',minHeight:0,display:'flex',flexDirection:'column',background:'#10131a',color:'#fff',overflow:'auto',fontFamily:'inherit'}}>
+    <form onSubmit={e=>{e.preventDefault();const q=query.trim();if(q)window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q),'_blank','noopener,noreferrer')}} style={{display:'flex',gap:8,padding:12,background:'#171b24',flexWrap:'wrap'}}>
+      <input aria-label="Search YouTube" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search YouTube videos…" style={{flex:'1 1 180px',minWidth:0,padding:'10px 12px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:14}}/>
+      <button type="submit" style={{padding:'10px 16px',border:0,borderRadius:8,background:'#ff0033',color:'#fff',fontWeight:700,cursor:'pointer'}}>Search YouTube ↗</button>
+    </form>
+    <div style={{padding:'10px 12px',display:'flex',gap:8,flexWrap:'wrap',background:'#11151d',alignItems:'center'}}>
+      <form onSubmit={e=>{e.preventDefault();loadVideo(videoInput)}} style={{display:'flex',gap:8,flex:'1 1 300px',minWidth:0}}>
+        <input aria-label="YouTube video URL" value={videoInput} onChange={e=>setVideoInput(e.target.value)} placeholder="Paste a YouTube video link or ID to play here" style={{flex:1,minWidth:0,padding:'9px 11px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:13}}/>
+        <button type="submit" style={{padding:'9px 13px',border:0,borderRadius:8,background:'#303847',color:'#fff',fontWeight:600,cursor:'pointer'}}>Play</button>
+      </form>
+      {error&&<span role="alert" style={{fontSize:12,color:'#ff8b98',width:'100%'}}>{error}</span>}
+    </div>
+    <div style={{flex:1,minHeight:220,display:'flex',alignItems:'center',justifyContent:'center',padding:12}}>
+      {videoId?<iframe key={videoId} title="YouTube video player" src={'https://www.youtube-nocookie.com/embed/'+videoId} style={{width:'100%',height:'100%',minHeight:220,border:0,borderRadius:10,background:'#000'}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>:<div style={{textAlign:'center',maxWidth:460,padding:24,color:'#cbd5e1'}}><div style={{fontSize:42,marginBottom:10}}>▶</div><strong style={{display:'block',fontSize:18,color:'#fff',marginBottom:8}}>Welcome to DaTV</strong><span style={{fontSize:13,lineHeight:1.6}}>Search opens YouTube results in a new tab because YouTube blocks its full website inside apps. Copy a video's link from YouTube and paste it above to play it right here.</span></div>}
+    </div>
   </div>
 }
 function DaScopeSearch({offline=false}:{offline?:boolean}){
