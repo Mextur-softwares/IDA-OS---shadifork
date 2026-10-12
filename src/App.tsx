@@ -1170,15 +1170,16 @@ function DaScopeSearch({offline=false}:{offline?:boolean}){
   const [images,setImages]=useState<{title:string;url:string;thumb:string;source:string}[]>([]);
   const [loading,setLoading]=useState(false);
   const [notice,setNotice]=useState('');
-  const [messages,setMessages]=useState<{role:'user'|'assistant';content:string}[]>([]);
+  const [messages,setMessages]=useState<{role:'user'|'assistant';content:string}[]>(()=>{try{const saved=localStorage.getItem('idascope-chat-history-v1');const parsed=saved?JSON.parse(saved):[];return Array.isArray(parsed)?parsed.filter((m:any)=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').slice(-40):[]}catch{return []}});
   const chatEndRef=useRef<HTMLDivElement|null>(null);
+  useEffect(()=>{try{localStorage.setItem('idascope-chat-history-v1',JSON.stringify(messages.slice(-40)))}catch{}},[messages]);
   useEffect(()=>{chatEndRef.current?.scrollIntoView({behavior:'smooth',block:'end'})},[messages,loading]);
   const ask=async(e?:React.FormEvent)=>{
     e?.preventDefault();const q=query.trim();if(!q||loading)return;
     setQuery('');setLoading(true);setNotice('');setAnswer('');setSources([]);setImages([]);
     setMessages(prev=>[...prev,{role:'user',content:q}]);
     try{
-      const res=await fetch('https://hcvpnvzznmoxhklguxhh.supabase.co/functions/v1/dascope-ai',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_L0sVGo7ZgCe-A_6EOTzYrQ_52xnGIhh'},body:JSON.stringify({query:q,history:messages.slice(-3).map(message=>({role:message.role,content:message.content}))})});
+      const res=await fetch('https://hcvpnvzznmoxhklguxhh.supabase.co/functions/v1/dascope-ai',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_L0sVGo7ZgCe-A_6EOTzYrQ_52xnGIhh'},body:JSON.stringify((()=>{const history=messages.slice(-3).map(message=>({role:message.role,content:message.content}));const context=history.map(message=>(message.role==='user'?'User':'DaScope')+': '+message.content).join('\n');return {query:context?'Recent conversation (use this context to answer the current message):\n'+context+'\n\nCurrent user message: '+q:q,history}})())});
       const data=await res.json();if(!res.ok)throw new Error(data.error||'DaScope could not get an answer.');
       const responseText=data.answer||'No answer returned.';
       const foundSources=Array.isArray(data.sources)?data.sources:[];const foundImages=Array.isArray(data.images)?data.images:[];
