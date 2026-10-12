@@ -1075,11 +1075,26 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
     e?.preventDefault();const q=query.trim();if(!q)return;
     setSearching(true);setError('');setResults([]);
     try{
-      const response=await fetch('https://inv.nadeko.net/api/v1/search?q='+encodeURIComponent(q)+'&type=video');
-      if(!response.ok)throw new Error('The video search service is temporarily unavailable. Try again in a moment.');
-      const data=await response.json();
-      const videos=Array.isArray(data)?data.filter((item:any)=>item.type==='video'||item.videoId).slice(0,24):[];
-      if(!videos.length)throw new Error('No videos found. Try a different search.');
+      const instances=['https://inv.nadeko.net','https://invidious.nerdvpn.de','https://yt.chocolatemoo53.com','https://invidious.tiekoetter.com'];
+      let videos:any[]=[];
+      let lastError:unknown=null;
+      for(const instance of instances){
+        try{
+          const controller=new AbortController();
+          const timeout=window.setTimeout(()=>controller.abort(),7000);
+          let response:Response;
+          try{response=await fetch(instance+'/api/v1/search?q='+encodeURIComponent(q)+'&type=video',{signal:controller.signal,mode:'cors',credentials:'omit'});}
+          finally{window.clearTimeout(timeout);}
+          if(!response.ok)continue;
+          const data=await response.json();
+          const found=Array.isArray(data)?data.filter((item:any)=>item.type==='video'||item.videoId).slice(0,24):[];
+          if(found.length){videos=found;break;}
+        }catch(err){lastError=err;}
+      }
+      if(!videos.length){
+        if(lastError)throw new Error('Video search services could not be reached from this app. Please try again later.');
+        throw new Error('No videos found. Try a different search.');
+      }
       setResults(videos);
     }catch(err){setError(err instanceof Error?err.message:'Could not search videos right now.');}
     finally{setSearching(false);}
