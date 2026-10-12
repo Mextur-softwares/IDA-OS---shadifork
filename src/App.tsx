@@ -1171,7 +1171,6 @@ function DaScopeSearch({offline=false}:{offline?:boolean}){
   const [loading,setLoading]=useState(false);
   const [notice,setNotice]=useState('');
   const [messages,setMessages]=useState<{role:'user'|'assistant';content:string}[]>([]);
-  const [history,setHistory]=useState<{query:string;answer:string;sources:DaSearchHit[];images:{title:string;url:string;thumb:string;source:string}[]}[]>([]);
   const chatEndRef=useRef<HTMLDivElement|null>(null);
   useEffect(()=>{chatEndRef.current?.scrollIntoView({behavior:'smooth',block:'end'})},[messages,loading]);
   const ask=async(e?:React.FormEvent)=>{
@@ -1185,7 +1184,6 @@ function DaScopeSearch({offline=false}:{offline?:boolean}){
       const foundSources=Array.isArray(data.sources)?data.sources:[];const foundImages=Array.isArray(data.images)?data.images:[];
       setAnswer(responseText);setSources(foundSources);setImages(foundImages);
       setMessages(prev=>[...prev,{role:'assistant',content:responseText}]);
-      setHistory(prev=>[{query:q,answer:responseText,sources:foundSources,images:foundImages},...prev].slice(0,8));
     }catch(err){
       const message=err instanceof Error?err.message:'Could not reach DaScope. Try again.';
       setNotice(message);setMessages(prev=>[...prev,{role:'assistant',content:'Sorry, I could not complete that request. '+message}]);
