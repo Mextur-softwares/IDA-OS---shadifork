@@ -1103,11 +1103,18 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
           if(response.ok){
             const data=await response.json();
             const sources=Array.isArray(data.sources)?data.sources:[];
-            const mapped=sources.map((item:any)=>{
-              const link=String(item.url||item.link||'');
+            const candidates=[...sources.map((item:any)=>({url:String(item.url||item.link||''),title:String(item.title||'YouTube video'),author:String(item.source||'YouTube')}))];
+            const answerText=String(data.answer||'');
+            const foundLinks=answerText.match(/https?:\\/\\/(?:www\\.)?(?:youtube\\.com\\/(?:watch\\?v=|shorts\\/|embed\\/)[a-zA-Z0-9_-]{11}[^\\s)]*|youtu\\.be\\/[a-zA-Z0-9_-]{11}[^\\s)]*)/g)||[];
+            foundLinks.forEach((url:string)=>candidates.push({url,title:'YouTube video',author:'YouTube'}));
+            const seen=new Set<string>();
+            const mapped=candidates.map((item:any)=>{
+              const link=item.url.replace(/[.,;]+$/,'');
               let id='';
-              try{const url=new URL(link);id=url.searchParams.get('v')|| (url.hostname==='youtu.be'?url.pathname.slice(1):'');}catch{}
-              return id?{type:'video',videoId:id,title:item.title||'YouTube video',author:item.source||'YouTube',videoThumbnails:[{quality:'medium',url:'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg'}]}:null;
+              try{const url=new URL(link);id=url.searchParams.get('v')|| (url.hostname==='youtu.be'?url.pathname.slice(1).split('/')[0]:'');if(!id){const match=url.pathname.match(/\\/(?:shorts|embed)\\/([a-zA-Z0-9_-]{11})/);if(match)id=match[1];}}catch{}
+              if(!/^[a-zA-Z0-9_-]{11}$/.test(id)||seen.has(id))return null;
+              seen.add(id);
+              return {type:'video',videoId:id,title:item.title||'YouTube video',author:item.author||'YouTube',videoThumbnails:[{quality:'medium',url:'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg'}]};
             }).filter(Boolean).slice(0,24);
             if(mapped.length)videos=mapped;
           }
