@@ -3,7 +3,7 @@
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#171923"/><stop offset="1" stop-color="#050609"/></linearGradient>
     <filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
-  <rect x="3" y="3" width="122" height="122" rx="25" fill="url(#bg)" stroke="#3b4252" stroke-width="3"/>
+  <rect x="3" y="3" width="200" height="200" rx="25" fill="url(#bg)" stroke="#3b4252" stroke-width="3"/>
   <path d="M26 38 38 23 48 31 62 25 77 31 89 23 102 40 98 70 89 83 87 103 74 103 68 90 58 90 52 103 39 103 37 82 27 68Z" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2.5" stroke-linejoin="round"/>
   <path d="M35 47 53 47 48 58 35 58Z" fill="#050609"/>
   <path d="M72 45 94 45 88 59 72 59Z" fill="#050609"/>
