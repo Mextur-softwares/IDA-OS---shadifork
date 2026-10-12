@@ -355,3 +355,77 @@ input::placeholder, textarea::placeholder { color:#778398 !important; }
   background: #ffffff !important;
   color: #263447 !important;
 }
+
+
+
+/* Office app scrollbars: subtle light tracks with a clear, neutral thumb. */
+.daexcellent *,
+.daword-shell *,
+.dapower * {
+  scrollbar-color: #b8c4d2 #f1f4f7 !important;
+  scrollbar-width: thin !important;
+}
+.daexcellent *::-webkit-scrollbar,
+.daword-shell *::-webkit-scrollbar,
+.dapower *::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+.daexcellent *::-webkit-scrollbar-track,
+.daword-shell *::-webkit-scrollbar-track,
+.dapower *::-webkit-scrollbar-track {
+  background: #f1f4f7 !important;
+  border-radius: 8px !important;
+}
+.daexcellent *::-webkit-scrollbar-thumb,
+.daword-shell *::-webkit-scrollbar-thumb,
+.dapower *::-webkit-scrollbar-thumb {
+  background: #b8c4d2 !important;
+  border: 2px solid #f1f4f7 !important;
+  border-radius: 8px !important;
+}
+.daexcellent *::-webkit-scrollbar-thumb:hover,
+.daword-shell *::-webkit-scrollbar-thumb:hover,
+.dapower *::-webkit-scrollbar-thumb:hover {
+  background: #8d9caf !important;
+}
+
+/* Keep the two spreadsheet color-picker swatches neat and clearly outlined. */
+.daexcellent .de-color-control {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 7px !important;
+  border: 1px solid #d5dee8 !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  color: #344258 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.daexcellent .de-color-control input[type="color"] {
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 24px !important;
+  padding: 2px !important;
+  border: 1px solid #cbd5df !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  cursor: pointer !important;
+  color-scheme: light !important;
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+}
+.daexcellent .de-color-control input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 1px !important;
+}
+.daexcellent .de-color-control input[type="color"]::-webkit-color-swatch {
+  border: 1px solid #aab5c2 !important;
+  border-radius: 2px !important;
+}
+.daexcellent .de-color-control input[type="color"]::-moz-color-swatch {
+  border: 1px solid #aab5c2 !important;
+  border-radius: 2px !important;
+}
