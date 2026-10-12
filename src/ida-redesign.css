@@ -89,3 +89,24 @@ input, select, textarea { border-color: rgba(226,232,255,.16); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Stable app-specific marks: these target each shortcut by ID rather than DOM position. */
+.app-tile[data-app-id="DAPP"] .app-icon { background:linear-gradient(145deg,#7769f7,#4433b7);color:#fff }
+.app-tile[data-app-id="DaEconomy"] .app-icon { background:linear-gradient(145deg,#ffca64,#a45a22);color:#fff9e8 }
+.app-tile[data-app-id="DaCourt"] .app-icon { background:linear-gradient(145deg,#ff8b80,#a73552);color:#fff }
+.app-tile[data-app-id="DaMusic"] .app-icon { background:linear-gradient(145deg,#e86cbd,#6b45c5);color:#fff }
+.app-tile[data-app-id="DaScope"] .app-icon { background:linear-gradient(145deg,#5ed6d0,#2378a7);color:#fff }
+.app-tile[data-app-id="DaFile Explorer"] .app-icon { background:linear-gradient(145deg,#70b8ff,#3154a8);color:#fff }
+.app-tile[data-app-id="DaNotes"] .app-icon { background:linear-gradient(145deg,#8c9cb8,#43516b);color:#fff }
+.app-tile[data-app-id="Da C++ Studio"] .app-icon { background:linear-gradient(145deg,#c6a0ff,#6547c7);color:#fff }
+.app-tile[data-app-id="DaWord"] .app-icon { background:linear-gradient(145deg,#5fa6ff,#2346b1);color:#fff }
+.app-tile[data-app-id="DaExcellent"] .app-icon { background:linear-gradient(145deg,#54d8bd,#167c75);color:#fff }
+.app-tile[data-app-id="DaPower"] .app-icon { background:linear-gradient(145deg,#ff8f70,#b5434b);color:#fff }
+.app-tile[data-app-id="DaSettings"] .app-icon { background:linear-gradient(145deg,#b5c0d3,#56657e);color:#172033 }
+.app-tile[data-app-id="DaTrash"] .app-icon { background:linear-gradient(145deg,#91a8c7,#425775);color:#fff }
+.app-tile[data-app-id="DaMedia"] .app-icon { background:linear-gradient(145deg,#65d5e6,#2865a8);color:#fff }
+.app-tile[data-app-id="DaTV"] .app-icon { background:linear-gradient(145deg,#ff8a9e,#9b3b6a);color:#fff }
+.app-tile[data-app-id="DaDrift"] .app-icon { background:linear-gradient(145deg,#75c6ff,#3650a1);color:#fff }
+.app-tile[data-app-id="Bad-Time"] .app-icon { background:linear-gradient(145deg,#9ca3b8,#4b4f67);color:#fff }
+.app-tile[data-app-id="Daculator"] .app-icon { background:linear-gradient(145deg,#a99aff,#5b4bba);color:#fff }
+.app-tile[data-app-id="DaRaw"] .app-icon { background:linear-gradient(145deg,#ff83bf,#9b458e);color:#fff }
