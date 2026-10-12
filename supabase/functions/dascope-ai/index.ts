@@ -30,6 +30,15 @@ Deno.serve(async (req: Request) => {
 
     const body = await req.json().catch(() => ({}));
     const query = typeof body.query === "string" ? body.query.trim() : "";
+    const history = Array.isArray(body.history)
+      ? body.history.slice(-3).flatMap((item: unknown) => {
+          if (!item || typeof item !== "object") return [];
+          const entry = item as { role?: unknown; content?: unknown };
+          if ((entry.role !== "user" && entry.role !== "assistant") || typeof entry.content !== "string") return [];
+          const content = entry.content.trim().slice(0, 12000);
+          return content ? [{ role: entry.role, content }] : [];
+        })
+      : [];
     if (!query) {
       return Response.json({ error: "Please enter a question." }, {
         status: 400,
@@ -56,8 +65,9 @@ Deno.serve(async (req: Request) => {
         messages: [
           {
             role: "system",
-            content: "You are DaScope, the helpful AI assistant inside IDA OS. Answer clearly and accurately. If you are unsure, say so. Do not claim to have browsed the web or verified sources unless source data was actually provided.",
+            content: "You are DaScope, the helpful AI assistant inside IDA OS. Answer clearly and accurately. If you are unsure, say so. Do not claim to have browsed the web or verified sources unless source data was actually provided. Use the recent conversation messages to understand follow-up questions and maintain context.",
           },
+          ...history,
           { role: "user", content: query },
         ],
       }),
