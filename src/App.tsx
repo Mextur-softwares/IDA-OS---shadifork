@@ -1178,7 +1178,7 @@ function DaScopeSearch({offline=false}:{offline?:boolean}){
     setQuery('');setLoading(true);setNotice('');setAnswer('');setSources([]);setImages([]);
     setMessages(prev=>[...prev,{role:'user',content:q}]);
     try{
-      const res=await fetch('https://hcvpnvzznmoxhklguxhh.supabase.co/functions/v1/dascope-ai',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_L0sVGo7ZgCe-A_6EOTzYrQ_52xnGIhh'},body:JSON.stringify({query:q})});
+      const res=await fetch('https://hcvpnvzznmoxhklguxhh.supabase.co/functions/v1/dascope-ai',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_L0sVGo7ZgCe-A_6EOTzYrQ_52xnGIhh'},body:JSON.stringify({query:q,history:messages.slice(-3).map(message=>({role:message.role,content:message.content}))})});
       const data=await res.json();if(!res.ok)throw new Error(data.error||'DaScope could not get an answer.');
       const responseText=data.answer||'No answer returned.';
       const foundSources=Array.isArray(data.sources)?data.sources:[];const foundImages=Array.isArray(data.images)?data.images:[];
