@@ -1105,7 +1105,7 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
             const sources=Array.isArray(data.sources)?data.sources:[];
             const candidates=[...sources.map((item:any)=>({url:String(item.url||item.link||''),title:String(item.title||'YouTube video'),author:String(item.source||'YouTube')}))];
             const answerText=String(data.answer||'');
-            const foundLinks=answerText.match(/https?:\\/\\/(?:www\\.)?(?:youtube\\.com\\/(?:watch\\?v=|shorts\\/|embed\\/)[a-zA-Z0-9_-]{11}[^\\s)]*|youtu\\.be\\/[a-zA-Z0-9_-]{11}[^\\s)]*)/g)||[];
+            const foundLinks=answerText.match(/https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)[a-zA-Z0-9_-]{11}[^\s)]*|youtu\.be\/[a-zA-Z0-9_-]{11}[^\s)]*)/g)||[];
             foundLinks.forEach((url:string)=>candidates.push({url,title:'YouTube video',author:'YouTube'}));
             const seen=new Set<string>();
             const mapped=candidates.map((item:any)=>{
