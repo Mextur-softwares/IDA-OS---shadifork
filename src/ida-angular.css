@@ -127,3 +127,87 @@ input::placeholder, textarea::placeholder { color:#778398 !important; }
   .app-icon { width:42px !important;height:42px !important;flex-basis:42px !important;border-radius:11px !important; }
   .desktop-window { min-width:0 !important; }
 }
+
+
+/* Office apps: restore the clean, light Office-style controls and spreadsheet grid. */
+.daword-shell,
+.daexcellent,
+.dapower {
+  color-scheme: light;
+}
+.daword-shell button,
+.daexcellent button,
+.dapower button,
+.daword-shell input,
+.daword-shell select,
+.daword-shell textarea,
+.daexcellent input,
+.daexcellent select,
+.daexcellent textarea,
+.dapower input,
+.dapower select,
+.dapower textarea {
+  outline-color: #8bb8f5;
+  box-shadow: none;
+}
+.daword-shell button,
+.daexcellent button,
+.dapower button {
+  border-color: #d5dce5;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #344258;
+}
+.daword-shell button:hover,
+.daexcellent button:hover,
+.dapower button:hover {
+  border-color: #b8c7d8;
+  background-color: #f3f6fa;
+  color: #1e293b;
+}
+.daword-shell button:focus-visible,
+.daexcellent button:focus-visible,
+.dapower button:focus-visible,
+.daword-shell input:focus-visible,
+.daexcellent input:focus-visible,
+.dapower input:focus-visible,
+.daword-shell select:focus-visible,
+.daexcellent select:focus-visible,
+.dapower select:focus-visible {
+  outline: 2px solid #78aaf5;
+  outline-offset: 1px;
+}
+.daexcellent .de-grid {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.daexcellent .de-grid thead th {
+  border-right: 1px solid #d8e0e7;
+  border-bottom: 1px solid #cbd5df;
+}
+.daexcellent .de-grid .de-rowhead {
+  border-right: 1px solid #d8e0e7;
+  border-bottom: 1px solid #e2e7ec;
+}
+.daexcellent .de-grid td {
+  border: 0;
+  border-right: 1px solid #e3e8ed;
+  border-bottom: 1px solid #e3e8ed;
+  outline: 0;
+  box-shadow: none;
+}
+.daexcellent .de-grid td input {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+.daexcellent .de-grid td.de-selected {
+  outline: 2px solid #16834a;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+.daexcellent .de-grid td:focus-within {
+  box-shadow: inset 0 0 0 2px #16834a;
+}
