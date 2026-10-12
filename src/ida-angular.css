@@ -116,3 +116,137 @@ input, select, textarea {
 @media (max-width: 700px) {
   .app-icon { border-radius: 0 !important; }
 }
+
+
+/* IDA NIGHTSHIFT — dark-first shell, crisp windows, and individually shaped app marks. */
+:root {
+  color-scheme: dark;
+  --ida-radius-xs: 0px;
+  --ida-radius-sm: 0px;
+  --ida-radius-md: 0px;
+  --ida-radius-lg: 0px;
+  --ida-radius-xl: 0px;
+  --ida-accent: #7c8cff;
+  --ida-accent-soft: rgba(124,140,255,.16);
+  --ida-surface: #10131b;
+  --ida-surface-raised: #171b25;
+  --ida-stroke: #303746;
+  --ida-text: #f3f5fb;
+  --ida-muted: #9aa5b8;
+  color-scheme: dark;
+}
+html, body, #root { background:#080a0f; color:#f3f5fb; }
+body { color-scheme:dark; }
+.daapps-root { background-color:#080a0f; color:#eef2fb; }
+.wallpaper-overlay { background:linear-gradient(180deg,rgba(5,7,12,.18),rgba(5,7,12,.44)),radial-gradient(ellipse at 50% 0%,rgba(100,116,255,.10),transparent 55%); }
+.app-window, .desktop-window {
+  background:#11151e !important;
+  color:#edf1fa !important;
+  border:1px solid #343b4b !important;
+  border-radius:0 !important;
+  box-shadow:0 24px 80px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.025) !important;
+}
+.window-bar, .window-titlebar, .window-header {
+  background:#151a24 !important;
+  color:#f3f5fb !important;
+  border-bottom:1px solid #303746 !important;
+}
+.window-title { color:#f3f5fb !important; }
+.window-actions button { color:#b8c2d4 !important; border-radius:0 !important; }
+.window-actions button:hover { background:#272e3c !important; }
+.window-actions .close-btn:hover { background:#dc4054 !important; color:#fff !important; }
+.window-body { scrollbar-color:#3c4659 #11151e; }
+.taskbar {
+  background:rgba(10,12,18,.94) !important;
+  border-top:1px solid #2a303c !important;
+  box-shadow:0 -10px 34px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(22px) saturate(125%);
+}
+.ida-start { background:#161b27 !important; border:1px solid #353e50 !important; color:#f6f7ff !important; border-radius:0 !important; }
+.ida-start:hover { background:#252d40 !important; }
+.search-box, .search-input {
+  background:#141924 !important; color:#e8edf7 !important;
+  border:1px solid #343c4c !important; border-radius:0 !important;
+}
+.search-box:hover { background:#1b2230 !important; border-color:#5d6c91 !important; }
+.taskbar-app, .taskbar-app:hover, .taskbar-app.selected { border-radius:0 !important; }
+.taskbar-app:hover, .taskbar-app.selected { background:#202736 !important; }
+.taskbar-app.running:after { background:#8fa0ff !important; }
+.control-center, .taskbar-preview, .start-menu, .search-panel, .context-menu,
+.settings-content, .trash-shell, .rename-dialog, .rename-backdrop > div {
+  background:#111620 !important;
+  color:#edf1fa !important;
+  border-color:#303849 !important;
+  border-radius:0 !important;
+  box-shadow:0 22px 70px rgba(0,0,0,.58) !important;
+  backdrop-filter:blur(22px);
+}
+.control-center button, .start-menu button, .search-panel button { color:#e8edf7 !important; }
+button, input, select, textarea { border-radius:0 !important; }
+input, select, textarea, .search-box input, .setting-row select {
+  background:#0c1018 !important;
+  color:#eef2fb !important;
+  border-color:#353e50 !important;
+  color-scheme:dark;
+}
+input::placeholder, textarea::placeholder { color:#778398 !important; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline:2px solid #91a0ff !important; outline-offset:2px;
+}
+.window-body { color:#e6ebf5; }
+.window-body h1, .window-body h2, .window-body h3, .window-body strong { color:inherit; }
+.window-body .setting-row, .window-body .wallpaper-controls label { border-color:#303849 !important; }
+.window-body .wallpaper-controls label, .window-body .wallpaper-choice { background:#151b27 !important; }
+.window-body .wallpaper-choice:hover { border-color:#8595ff !important; }
+.app-name { color:#f2f4fa !important; text-shadow:0 2px 8px #000 !important; }
+.app-tile { border-radius:0 !important; }
+.app-tile:focus-visible { outline:1px solid #91a0ff !important; outline-offset:3px; border-radius:0 !important; }
+.app-tile-selected .app-name { background:rgba(132,148,255,.2) !important; color:#fff !important; border-radius:0 !important; }
+.app-tile-selected .app-icon { outline:1px solid rgba(225,230,255,.9) !important; outline-offset:3px; box-shadow:0 0 0 5px rgba(124,140,255,.13),0 10px 26px #0008 !important; }
+
+/* App icons use deep charcoal bodies with a distinct colored glyph and a different silhouette. */
+.app-icon {
+  width:46px !important; height:46px !important; flex-basis:46px !important;
+  display:grid; place-items:center; overflow:hidden;
+  border:1px solid rgba(255,255,255,.13) !important;
+  background:#10141d !important; color:#d9e0ff !important;
+  box-shadow:0 9px 22px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06) !important;
+  backdrop-filter:none !important;
+  clip-path:polygon(12% 0,88% 0,100% 14%,100% 86%,88% 100%,12% 100%,0 86%,0 14%);
+}
+.app-icon svg { width:23px !important; height:23px !important; stroke:currentColor !important; color:inherit !important; fill:none !important; filter:none !important; stroke-width:1.9; }
+.app-tile[data-app-id="DAPP"] .app-icon { color:#c1a6ff !important;background:#171225 !important;clip-path:polygon(50% 0,91% 19%,100% 63%,69% 100%,25% 92%,0 54%,13% 15%); }
+.app-tile[data-app-id="DaEconomy"] .app-icon { color:#ffd166 !important;background:#21190d !important;clip-path:circle(48% at 50% 50%); }
+.app-tile[data-app-id="DaCourt"] .app-icon { color:#ff8d9a !important;background:#241117 !important;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%); }
+.app-tile[data-app-id="DaMusic"] .app-icon { color:#ff8ce4 !important;background:#211022 !important;clip-path:polygon(18% 0,100% 0,82% 100%,0 100%,0 18%); }
+.app-tile[data-app-id="DaScope"] .app-icon { color:#66e6db !important;background:#0b201f !important;clip-path:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%); }
+.app-tile[data-app-id="DaFile Explorer"] .app-icon { color:#74bdff !important;background:#0d1b2b !important;clip-path:polygon(0 18%,39% 18%,50% 29%,100% 29%,100% 100%,0 100%); }
+.app-tile[data-app-id="DaNotes"] .app-icon { color:#c5d0e8 !important;background:#171c28 !important;clip-path:polygon(0 0,76% 0,100% 23%,100% 100%,0 100%); }
+.app-tile[data-app-id="Da C++ Studio"] .app-icon { color:#c3a4ff !important;background:#171126 !important;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+.app-tile[data-app-id="DaWord"] .app-icon { color:#70aaff !important;background:#0e172a !important;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%,0 15%); }
+.app-tile[data-app-id="DaExcellent"] .app-icon { color:#5ce3b1 !important;background:#0d211b !important;clip-path:polygon(0 15%,82% 0,100% 85%,18% 100%); }
+.app-tile[data-app-id="DaPower"] .app-icon { color:#ff9b7b !important;background:#26150f !important;clip-path:polygon(0 0,100% 18%,82% 100%,0 82%); }
+.app-tile[data-app-id="DaSettings"] .app-icon { color:#b6c5dc !important;background:#151c28 !important;clip-path:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%); }
+.app-tile[data-app-id="DaTrash"] .app-icon { color:#b3c6df !important;background:#121b29 !important;clip-path:polygon(18% 0,82% 0,100% 18%,86% 100%,14% 100%,0 18%); }
+.app-tile[data-app-id="DaMedia"] .app-icon { color:#69d9ff !important;background:#0d1d29 !important;clip-path:polygon(0 18%,100% 0,100% 82%,0 100%); }
+.app-tile[data-app-id="DaTV"] .app-icon { color:#ff8bba !important;background:#261020 !important;clip-path:polygon(12% 0,88% 0,100% 14%,88% 100%,12% 100%,0 14%); }
+.app-tile[data-app-id="DaDrift"] .app-icon { color:#86c6ff !important;background:#101a2b !important;clip-path:polygon(0 0,100% 0,100% 72%,70% 100%,0 70%); }
+.app-tile[data-app-id="Bad-Time"] .app-icon { color:#e1e6f4 !important;background:#191b26 !important;clip-path:polygon(50% 0,62% 29%,94% 17%,81% 49%,100% 70%,66% 72%,50% 100%,34% 72%,0 70%,19% 49%,6% 17%,38% 29%); }
+.app-tile[data-app-id="Daculator"] .app-icon { color:#c0b0ff !important;background:#18132a !important;clip-path:polygon(14% 0,86% 0,100% 14%,100% 86%,86% 100%,14% 100%,0 86%,0 14%); }
+.app-tile[data-app-id="DaRaw"] .app-icon { color:#ff8bd1 !important;background:#251126 !important;clip-path:polygon(50% 0,61% 24%,87% 12%,80% 39%,100% 50%,80% 61%,87% 88%,61% 76%,50% 100%,39% 76%,13% 88%,20% 61%,0 50%,20% 39%,13% 12%,39% 24%); }
+
+/* Keep taskbar marks colorful without putting them inside rounded or white tiles. */
+.taskbar .mini-icon, .taskbar .app-icon, .taskbar .taskbar-app { background:transparent !important; }
+.taskbar .mini-icon svg, .taskbar .taskbar-app svg { filter:none !important; }
+.taskbar .taskbar-app:nth-child(5n + 1) { color:#c1a6ff !important; }
+.taskbar .taskbar-app:nth-child(5n + 2) { color:#ffd166 !important; }
+.taskbar .taskbar-app:nth-child(5n + 3) { color:#ff8d9a !important; }
+.taskbar .taskbar-app:nth-child(5n + 4) { color:#66e6db !important; }
+.taskbar .taskbar-app:nth-child(5n) { color:#74bdff !important; }
+.music-art { background:#171225 !important; color:#c1a6ff !important; border-radius:0 !important; }
+.play-button { background:#dce3ff !important; color:#111522 !important; border-radius:0 !important; }
+::selection { background:rgba(124,140,255,.4) !important; color:#fff !important; }
+@media(max-width:700px) {
+  .app-icon { width:42px !important;height:42px !important;flex-basis:42px !important; }
+  .desktop-window { min-width:0 !important; }
+}
