@@ -1,0 +1,91 @@
+/* IDA Studio design refresh — rounded surfaces, clearer hierarchy, and a unified icon system. */
+:root {
+  --ida-radius-xs: 8px;
+  --ida-radius-sm: 12px;
+  --ida-radius-md: 16px;
+  --ida-radius-lg: 22px;
+  --ida-radius-xl: 28px;
+  --ida-accent: #8b7cff;
+  --ida-accent-soft: rgba(139,124,255,.18);
+  --ida-surface: rgba(17, 21, 34, .88);
+  --ida-surface-raised: rgba(27, 32, 48, .94);
+  --ida-stroke: rgba(226,232,255,.13);
+  --ida-text: #f5f6ff;
+  --ida-muted: #a9b1c8;
+}
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -.012em; }
+button, input, select, textarea { border-radius: var(--ida-radius-sm); }
+button { transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #a99fff; outline-offset: 2px;
+}
+.app-window, .control-center, .taskbar-preview, .start-menu, .search-panel,
+.context-menu, .modal-backdrop > *, .settings-content, .trash-shell {
+  border-radius: var(--ida-radius-lg);
+}
+.app-window { border: 1px solid var(--ida-stroke); background: rgba(15,18,30,.94); box-shadow: 0 26px 80px rgba(0,0,0,.42), 0 1px 0 rgba(255,255,255,.06) inset; }
+.window-bar { min-height: 50px; border-bottom-color: var(--ida-stroke); background: linear-gradient(100deg,rgba(255,255,255,.055),rgba(255,255,255,.018)); }
+.window-title { letter-spacing: -.02em; font-size: 13px; }
+.window-actions button { width: 34px; height: 32px; border-radius: 10px; }
+.window-actions .close-btn:hover { background: #e5485d; }
+.window-body { scrollbar-color: rgba(170,180,210,.34) transparent; scrollbar-width: thin; }
+.window-body button, .window-body input, .window-body select, .window-body textarea { border-radius: 11px; }
+.window-body button:hover { border-color: rgba(184,174,255,.42); }
+.window-immersive { border-radius: 0 !important; }
+.taskbar { height: 56px; padding: 7px 12px; border-top: 1px solid rgba(255,255,255,.12); background: rgba(15,18,30,.76) !important; box-shadow: 0 -12px 34px rgba(0,0,0,.18); }
+.ida-start { width: 42px; height: 40px; border: 1px solid rgba(255,255,255,.12); border-radius: 13px; background: linear-gradient(145deg,#8b7cff,#5a56d6); box-shadow: 0 5px 18px rgba(104,91,230,.24); }
+.ida-start:hover { background: linear-gradient(145deg,#a69aff,#6c68e8); }
+.search-box { height: 38px; border-radius: 13px; background: rgba(255,255,255,.075); border: 1px solid rgba(255,255,255,.13); }
+.taskbar-app { height: 40px; width: 44px; border-radius: 12px; }
+.taskbar-app:hover, .taskbar-app.selected { background: rgba(255,255,255,.10) !important; }
+.taskbar-app.running:after { height: 3px; border-radius: 99px; }
+.app-icon { width: 48px; height: 48px; flex-basis: 48px; border-radius: 16px; border: 1px solid rgba(255,255,255,.13); box-shadow: 0 8px 22px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.18); backdrop-filter: blur(16px); }
+.app-icon svg { width: 23px; height: 23px; stroke-width: 1.9; }
+.app-tile { width: 100px; min-height: 98px; gap: 7px; }
+.app-name { max-width: 96px; font-size: 11px; font-weight: 650; letter-spacing: .005em; }
+.app-tile-selected .app-icon { outline: 2px solid rgba(198,191,255,.92); outline-offset: 2px; box-shadow: 0 0 0 5px rgba(139,124,255,.16), 0 12px 28px rgba(0,0,0,.3); }
+.tone-yellow { color: #ffd66e; background: linear-gradient(145deg,#49371d,#211b16); }
+.tone-violet { color: #c4baff; background: linear-gradient(145deg,#473d7d,#242044); }
+.tone-slate { color: #d2d9eb; background: linear-gradient(145deg,#35445d,#1b2435); }
+.tone-blue { color: #91d5ff; background: linear-gradient(145deg,#205a7d,#18304d); }
+.tone-red { color: #ff9ca9; background: linear-gradient(145deg,#71354c,#321c31); }
+.tone-amber { color: #ffd39a; background: linear-gradient(145deg,#76502d,#38271f); }
+.app-tile:nth-of-type(1) .app-icon { background: linear-gradient(145deg,#7769f7,#4433b7); color: #fff; }
+.app-tile:nth-of-type(2) .app-icon { background: linear-gradient(145deg,#ffca64,#a45a22); color: #fff9e8; }
+.app-tile:nth-of-type(3) .app-icon { background: linear-gradient(145deg,#ff8b80,#a73552); color: #fff; }
+.app-tile:nth-of-type(4) .app-icon { background: linear-gradient(145deg,#e86cbd,#6b45c5); color: #fff; }
+.app-tile:nth-of-type(5) .app-icon { background: linear-gradient(145deg,#5ed6d0,#2378a7); color: #fff; }
+.app-tile:nth-of-type(6) .app-icon { background: linear-gradient(145deg,#70b8ff,#3154a8); color: #fff; }
+.app-tile:nth-of-type(7) .app-icon { background: linear-gradient(145deg,#8c9cb8,#43516b); color: #fff; }
+.app-tile:nth-of-type(8) .app-icon { background: linear-gradient(145deg,#c6a0ff,#6547c7); color: #fff; }
+.app-tile:nth-of-type(9) .app-icon { background: linear-gradient(145deg,#5fa6ff,#2346b1); color: #fff; }
+.app-tile:nth-of-type(10) .app-icon { background: linear-gradient(145deg,#54d8bd,#167c75); color: #fff; }
+.app-tile:nth-of-type(11) .app-icon { background: linear-gradient(145deg,#ff8f70,#b5434b); color: #fff; }
+.app-tile:nth-of-type(12) .app-icon { background: linear-gradient(145deg,#b5c0d3,#56657e); color: #172033; }
+.app-tile:nth-of-type(13) .app-icon { background: linear-gradient(145deg,#91a8c7,#425775); color: #fff; }
+.app-tile:nth-of-type(14) .app-icon { background: linear-gradient(145deg,#65d5e6,#2865a8); color: #fff; }
+.app-tile:nth-of-type(15) .app-icon { background: linear-gradient(145deg,#ff8a9e,#9b3b6a); color: #fff; }
+.app-tile:nth-of-type(16) .app-icon { background: linear-gradient(145deg,#75c6ff,#3650a1); color: #fff; }
+.app-tile:nth-of-type(17) .app-icon { background: linear-gradient(145deg,#9ca3b8,#4b4f67); color: #fff; }
+.app-tile:nth-of-type(18) .app-icon { background: linear-gradient(145deg,#a99aff,#5b4bba); color: #fff; }
+.app-tile:nth-of-type(19) .app-icon { background: linear-gradient(145deg,#ff83bf,#9b458e); color: #fff; }
+.control-center, .taskbar-preview { border: 1px solid var(--ida-stroke); background: rgba(19,23,38,.94); box-shadow: 0 20px 60px rgba(0,0,0,.36); }
+.internet-toggle, .wallpaper-controls label, .trash-card, .track-row, .wallpaper-choice, .upload-wallpaper { border-radius: 14px; }
+.wallpaper-choice { border-color: var(--ida-stroke); }
+.wallpaper-choice:hover { border-color: rgba(180,170,255,.8); transform: translateY(-2px); }
+.music-art { border-radius: 20px; background: linear-gradient(145deg,#9c77ff,#4b3aa6); color: white; }
+.play-button { border-radius: 16px; background: linear-gradient(145deg,#b2a7ff,#7c6cf4); color: #11152a; box-shadow: 0 8px 22px rgba(124,108,244,.24); }
+.trash-toolbar button { border-radius: 10px; padding: 9px 12px; }
+input, select, textarea { border-color: rgba(226,232,255,.16); }
+::selection { background: rgba(139,124,255,.38); color: white; }
+@media (max-width: 700px) {
+  .taskbar { height: 52px; padding: 5px 7px; }
+  .search-box { width: min(34vw,180px); }
+  .app-tile { width: 84px; }
+  .app-icon { width: 44px; height: 44px; flex-basis: 44px; border-radius: 14px; }
+  .app-name { max-width: 80px; font-size: 10px; }
+  .desktop-window { min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
