@@ -1077,7 +1077,7 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
       const url=new URL(raw.startsWith('http')?raw:'https://www.youtube.com/watch?v='+raw);
       if(url.hostname==='youtu.be')id=url.pathname.slice(1);
       else if(url.searchParams.get('v'))id=url.searchParams.get('v')||'';
-      else {const match=url.pathname.match(/\\/embed\\/([^/?]+)/);if(match)id=match[1];else if(url.pathname.startsWith('/shorts/'))id=url.pathname.split('/')[2]||''}
+      else {const match=url.pathname.match(/\/embed\/([^/?]+)/);if(match)id=match[1];else if(url.pathname.startsWith('/shorts/'))id=url.pathname.split('/')[2]||''}
     }catch{}
     if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){setError('That does not look like a valid YouTube video link or ID.');return}
     setVideoId(id);setVideoInput(raw);setError('');
