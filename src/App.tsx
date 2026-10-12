@@ -1068,7 +1068,22 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
   const [query,setQuery]=useState('');
   const [videoInput,setVideoInput]=useState('');
   const [videoId,setVideoId]=useState('');
+  const [results,setResults]=useState<any[]>([]);
+  const [searching,setSearching]=useState(false);
   const [error,setError]=useState('');
+  const searchVideos=async(e?:React.FormEvent)=>{
+    e?.preventDefault();const q=query.trim();if(!q)return;
+    setSearching(true);setError('');setResults([]);
+    try{
+      const response=await fetch('https://inv.nadeko.net/api/v1/search?q='+encodeURIComponent(q)+'&type=video');
+      if(!response.ok)throw new Error('The video search service is temporarily unavailable. Try again in a moment.');
+      const data=await response.json();
+      const videos=Array.isArray(data)?data.filter((item:any)=>item.type==='video'||item.videoId).slice(0,24):[];
+      if(!videos.length)throw new Error('No videos found. Try a different search.');
+      setResults(videos);
+    }catch(err){setError(err instanceof Error?err.message:'Could not search videos right now.');}
+    finally{setSearching(false);}
+  };
   const loadVideo=(value:string)=>{
     const raw=value.trim();
     if(!raw){setError('Paste a YouTube video link or video ID.');return}
@@ -1077,27 +1092,27 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
       const url=new URL(raw.startsWith('http')?raw:'https://www.youtube.com/watch?v='+raw);
       if(url.hostname==='youtu.be')id=url.pathname.slice(1);
       else if(url.searchParams.get('v'))id=url.searchParams.get('v')||'';
-      else {const match=url.pathname.match(/\/embed\/([^/?]+)/);if(match)id=match[1];else if(url.pathname.startsWith('/shorts/'))id=url.pathname.split('/')[2]||''}
+      else {const match=url.pathname.match(/\\/embed\\/([^/?]+)/);if(match)id=match[1];else if(url.pathname.startsWith('/shorts/'))id=url.pathname.split('/')[2]||''}
     }catch{}
     if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){setError('That does not look like a valid YouTube video link or ID.');return}
     setVideoId(id);setVideoInput(raw);setError('');
   };
   if(offline)return <div style={{height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:10,background:'#11151d',color:'#fff',textAlign:'center'}}><Wifi size={42} opacity={.75}/><strong style={{fontSize:22}}>Waiting for Wi-Fi connection</strong><span style={{opacity:.65}}>Connect to Wi-Fi to use DaTV.</span></div>;
   return <div style={{height:'100%',minHeight:0,display:'flex',flexDirection:'column',background:'#10131a',color:'#fff',overflow:'auto',fontFamily:'inherit'}}>
-    <form onSubmit={e=>{e.preventDefault();const q=query.trim();if(q)window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q),'_blank','noopener,noreferrer')}} style={{display:'flex',gap:8,padding:12,background:'#171b24',flexWrap:'wrap'}}>
-      <input aria-label="Search YouTube" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search YouTube videos…" style={{flex:'1 1 180px',minWidth:0,padding:'10px 12px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:14}}/>
-      <button type="submit" style={{padding:'10px 16px',border:0,borderRadius:8,background:'#ff0033',color:'#fff',fontWeight:700,cursor:'pointer'}}>Search YouTube ↗</button>
+    <form onSubmit={searchVideos} style={{display:'flex',gap:8,padding:12,background:'#171b24',flexWrap:'wrap'}}>
+      <input aria-label="Search videos" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search videos…" style={{flex:'1 1 180px',minWidth:0,padding:'10px 12px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:14}}/>
+      <button type="submit" disabled={searching||!query.trim()} style={{padding:'10px 16px',border:0,borderRadius:8,background:'#ff0033',color:'#fff',fontWeight:700,cursor:'pointer'}}>{searching?'Searching…':'Search'}</button>
     </form>
     <div style={{padding:'10px 12px',display:'flex',gap:8,flexWrap:'wrap',background:'#11151d',alignItems:'center'}}>
       <form onSubmit={e=>{e.preventDefault();loadVideo(videoInput)}} style={{display:'flex',gap:8,flex:'1 1 300px',minWidth:0}}>
-        <input aria-label="YouTube video URL" value={videoInput} onChange={e=>setVideoInput(e.target.value)} placeholder="Paste a YouTube video link or ID to play here" style={{flex:1,minWidth:0,padding:'9px 11px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:13}}/>
+        <input aria-label="YouTube video URL" value={videoInput} onChange={e=>setVideoInput(e.target.value)} placeholder="Or paste a YouTube link / video ID" style={{flex:1,minWidth:0,padding:'9px 11px',borderRadius:8,border:'1px solid #3b4352',background:'#0e1117',color:'#fff',fontSize:13}}/>
         <button type="submit" style={{padding:'9px 13px',border:0,borderRadius:8,background:'#303847',color:'#fff',fontWeight:600,cursor:'pointer'}}>Play</button>
       </form>
-      {error&&<span role="alert" style={{fontSize:12,color:'#ff8b98',width:'100%'}}>{error}</span>}
     </div>
-    <div style={{flex:1,minHeight:220,display:'flex',alignItems:'center',justifyContent:'center',padding:12}}>
-      {videoId?<iframe key={videoId} title="YouTube video player" src={'https://www.youtube-nocookie.com/embed/'+videoId} style={{width:'100%',height:'100%',minHeight:220,border:0,borderRadius:10,background:'#000'}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>:<div style={{textAlign:'center',maxWidth:460,padding:24,color:'#cbd5e1'}}><div style={{fontSize:42,marginBottom:10}}>▶</div><strong style={{display:'block',fontSize:18,color:'#fff',marginBottom:8}}>Welcome to DaTV</strong><span style={{fontSize:13,lineHeight:1.6}}>Search opens YouTube results in a new tab because YouTube blocks its full website inside apps. Copy a video's link from YouTube and paste it above to play it right here.</span></div>}
-    </div>
+    {error&&<div role="alert" style={{padding:'8px 12px',fontSize:12,color:'#ff9ba7',background:'#24151b'}}>{error}</div>}
+    {videoId?<div style={{padding:12,display:'flex',flexDirection:'column',gap:10}}><button onClick={()=>setVideoId('')} style={{alignSelf:'flex-start',padding:'7px 11px',border:0,borderRadius:7,background:'#303847',color:'#fff',cursor:'pointer'}}>← Back to results</button><iframe key={videoId} title="YouTube video player" src={'https://www.youtube-nocookie.com/embed/'+videoId} style={{width:'100%',height:'min(56vw,420px)',minHeight:220,border:0,borderRadius:10,background:'#000'}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>
+    :results.length>0?<div style={{padding:12,display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(190px,1fr))',gap:12}}>{results.map((item:any,index:number)=>{const thumb=item.videoThumbnails?.find((t:any)=>t.quality==='medium')?.url||item.videoThumbnails?.[0]?.url;return <button key={item.videoId||index} onClick={()=>{setVideoId(item.videoId);setVideoInput('https://www.youtube.com/watch?v='+item.videoId);setError('')}} style={{textAlign:'left',padding:0,border:'1px solid #303847',borderRadius:10,overflow:'hidden',background:'#171b24',color:'#fff',cursor:'pointer'}}>{thumb?<img src={thumb} alt="" loading="lazy" style={{width:'100%',aspectRatio:'16/9',objectFit:'cover',display:'block',background:'#080a0e'}}/>:<div style={{aspectRatio:'16/9',display:'grid',placeItems:'center',background:'#080a0e'}}>▶</div>}<div style={{padding:10}}><strong style={{fontSize:13,lineHeight:1.4,display:'block'}}>{item.title||'Untitled video'}</strong><span style={{display:'block',fontSize:11,color:'#aab4c4',marginTop:6}}>{item.author||'YouTube'}{item.lengthSeconds?' · '+Math.floor(item.lengthSeconds/60)+':'+String(item.lengthSeconds%60).padStart(2,'0'):''}</span></div></button>})}</div>
+    :<div style={{flex:1,minHeight:220,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}><div style={{textAlign:'center',maxWidth:460,color:'#cbd5e1'}}><div style={{fontSize:42,marginBottom:10}}>▶</div><strong style={{display:'block',fontSize:18,color:'#fff',marginBottom:8}}>Welcome to DaTV</strong><span style={{fontSize:13,lineHeight:1.6}}>Search for videos here, choose a result, and watch it inside DaTV. Nothing needs to redirect you to a new tab.</span></div></div>}
   </div>
 }
 function DaScopeSearch({offline=false}:{offline?:boolean}){
