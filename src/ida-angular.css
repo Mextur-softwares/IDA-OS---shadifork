@@ -519,3 +519,34 @@ input::placeholder, textarea::placeholder { color:#778398 !important; }
 .ida-compact-ui .settings-extra-grid label { padding:7px; }
 .ida-hide-icon-labels .app-tile .app-tile-label { display:none!important; }
 @media(max-width:600px) { .db-private {font-size:0}.db-private svg{width:18px;height:18px}.db-toolbar{gap:2px;padding:7px 5px}.db-toolbar button{width:28px}.db-home{padding:20px 12px}.db-brand h1{font-size:25px}.db-frame-tip{white-space:normal;text-align:center}.settings-extra-grid{grid-template-columns:1fr}.appearance-mode-grid{grid-template-columns:1fr} }
+
+
+/* Extend light mode into the common built-in app surfaces. */
+.daapps-root[data-theme="light"] .explorer-shell,
+.daapps-root[data-theme="light"] .explorer-main,
+.daapps-root[data-theme="light"] .explorer-content,
+.daapps-root[data-theme="light"] .notes-shell,
+.daapps-root[data-theme="light"] .notes-content,
+.daapps-root[data-theme="light"] .music-panel-content,
+.daapps-root[data-theme="light"] .media-shell,
+.daapps-root[data-theme="light"] .media-stage,
+.daapps-root[data-theme="light"] .calculator-panel,
+.daapps-root[data-theme="light"] .scope-panel,
+.daapps-root[data-theme="light"] .file-preview { background:#f8fafc !important; color:#1f2937 !important; }
+.daapps-root[data-theme="light"] .explorer-sidebar,
+.daapps-root[data-theme="light"] .explorer-toolbar,
+.daapps-root[data-theme="light"] .notes-toolbar,
+.daapps-root[data-theme="light"] .music-toolbar,
+.daapps-root[data-theme="light"] .media-toolbar { background:#e8edf4 !important; color:#1f2937 !important; border-color:#cbd5e1 !important; }
+.daapps-root[data-theme="light"] .explorer-card,
+.daapps-root[data-theme="light"] .explorer-file-card,
+.daapps-root[data-theme="light"] .notes-card,
+.daapps-root[data-theme="light"] .music-track,
+.daapps-root[data-theme="light"] .track-row,
+.daapps-root[data-theme="light"] .setting-row { background:#fff !important; color:#1f2937 !important; border-color:#dbe3ed !important; }
+.daapps-root[data-theme="light"] .app-window button:not(.close-btn) { color:inherit; }
+.daapps-root[data-theme="light"] .app-window input[type="checkbox"] { accent-color:#2563eb; }
+.daapps-root[data-theme="light"] .app-window ::placeholder { color:#94a3b8 !important; }
+@media (prefers-reduced-motion: reduce) {
+ .ida-theme-light *, .ida-theme-dark * { scroll-behavior:auto; }
+}
