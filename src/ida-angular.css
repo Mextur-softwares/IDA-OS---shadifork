@@ -211,3 +211,52 @@ input::placeholder, textarea::placeholder { color:#778398 !important; }
 .daexcellent .de-grid td:focus-within {
   box-shadow: inset 0 0 0 2px #16834a;
 }
+
+
+/* Hard override global dark-form styles inside the Office apps (especially spreadsheet cells). */
+.daexcellent,
+.daexcellent * {
+  color-scheme: light !important;
+}
+.daexcellent .de-grid-wrap,
+.daexcellent .de-grid,
+.daexcellent .de-grid tbody,
+.daexcellent .de-grid tr,
+.daexcellent .de-grid td {
+  background-color: #ffffff !important;
+  color: #202938 !important;
+}
+.daexcellent .de-grid td input,
+.daexcellent .de-grid td input:hover,
+.daexcellent .de-grid td input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #202938 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color-scheme: light !important;
+}
+.daexcellent .de-grid thead th,
+.daexcellent .de-grid .de-rowhead {
+  background-color: #edf1f4 !important;
+  color: #637184 !important;
+}
+.daexcellent .de-grid td.de-range-selected,
+.daexcellent .de-grid td.de-range-selected input {
+  background-color: #dcefe3 !important;
+}
+.daexcellent .de-grid td.de-selected {
+  outline: 2px solid #16834a !important;
+  outline-offset: -2px !important;
+}
+.daword-shell input,
+.daword-shell textarea,
+.daword-shell select,
+.dapower input,
+.dapower textarea,
+.dapower select {
+  background-color: #ffffff !important;
+  color: #202938 !important;
+  color-scheme: light !important;
+}
