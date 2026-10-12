@@ -260,3 +260,98 @@ input::placeholder, textarea::placeholder { color:#778398 !important; }
   color: #202938 !important;
   color-scheme: light !important;
 }
+
+
+
+/* Final Office control cleanup: toolbar selectors, formula bar and bottom status bars. */
+.daexcellent .de-titlebar,
+.daexcellent .de-ribbon,
+.daexcellent .de-formula-bar,
+.daexcellent .de-statusbar,
+.daexcellent .de-sheetbar,
+.daword-shell .dw-titlebar,
+.daword-shell .dw-tabs,
+.daword-shell .dw-ribbon,
+.daword-shell .dw-statusbar,
+.dapower .dp-titlebar,
+.dapower .dp-ribbon,
+.dapower .dp-design,
+.dapower .dp-statusbar {
+  color: #263447 !important;
+  background-color: #ffffff !important;
+  border-color: #d9e1e9 !important;
+  color-scheme: light !important;
+}
+.daexcellent .de-tools select,
+.daexcellent .de-formula-bar input,
+.daexcellent .de-bookname input,
+.daword-shell .dw-ribbon input,
+.daword-shell .dw-ribbon select,
+.daword-shell .dw-titlebar input,
+.daword-shell .dw-findbar input,
+.dapower .dp-design-control input:not([type="color"]),
+.dapower .dp-design-control select,
+.dapower .dp-titlebar input,
+.dapower .dp-speaker-notes textarea {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #263447 !important;
+  border: 1px solid #d5dee8 !important;
+  border-radius: 5px !important;
+  color-scheme: light !important;
+  box-shadow: none !important;
+}
+.daexcellent .de-formula-bar input,
+.daexcellent .de-bookname input,
+.daword-shell .dw-titlebar input,
+.daword-shell .dw-ribbon input,
+.dapower .dp-titlebar input {
+  border-color: #e1e6ec !important;
+}
+.daexcellent .de-ribbon button,
+.daexcellent .de-statusbar button,
+.daexcellent .de-sheetbar button,
+.daword-shell .dw-ribbon button,
+.daword-shell .dw-statusbar button,
+.dapower .dp-ribbon button,
+.dapower .dp-design button,
+.dapower .dp-design-control button {
+  background: #ffffff !important;
+  color: #344258 !important;
+  border: 1px solid #d5dce5 !important;
+  border-radius: 6px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.daexcellent .de-ribbon button:hover,
+.daexcellent .de-sheetbar button:hover,
+.daword-shell .dw-ribbon button:hover,
+.dapower .dp-ribbon button:hover,
+.dapower .dp-design button:hover,
+.dapower .dp-design-control button:hover {
+  background: #f3f6fa !important;
+  border-color: #b8c7d8 !important;
+}
+.daexcellent .de-ribbon button:focus-visible,
+.daexcellent .de-sheetbar button:focus-visible,
+.daword-shell .dw-ribbon button:focus-visible,
+.dapower .dp-ribbon button:focus-visible,
+.dapower .dp-design button:focus-visible {
+  outline: 2px solid #78aaf5 !important;
+  outline-offset: 1px !important;
+}
+.daexcellent .de-statusbar,
+.daword-shell .dw-statusbar,
+.dapower .dp-statusbar {
+  background: #f7f9fb !important;
+  color: #526176 !important;
+  border-top: 1px solid #dbe3ec !important;
+}
+.daexcellent .de-formula-bar {
+  background: #f8fafc !important;
+  border-color: #dbe3ec !important;
+}
+.daexcellent .de-formula-bar input {
+  background: #ffffff !important;
+  color: #263447 !important;
+}
