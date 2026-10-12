@@ -1,16 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">BadTime app icon</title>
+  <desc id="desc">A mischievous ivory skull with a cyan glowing eye and magenta-cyan energy bursting across a full-bleed midnight background.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#171923"/><stop offset="1" stop-color="#050609"/></linearGradient>
-    <filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17112f"/>
+      <stop offset=".48" stop-color="#090b1a"/>
+      <stop offset="1" stop-color="#1b0624"/>
+    </linearGradient>
+    <radialGradient id="aura" cx=".5" cy=".48" r=".66">
+      <stop offset="0" stop-color="#132b50" stop-opacity=".15"/>
+      <stop offset=".58" stop-color="#0a0b18" stop-opacity=".05"/>
+      <stop offset="1" stop-color="#03040b" stop-opacity=".8"/>
+    </radialGradient>
+    <linearGradient id="skull" x1=".18" y1="0" x2=".82" y2="1">
+      <stop offset="0" stop-color="#fffdf4"/>
+      <stop offset=".55" stop-color="#e6e8f2"/>
+      <stop offset="1" stop-color="#aeb6ca"/>
+    </linearGradient>
+    <linearGradient id="jaw" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f9f8ef"/>
+      <stop offset="1" stop-color="#b7bfd1"/>
+    </linearGradient>
+    <linearGradient id="slash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff2e9a" stop-opacity="0"/>
+      <stop offset=".38" stop-color="#ff2e9a"/>
+      <stop offset=".72" stop-color="#5af6ff"/>
+      <stop offset="1" stop-color="#5af6ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="pinkGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2.6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grain" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 7.5H8" stroke="#a6b6ff" stroke-opacity=".055"/>
+      <path d="M7.5 0V8" stroke="#a6b6ff" stroke-opacity=".035"/>
+    </pattern>
   </defs>
-  <rect x="3" y="3" width="200" height="200" rx="25" fill="url(#bg)" stroke="#3b4252" stroke-width="3"/>
-  <path d="M26 38 38 23 48 31 62 25 77 31 89 23 102 40 98 70 89 83 87 103 74 103 68 90 58 90 52 103 39 103 37 82 27 68Z" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M35 47 53 47 48 58 35 58Z" fill="#050609"/>
-  <path d="M72 45 94 45 88 59 72 59Z" fill="#050609"/>
-  <path d="M70 45 94 45 88 59 72 59Z" fill="#38bdf8" filter="url(#glow)"/>
-  <path d="M79 43 88 43 84 60 76 60Z" fill="#e0f2fe"/>
-  <path d="M44 70 52 70 52 78 60 78 60 70 68 70 68 78 76 78 76 70 84 70 84 82 76 82 76 88 52 88 52 82 44 82Z" fill="#111827"/>
-  <path d="M24 99 36 93 43 100 36 108 24 107Z" fill="#ef4444"/>
-  <path d="M104 99 92 93 85 100 92 108 104 107Z" fill="#ef4444"/>
-  <path d="M17 64h9M102 64h9" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Full-bleed background: no blank margins or inset tile. -->
+  <rect width="128" height="128" fill="url(#bg)"/>
+  <rect width="128" height="128" fill="url(#aura)"/>
+  <path d="M-8 28 20 16 9 36 31 27 16 47" fill="none" stroke="#ff2e9a" stroke-width="3" opacity=".9" filter="url(#pinkGlow)"/>
+  <path d="M95 -5 84 16 108 10 96 29 132 17" fill="none" stroke="#46efff" stroke-width="2.5" opacity=".95" filter="url(#cyanGlow)"/>
+  <path d="M-7 94 17 83 7 104 28 96" fill="none" stroke="#45efff" stroke-width="2" opacity=".8"/>
+  <path d="M101 91 119 80 111 101 135 88" fill="none" stroke="#ff329b" stroke-width="3" opacity=".9" filter="url(#pinkGlow)"/>
+
+  <!-- Broken rune ring and motion streaks fill the corners. -->
+  <path d="M29 21A49 49 0 0 1 61 10M76 11A50 50 0 0 1 112 36M117 54A50 50 0 0 1 110 91M94 111A49 49 0 0 1 67 119M49 116A50 50 0 0 1 14 91M11 69A50 50 0 0 1 17 43"
+        fill="none" stroke="#5af6ff" stroke-width="1.3" stroke-dasharray="4 5" opacity=".75"/>
+  <path d="M22 51 31 46 26 56 36 51M92 31 101 26 96 36 106 31M88 105 98 100 93 110"
+        fill="none" stroke="#ff3a9d" stroke-width="2" stroke-linecap="square"/>
+  <g fill="#e7fbff">
+    <path d="M18 61h7v2h-7zM22 57h2v10h-2z" opacity=".9"/>
+    <path d="M103 66h8v2h-8zM106 63h2v8h-2z" opacity=".8"/>
+    <path d="M61 8h5v2h-5zM63 6h2v6h-2z" opacity=".7"/>
+  </g>
+  <g fill="#ff4aa8" opacity=".95">
+    <rect x="12" y="75" width="5" height="2"/><rect x="15" y="78" width="2" height="5"/>
+    <rect x="111" y="45" width="5" height="2"/><rect x="114" y="48" width="2" height="5"/>
+    <rect x="44" y="13" width="4" height="2"/>
+  </g>
+  <g fill="#5af6ff" opacity=".9">
+    <rect x="100" y="113" width="8" height="2"/><rect x="104" y="109" width="2" height="10"/>
+    <rect x="35" y="105" width="5" height="2"/><rect x="37" y="102" width="2" height="8"/>
+  </g>
+
+  <!-- Original stylized skull silhouette. -->
+  <path d="M64 20
+    C43 20 29 34 28 52
+    C27 65 33 74 40 81
+    L41 95 49 95 51 105 60 105 60 98
+    L68 98 68 105 78 105 80 95 88 95 89 81
+    C97 73 101 64 100 51
+    C99 33 84 20 64 20Z"
+    fill="#050712" stroke="#03040a" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M64 21
+    C45 21 31 35 31 52
+    C30 64 36 73 43 80
+    L44 91 51 91 53 101 59 101 59 94
+    L69 94 69 101 76 101 78 91 85 91 86 80
+    C94 72 98 63 97 52
+    C97 35 83 21 64 21Z"
+    fill="url(#skull)" stroke="#f8fbff" stroke-width="1.2" stroke-linejoin="round"/>
+
+  <!-- Forehead cracks and cheek shading give it a distinct silhouette. -->
+  <path d="M43 34 49 30 47 38 53 41" fill="none" stroke="#aab4c8" stroke-width="2" stroke-linecap="square"/>
+  <path d="M81 33 86 39 81 42" fill="none" stroke="#c0c8d8" stroke-width="2" stroke-linecap="square"/>
+  <path d="M35 62 44 69 44 77 38 70Z" fill="#aeb8ce" opacity=".8"/>
+  <path d="M92 60 84 69 84 77 90 70Z" fill="#b7c0d2" opacity=".75"/>
+
+  <!-- Left socket stays shadowed; right socket erupts with cyan light. -->
+  <path d="M35 48 42 42 55 43 59 51 56 61 47 66 38 61 34 54Z" fill="#090b18"/>
+  <path d="M70 48 77 41 88 43 94 51 91 60 82 65 73 60 69 54Z" fill="#070a18"/>
+  <path d="M73 48 80 44 88 47 89 53 83 58 75 56Z" fill="#22eaff" filter="url(#cyanGlow)"/>
+  <path d="M78 46 84 45 80 55 75 55Z" fill="#f1ffff"/>
+  <path d="M38 49 43 46 45 50 41 54Z" fill="#f7f9ff" opacity=".95"/>
+
+  <!-- A diagonal energy slash and cheek sparks. -->
+  <path d="M26 69 47 60 61 64 83 55 105 48" fill="none" stroke="url(#slash)" stroke-width="5" opacity=".9" filter="url(#cyanGlow)"/>
+  <path d="M29 73 45 67M86 60 99 54" fill="none" stroke="#ff3a9d" stroke-width="2.5" filter="url(#pinkGlow)"/>
+
+  <!-- Mischievous toothy grin. -->
+  <path d="M43 72 51 75 58 73 64 77 71 73 79 75 86 71 84 83 78 89 70 92 60 92 51 88 45 82Z"
+    fill="#080a15" stroke="#171a2b" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M48 76 56 77 55 83 50 81ZM60 78 67 78 67 85 61 85ZM72 77 80 76 77 83 72 84Z"
+    fill="#fffdf5"/>
+  <path d="M55 87 62 89 69 89 76 86" fill="none" stroke="#7f8aa5" stroke-width="1.5"/>
+  <path d="M47 69 41 73M82 69 89 72" stroke="#ff4aa8" stroke-width="2" stroke-linecap="square"/>
+
+  <!-- Foreground pixel shards lock the composition to the canvas edges. -->
+  <path d="M0 18h10v3H5v5H0ZM128 104h-9v-3h5v-5h4ZM0 118h14v3H8v7H0ZM128 13h-12v3h6v6h6Z" fill="#5af6ff" opacity=".8"/>
+  <path d="M0 42h7v3H3v6H0ZM128 73h-8v3h4v5h4ZM53 0h7v3h-4v4h-3Z" fill="#ff3a9d" opacity=".8"/>
+  <rect width="128" height="128" fill="url(#grain)" opacity=".7"/>
 </svg>
