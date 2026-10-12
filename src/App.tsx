@@ -1111,7 +1111,7 @@ function DaTVPanel({offline=false,volume=70,onDownloadVideo}:{offline?:boolean;v
             const mapped=candidates.map((item:any)=>{
               const link=item.url.replace(/[.,;]+$/,'');
               let id='';
-              try{const url=new URL(link);id=url.searchParams.get('v')|| (url.hostname==='youtu.be'?url.pathname.slice(1).split('/')[0]:'');if(!id){const match=url.pathname.match(/\\/(?:shorts|embed)\\/([a-zA-Z0-9_-]{11})/);if(match)id=match[1];}}catch{}
+              try{const url=new URL(link);id=url.searchParams.get('v')|| (url.hostname==='youtu.be'?url.pathname.slice(1).split('/')[0]:'');if(!id){const match=url.pathname.match(/\/(?:shorts|embed)\/([a-zA-Z0-9_-]{11})/);if(match)id=match[1];}}catch{}
               if(!/^[a-zA-Z0-9_-]{11}$/.test(id)||seen.has(id))return null;
               seen.add(id);
               return {type:'video',videoId:id,title:item.title||'YouTube video',author:item.author||'YouTube',videoThumbnails:[{quality:'medium',url:'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg'}]};
