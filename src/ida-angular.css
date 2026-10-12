@@ -1,0 +1,118 @@
+/* IDA angular monochrome visual system — deliberately square, quiet, and tool-focused. */
+:root {
+  --ida-radius-xs: 0px;
+  --ida-radius-sm: 0px;
+  --ida-radius-md: 0px;
+  --ida-radius-lg: 0px;
+  --ida-radius-xl: 0px;
+  --ida-accent: #252a32;
+  --ida-accent-soft: rgba(25, 29, 36, .10);
+  --ida-surface: #f0f1f3;
+  --ida-surface-raised: #ffffff;
+  --ida-stroke: #c8cbd0;
+  --ida-text: #17191d;
+  --ida-muted: #626873;
+}
+
+/* Replace the bubbly look with crisp square edges and restrained contrast. */
+*, *::before, *::after { border-radius: 0 !important; }
+button, input, select, textarea { border-radius: 0 !important; }
+.app-window, .desktop-window, .control-center, .taskbar-preview, .start-menu,
+.search-panel, .context-menu, .modal-backdrop > *, .settings-content, .trash-shell {
+  border-radius: 0 !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.22);
+}
+.app-window, .desktop-window {
+  border: 1px solid #858b94 !important;
+  background: #f4f5f6 !important;
+  color: #17191d !important;
+}
+.window-bar, .window-titlebar, .window-header {
+  background: #e4e6e9 !important;
+  border-bottom: 1px solid #c4c8ce !important;
+  color: #17191d !important;
+}
+.window-actions button, .taskbar-app, .ida-start {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.ida-start {
+  background: #262a31 !important;
+  border: 1px solid #121418 !important;
+  color: #fff !important;
+}
+.search-box, .search-input {
+  border-radius: 0 !important;
+  background: #e8eaed !important;
+  border: 1px solid #aeb3bb !important;
+  color: #17191d !important;
+}
+.taskbar {
+  border-radius: 0 !important;
+  background: rgba(232,234,237,.97) !important;
+  border-top: 1px solid #aeb3bb !important;
+  box-shadow: none !important;
+}
+.taskbar-app:hover, .taskbar-app.selected {
+  background: #d4d7dc !important;
+}
+.taskbar-app.running:after { background: #252a32 !important; border-radius: 0 !important; }
+
+/* All app marks use a common monochrome palette; SVG shapes remain distinct per app. */
+.app-icon {
+  border-radius: 0 !important;
+  background: #d9dce1 !important;
+  color: #20242b !important;
+  border: 1px solid #aeb3bb !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+.app-icon svg {
+  color: #20242b !important;
+  stroke: #20242b !important;
+  fill: none;
+  filter: grayscale(1) !important;
+}
+.app-tile { border-radius: 0 !important; }
+.app-tile:hover { background: rgba(40,44,52,.07) !important; }
+.app-tile-selected .app-icon {
+  outline: 2px solid #252a32 !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
+.app-name { color: #22262d !important; text-shadow: none !important; }
+.tone-yellow, .tone-violet, .tone-slate, .tone-blue, .tone-red, .tone-amber,
+.app-tile .app-icon,
+.app-tile:nth-of-type(n) .app-icon {
+  background: #d9dce1 !important;
+  color: #20242b !important;
+}
+.app-tile[data-app-id] .app-icon {
+  background: #d9dce1 !important;
+  color: #20242b !important;
+}
+.music-art, .play-button {
+  border-radius: 0 !important;
+  background: #d9dce1 !important;
+  color: #20242b !important;
+  box-shadow: none !important;
+}
+.control-center, .taskbar-preview, .start-menu, .search-panel, .context-menu {
+  border: 1px solid #aeb3bb !important;
+  background: #f0f1f3 !important;
+  color: #17191d !important;
+  backdrop-filter: none !important;
+}
+.control-center button, .start-menu button, .search-panel button {
+  color: #20242b !important;
+}
+button:hover { box-shadow: none !important; }
+input, select, textarea {
+  border: 1px solid #aeb3bb !important;
+  background: #fff !important;
+  color: #17191d !important;
+}
+::selection { background: #c7cbd1 !important; color: #17191d !important; }
+@media (max-width: 700px) {
+  .app-icon { border-radius: 0 !important; }
+}
