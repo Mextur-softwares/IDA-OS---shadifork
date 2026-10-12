@@ -65,7 +65,7 @@ const DEFAULT_POSITIONS: Record<string, Position> = {
   DaEconomy: { x: 3, y: 19 },
   DaCourt: { x: 3, y: 35 },
   DaScope: { x: 3, y: 67 },
-  DaBrowser: { x: 14, y: 83 },
+  DaBrowser: { x: 36, y: 3 },
   'DaFile Explorer': { x: 3, y: 83 },
   DaSettings: { x: 14, y: 3 },
   DaTrash: { x: 14, y: 19 },
@@ -162,6 +162,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
   const [volume, setVolume] = useState(()=>{try{return Number(localStorage.getItem('ida-volume')??70)}catch{return 70}})
   const [theme, setTheme] = useState<'dark'|'light'>(()=>{try{return localStorage.getItem('ida-theme')==='light'?'light':'dark'}catch{return 'dark'}})
   useEffect(()=>{try{localStorage.setItem('ida-theme',theme)}catch{}},[theme])
+  useEffect(()=>{try{document.documentElement.classList.toggle('ida-reduce-motion',localStorage.getItem('ida-reduce-motion')==='1');document.documentElement.classList.toggle('ida-compact-ui',localStorage.getItem('ida-compact-ui')==='1');document.documentElement.classList.toggle('ida-hide-icon-labels',localStorage.getItem('ida-show-icon-labels')==='0')}catch{}},[])
   const [desktop, setDesktop] = useState(false)
   const [taskbarApps, setTaskbarApps] = useState<string[]>(['DaSettings'])
   const [taskbarTheme, setTaskbarTheme] = useState<'default'|'aurora'|'sunset'|'ocean'|'manual'>('default')
