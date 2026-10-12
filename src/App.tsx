@@ -38,7 +38,6 @@ const APPS: AppItem[] = [
   { name: 'DAPP', kind: 'store', tone: 'violet' },
   { name: 'DaEconomy', kind: 'external', url: 'https://xt0tiedcmrq9i5amck0jexb0.macaly.app/', tone: 'yellow' },
   { name: 'DaCourt', kind: 'external', url: 'https://jquv9w2u2tbwtpi6qdd4ze7n.macaly.app/', tone: 'yellow' },
-  { name: 'DaMusic', kind: 'music', tone: 'violet' },
   { name: 'DaScope', kind: 'scope', tone: 'blue' },
   { name: 'DaFile Explorer', kind: 'explorer', tone: 'blue' },
   { name: 'DaNotes', kind: 'notes', tone: 'slate' },
@@ -63,7 +62,6 @@ const DEFAULT_POSITIONS: Record<string, Position> = {
   DAPP: { x: 3, y: 3 },
   DaEconomy: { x: 3, y: 19 },
   DaCourt: { x: 3, y: 35 },
-  DaMusic: { x: 3, y: 51 },
   DaScope: { x: 3, y: 67 },
   'DaFile Explorer': { x: 3, y: 83 },
   DaSettings: { x: 14, y: 3 },
@@ -84,7 +82,6 @@ type DappCatalogItem = { name:string; tagline:string; description:string; catego
 const DAPP_CATALOG: DappCatalogItem[] = [
   {name:'DaEconomy',tagline:'The official bank of DaBoys',description:'The official bank of the DaBoys group. Work for money, play games, or trade. Buy items in the shop that can benefit you across DaBoys, manage your economy, and build your balance.',category:'Finance',tone:'yellow'},
   {name:'DaCourt',tagline:'Justice, trials, and roles',description:'The official courtroom for DaBoys. Become a judge, prosecutor, lawyer, or take part in cases, trials, and the growing legal world of DaBoys.',category:'Community',tone:'red'},
-  {name:'DaMusic',tagline:'Your music, inside IDA',description:'A focused music player for IDA with playlists, playback controls, volume control, and a clean desktop experience.',category:'Entertainment',tone:'violet'},
   {name:'DaScope',tagline:'Search the web, the simple way',description:'DaScope is IDA’s lightweight web search app. Type what you are looking for and DaScope takes you straight to Google for the results, keeping the experience fast and familiar.',category:'Search',tone:'blue'},
   {name:'DaNotes',tagline:'Write it down. Keep it close.',description:'A simple notes workspace for ideas, plans, reminders, and anything else you want to keep inside IDA.',category:'Productivity',tone:'amber'},
   {name:'DaWord',tagline:'A full writing desk for your ideas',description:'Create and edit rich-text documents with a familiar ribbon, headings, tables, lists, links, image insertion, autosave, and export to HTML or plain text.',category:'Productivity',tone:'blue'},
@@ -144,7 +141,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
   const [files, setFiles] = useState<UserFile[]>([])
   const [folders, setFolders] = useState<UserFolder[]>([])
   const [folderApps, setFolderApps] = useState<Record<string,string[]>>({})
-  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaMusic','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord','DaExcellent','DaPower','Da C++ Studio'])
+  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord','DaExcellent','DaPower','Da C++ Studio'])
   const [clipboard, setClipboard] = useState<{type:'app'|'file'|'folder';id:string;mode:'copy'|'cut'}|null>(null)
   const [trash, setTrash] = useState<Array<{type:'app'|'file'|'folder';id:string;name:string;app?:AppItem;file?:UserFile;folder?:UserFolder;deletedAt:number}>>([])
   const [appLabels, setAppLabels] = useState<Record<string,string>>({})
@@ -230,7 +227,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
       setFiles(readFiles())
       const savedFolders = localStorage.getItem('ida-folders-v1'); if(savedFolders) setFolders(JSON.parse(savedFolders))
       const savedFolderApps = localStorage.getItem('ida-folder-apps-v1'); if(savedFolderApps) setFolderApps(JSON.parse(savedFolderApps))
-      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter(Boolean); setDesktopApps(Array.from(new Set([...normalized,'DaWord','Da C++ Studio']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaWord'])))) } catch {} }
+      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter((id:string)=>Boolean(id)&&id!=='DaMusic'); setDesktopApps(Array.from(new Set([...normalized,'DaWord','Da C++ Studio']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaWord'])))) } catch {} }
       const savedLabels = localStorage.getItem('ida-app-labels'); if (savedLabels) setAppLabels(JSON.parse(savedLabels))
       const savedNotes = localStorage.getItem('ida-notes-v2'); if (savedNotes) setNotes(JSON.parse(savedNotes))
       const savedTrash = localStorage.getItem('ida-trash-v1'); if (savedTrash) setTrash(JSON.parse(savedTrash))
