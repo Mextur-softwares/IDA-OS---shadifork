@@ -15,7 +15,7 @@ function validateTarget(value) {
   if (!host || host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") ||
       host.endsWith(".internal") || host === "metadata.google.internal" ||
       /^(127\.|10\.|192\.168\.|169\.254\.|0\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host) ||
-      host === "::1" || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80:") ||
+      host.includes(":") || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80:") ||
       /^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
     throw new Error("Local and IP-address destinations are blocked.");
   }
