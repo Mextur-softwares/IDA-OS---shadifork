@@ -16,7 +16,6 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true,
-      sandbox: false
     }
   });
 
@@ -29,9 +28,14 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    const allowed = new Set(['fullscreen', 'media', 'geolocation', 'notifications', 'clipboard-read', 'clipboard-sanitized-write']);
-    callback(allowed.has(permission));
+  app.on('web-contents-created', (_event, contents) => {
+    contents.on('will-attach-webview', (event, webPreferences, params) => {
+      delete webPreferences.preload;
+      webPreferences.nodeIntegration = false;
+      webPreferences.contextIsolation = true;
+      webPreferences.sandbox = true;
+      if (!/^https?:\\/\\//i.test(params.src || '')) event.preventDefault();
+    });
   });
   createWindow();
   app.on('activate', () => {
