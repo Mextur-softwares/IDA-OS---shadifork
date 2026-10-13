@@ -27,6 +27,16 @@ function proxyUrl(workerOrigin, target) {
   return workerOrigin + "/?url=" + encodeURIComponent(target.href);
 }
 
+function rewriteUrl(workerOrigin, raw, base) {
+  try {
+    const target = new URL(raw, base);
+    if (!["http:", "https:"].includes(target.protocol)) return raw;
+    return proxyUrl(workerOrigin, target);
+  } catch {
+    return raw;
+  }
+}
+
 function htmlResponse(response, target, workerOrigin) {
   const headers = new Headers(response.headers);
   for (const name of ["content-security-policy", "content-security-policy-report-only", "x-frame-options", "frame-options", "set-cookie", "set-cookie2", "cross-origin-opener-policy", "cross-origin-embedder-policy", "cross-origin-resource-policy"]) {
@@ -36,16 +46,16 @@ function htmlResponse(response, target, workerOrigin) {
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "no-referrer");
   const rewriter = new HTMLRewriter()
-    .on("a[href]", { element(e) { e.setAttribute("href", proxyUrl(workerOrigin, new URL(e.getAttribute("href"), target))); } })
-    .on("area[href]", { element(e) { e.setAttribute("href", proxyUrl(workerOrigin, new URL(e.getAttribute("href"), target))); } })
-    .on("link[href]", { element(e) { e.setAttribute("href", proxyUrl(workerOrigin, new URL(e.getAttribute("href"), target))); } })
-    .on("script[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("img[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("source[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("video[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("audio[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("iframe[src]", { element(e) { e.setAttribute("src", proxyUrl(workerOrigin, new URL(e.getAttribute("src"), target))); } })
-    .on("form[action]", { element(e) { e.setAttribute("action", proxyUrl(workerOrigin, new URL(e.getAttribute("action"), target))); e.setAttribute("method", "get"); } })
+    .on("a[href]", { element(e) { e.setAttribute("href", rewriteUrl(workerOrigin, e.getAttribute("href"), target)); } })
+    .on("area[href]", { element(e) { e.setAttribute("href", rewriteUrl(workerOrigin, e.getAttribute("href"), target)); } })
+    .on("link[href]", { element(e) { e.setAttribute("href", rewriteUrl(workerOrigin, e.getAttribute("href"), target)); } })
+    .on("script[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("img[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("source[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("video[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("audio[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("iframe[src]", { element(e) { e.setAttribute("src", rewriteUrl(workerOrigin, e.getAttribute("src"), target)); } })
+    .on("form[action]", { element(e) { e.setAttribute("action", rewriteUrl(workerOrigin, e.getAttribute("action"), target)); e.setAttribute("method", "get"); } })
     .on("head", { element(e) {
       const targetJson = JSON.stringify(target.href).replace(/</g, "\\u003c");
       e.append('<script>try{parent.postMessage({type:"dabrowser:navigate",url:'+targetJson+'},"*")}catch(e){}</script>', { html: true });
