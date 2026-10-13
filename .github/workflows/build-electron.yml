@@ -1,0 +1,29 @@
+name: Build IDA OS desktop app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'electron/**'
+      - 'package.json'
+      - 'vite.config.ts'
+      - '.github/workflows/build-electron.yml'
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run electron:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IDA-OS-Windows-Installer
+          path: release/*.exe
+          if-no-files-found: error
+          retention-days: 14
