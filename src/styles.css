@@ -488,3 +488,8 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .de-cell-function-suggestions button{display:flex;align-items:center;gap:8px;width:100%;padding:6px 7px;border:0;border-radius:4px;background:#fff;text-align:left;cursor:pointer;color:#26384c;font-size:11px}
 .de-cell-function-suggestions button:hover{background:#eaf4ed}
 .de-cell-function-suggestions button span{margin-left:auto;color:#8793a2;font-size:10px}
+
+
+/* DaBrowser in-app DuckDuckGo instant-answer results */
+.db-search-results{display:block!important;overflow:auto!important;padding:clamp(18px,4vw,42px)!important;box-sizing:border-box;color:var(--text-primary,#e8edf5);background:var(--panel-bg,#101722)}
+.db-results-head{display:flex;align-items:center;gap:14px;margin:0 auto 24px;max-width:820px}.db-results-head h2{margin:0 0 4px;font-size:24px}.db-results-head p{margin:0;opacity:.75;overflow-wrap:anywhere}.db-result{max-width:820px;margin:0 auto 16px;padding:16px 18px;border:1px solid var(--border-color,rgba(150,170,200,.22));border-radius:12px;background:rgba(130,150,180,.055);overflow-wrap:anywhere}.db-result h3{margin:0 0 8px;font-size:17px}.db-result p{margin:0 0 8px;line-height:1.55}.db-result a{color:var(--accent-color,#75a7ff);overflow-wrap:anywhere}.db-result small{opacity:.65;overflow-wrap:anywhere}.db-search-note{max-width:820px;margin:22px auto 0;font-size:12px;opacity:.65}
