@@ -10,7 +10,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 import {
-  ChevronDown, ChevronUp, ChevronRight, Download, Gauge, CarFront, Settings as Gear, Music2, Film, Trash2, Moon, Skull, Plus, Globe, Globe, ArrowLeft, ArrowRight, RotateCw, Home, Star, ShieldCheck, History, ExternalLink,
+  ChevronDown, ChevronUp, ChevronRight, Download, Gauge, CarFront, Settings as Gear, Music2, Film, Trash2, Moon, Skull, Plus, Globe, ArrowLeft, ArrowRight, RotateCw, Home, Star, ShieldCheck, History, ExternalLink,
   Minus, Pause, Play, Scale, Search, Settings2, SlidersHorizontal, Maximize2, ArrowUpDown,
   Code2, SunMedium, Volume2, VolumeX, Wifi, BatteryFull, Power, Folder, Sparkles, X, FileText, Clipboard, Scissors, Tv, SkipBack, SkipForward, ListMusic, Calculator, Sigma, FilePlus2
 } from 'lucide-react'
