@@ -7,7 +7,7 @@ export default function DaBrowser({theme}:{theme:'dark'|'light'}) {
  const [active,setActive]=useState(1); const [address,setAddress]=useState('');
  const [bookmarks,setBookmarks]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('ida-browser-bookmarks')||'[]')}catch{return []}});
  const [history,setHistory]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('ida-browser-history')||'[]')}catch{return []}});
- const [showBookmarks,setShowBookmarks]=useState(false); const [privateMode,setPrivateMode]=useState(false); const [searchData,setSearchData]=useState<any>(null); const [searchLoading,setSearchLoading]=useState(false); const frame=useRef<any>(null);
+ const [showBookmarks,setShowBookmarks]=useState(false); const [privateMode,setPrivateMode]=useState(false); const frame=useRef<any>(null);
  const current=tabs.find(t=>t.id===active)||tabs[0];
  useEffect(()=>{setAddress(current?.url==='about:blank'?'':current?.url||'')},[active,current?.url]);
 
