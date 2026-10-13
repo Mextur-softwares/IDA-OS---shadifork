@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 
 const isDev = !app.isPackaged;
@@ -34,7 +34,7 @@ app.whenReady().then(() => {
       webPreferences.nodeIntegration = false;
       webPreferences.contextIsolation = true;
       webPreferences.sandbox = true;
-      if (!/^https?:\\/\\//i.test(params.src || '')) event.preventDefault();
+      if (!/^https?:/i.test(params.src || '')) event.preventDefault();
     });
   });
   createWindow();
