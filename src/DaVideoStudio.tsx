@@ -10,7 +10,6 @@ export default function DaVideoStudio(){
  const [clips,setClips]=useState<Clip[]>([]); const [active,setActive]=useState(''); const [playing,setPlaying]=useState(false);
  const [filter,setFilter]=useState('none'); const [brightness,setBrightness]=useState(100); const [contrast,setContrast]=useState(100); const [saturation,setSaturation]=useState(100);
  const [textLayers,setTextLayers]=useState<TextLayer[]>([]); const [selectedTextId,setSelectedTextId]=useState(''); const [playhead,setPlayhead]=useState(0); const [draggingText,setDraggingText]=useState(false);
- const selectedText=textLayers.find(t=>t.id===selectedTextId); const visibleTextLayers=textLayers.filter(t=>t.clipId===clip?.id&&playhead>=t.start&&playhead<=t.end);
  const updateText=(id:string,patch:Partial<TextLayer>)=>setTextLayers(old=>old.map(t=>t.id===id?{...t,...patch}:t));
  const addTextLayer=()=>{if(!clip)return;const id=uid();setTextLayers(old=>[...old,{id,clipId:clip.id,text:'Your text',color:'#ffffff',size:34,x:50,y:82,start:clip.start,end:clip.end,keyframes:[]}]);setSelectedTextId(id)};
  const removeTextLayer=(id:string)=>{setTextLayers(old=>old.filter(t=>t.id!==id));if(selectedTextId===id)setSelectedTextId('')};
@@ -19,6 +18,7 @@ export default function DaVideoStudio(){
  const [aspect,setAspect]=useState('16:9'); const [muted,setMuted]=useState(false); const [exporting,setExporting]=useState(false); const [message,setMessage]=useState('');
  const video=useRef<HTMLVideoElement>(null); const canvas=useRef<HTMLCanvasElement>(null); const fileInput=useRef<HTMLInputElement>(null); const raf=useRef<number>(0);
  const clip=clips.find(c=>c.id===active)||clips[0];
+ const selectedText=textLayers.find(t=>t.id===selectedTextId); const visibleTextLayers=textLayers.filter(t=>t.clipId===clip?.id&&playhead>=t.start&&playhead<=t.end);
  const filterCss=filter==='none'?`brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`:`${presets.find(p=>p.filter===filter)?.filter||filter} brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
  useEffect(()=>()=>{clips.forEach(c=>URL.revokeObjectURL(c.url));cancelAnimationFrame(raf.current)},[]);
  useEffect(()=>{const el=video.current;if(!el||!clip)return;setPlaying(false);el.pause();el.src=clip.url;el.load();el.onloadedmetadata=()=>{el.currentTime=Math.min(clip.start,Math.max(0,el.duration-.05));el.playbackRate=clip.speed;el.volume=muted?0:clip.volume;};el.onended=()=>setPlaying(false);return()=>{el.onloadedmetadata=null}},[active,clip?.url,clip?.duration]);
