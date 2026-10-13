@@ -149,7 +149,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
   const [files, setFiles] = useState<UserFile[]>([])
   const [folders, setFolders] = useState<UserFolder[]>([])
   const [folderApps, setFolderApps] = useState<Record<string,string[]>>({})
-  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaBrowser','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord','DaExcellent','DaPower','Da C++ Studio'])
+  const [desktopApps, setDesktopApps] = useState<string[]>(['DAPP','DaEconomy','DaCourt','DaBrowser','DaVideo Studio','DaFile Explorer','DaSettings','DaTrash','Daculator','DaWord','DaExcellent','DaPower','Da C++ Studio'])
   const [clipboard, setClipboard] = useState<{type:'app'|'file'|'folder';id:string;mode:'copy'|'cut'}|null>(null)
   const [trash, setTrash] = useState<Array<{type:'app'|'file'|'folder';id:string;name:string;app?:AppItem;file?:UserFile;folder?:UserFolder;deletedAt:number}>>([])
   const [appLabels, setAppLabels] = useState<Record<string,string>>({})
@@ -238,7 +238,7 @@ export function DaApps({onRestartToLock}:{onRestartToLock?:()=>void} = {}) {
       setFiles(readFiles())
       const savedFolders = localStorage.getItem('ida-folders-v1'); if(savedFolders) setFolders(JSON.parse(savedFolders))
       const savedFolderApps = localStorage.getItem('ida-folder-apps-v1'); if(savedFolderApps) setFolderApps(JSON.parse(savedFolderApps))
-      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter((id:string)=>Boolean(id)&&id!=='DaMusic'); setDesktopApps(Array.from(new Set([...normalized,'DaBrowser','DaWord','Da C++ Studio']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaBrowser','DaWord','Da C++ Studio'])))) } catch {} }
+      const savedDesktopApps = localStorage.getItem('ida-desktop-apps'); if (savedDesktopApps) { const raw=Array.isArray(JSON.parse(savedDesktopApps))?JSON.parse(savedDesktopApps):[]; const normalized=raw.map((id:string)=>typeof id==='string'?id:'').filter((id:string)=>Boolean(id)&&id!=='DaMusic'); setDesktopApps(Array.from(new Set([...normalized,'DaBrowser','DaVideo Studio','DaWord','Da C++ Studio']))); try { localStorage.setItem('ida-desktop-apps', JSON.stringify(Array.from(new Set([...normalized,'DaBrowser','DaWord','Da C++ Studio'])))) } catch {} }
       const savedLabels = localStorage.getItem('ida-app-labels'); if (savedLabels) setAppLabels(JSON.parse(savedLabels))
       const savedNotes = localStorage.getItem('ida-notes-v2'); if (savedNotes) setNotes(JSON.parse(savedNotes))
       const savedTrash = localStorage.getItem('ida-trash-v1'); if (savedTrash) setTrash(JSON.parse(savedTrash))
