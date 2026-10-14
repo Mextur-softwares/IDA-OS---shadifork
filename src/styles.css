@@ -943,3 +943,22 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
     -webkit-overflow-scrolling:touch;
   }
 }
+
+/* Native resize grips for the preview and settings/inspector pane. */
+.da-video-studio .dvs-preview-wrap{
+  resize:both;
+  overflow:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#414451 #171922;
+}
+.da-video-studio .dvs-inspector{
+  resize:both;
+  overflow:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#414451 #171922;
+}
+.da-video-studio .dvs-inspector-tabs{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
