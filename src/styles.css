@@ -864,3 +864,8 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-property-grid .dvs-text-toggle{display:flex;flex-direction:row;align-items:center;gap:7px;padding:7px;border:1px solid #303442;border-radius:5px;background:#ffffff04}
 .da-video-studio .dvs-property-grid .dvs-text-toggle input{accent-color:#00a4ef}
 .da-video-studio .dvs-inspector-body .dvs-property-grid label{overflow-wrap:anywhere}
+
+.da-video-studio .dvs-title-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0 12px}
+.da-video-studio .dvs-title-presets button{justify-content:center;padding:8px 5px;border:1px solid #303442;border-radius:6px;background:linear-gradient(135deg,#1a2334,#11131b);color:#cbd5e1;font-size:10px;font-weight:700}
+.da-video-studio .dvs-title-presets button:hover:not(:disabled){border-color:#00a4ef;color:#d9f3ff;background:#00a4ef14}
+.da-video-studio .dvs-title-presets button:disabled{opacity:.4;cursor:not-allowed}
