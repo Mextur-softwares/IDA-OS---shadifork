@@ -661,3 +661,11 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 
 .da-video-studio .dvs-waveform-bars{height:21px;display:flex;align-items:center;justify-content:space-between;gap:1px;flex:1;min-width:0;overflow:hidden}
 .da-video-studio .dvs-waveform-bars i{display:block;flex:1;min-width:1px;max-width:3px;background:#54d6a0;border-radius:1px;opacity:.9}
+
+.da-video-studio .dvs-monitor-tabs{display:flex;align-items:center;gap:3px;margin:0 0 6px;border-bottom:1px solid #111;padding-bottom:5px}
+.da-video-studio .dvs-monitor-tabs button{padding:6px 10px;background:#292929;border:1px solid #3d3d3d;color:#bdbdbd;font-size:10px;border-radius:2px}
+.da-video-studio .dvs-monitor-tabs button.active{background:#12384a;border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-monitor-tabs span{margin-left:auto;max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:#aaa}
+.da-video-studio .dvs-playbar>button:not(.dvs-play){border-radius:2px;background:#303030;border:1px solid #484848;padding:6px 8px;font-size:10px;color:#ddd}
+.da-video-studio .dvs-playbar>button:not(.dvs-play):hover{border-color:#00a4ef}
+@media(max-width:600px){.da-video-studio .dvs-monitor-tabs span{display:none}.da-video-studio .dvs-monitor-tabs button{padding:6px 7px}}
