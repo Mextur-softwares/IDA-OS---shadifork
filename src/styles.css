@@ -713,3 +713,6 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-color-grade-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:soft-light}
 .da-video-studio #dvs-look .dvs-range b{font-variant-numeric:tabular-nums}
 .da-video-studio .dvs-color-grade-overlay{mix-blend-mode:normal}
+
+.da-video-studio .dvs-audio-track>button.dvs-solo-active{background:#124b36;border-color:#54d6a0;color:#c8f7df}
+.da-video-studio .dvs-audio-track>button.dvs-solo-active:hover{background:#176345}
