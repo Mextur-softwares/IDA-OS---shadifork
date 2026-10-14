@@ -781,3 +781,8 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-work-area-controls button{height:23px;padding:2px 6px;border:1px solid transparent;border-radius:3px;background:#252525;color:#ccc;font-size:9px}
 .da-video-studio .dvs-work-area-controls button:hover{border-color:#00a4ef;color:#fff}
 .da-video-studio .dvs-work-area-controls span{padding:0 5px;color:#00a4ef;font-size:9px;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.da-video-studio .dvs-work-area-band{position:absolute;z-index:0;top:0;bottom:0;background:#00a4ef20;border-left:2px solid #00a4ef;border-right:2px solid #00a4ef;pointer-events:none}
+.da-video-studio .dvs-time-ruler span{z-index:1}
+.da-video-studio .dvs-timeline-clip{user-select:none}
+.da-video-studio .dvs-tool-selectors button[title^="Ripple"]{cursor:ew-resize}
