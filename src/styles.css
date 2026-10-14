@@ -774,3 +774,10 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-track-name span{line-height:1.1}
 .da-video-studio .dvs-track-spacer{display:flex;align-items:center;justify-content:space-between}
 .da-video-studio .dvs-audio-lane-label strong{color:#54d6a0}
+
+.da-video-studio .dvs-export-resolution{display:flex;align-items:center;gap:5px;padding:0 3px;color:#aaa;font-size:10px;white-space:nowrap}
+.da-video-studio .dvs-export-resolution select{width:70px;padding:6px 5px;background:#171717;border:1px solid #444;border-radius:4px;color:#ddd;font-size:10px}
+.da-video-studio .dvs-work-area-controls{display:flex;align-items:center;gap:3px;padding:2px;border:1px solid #333;border-radius:4px;background:#191919}
+.da-video-studio .dvs-work-area-controls button{height:23px;padding:2px 6px;border:1px solid transparent;border-radius:3px;background:#252525;color:#ccc;font-size:9px}
+.da-video-studio .dvs-work-area-controls button:hover{border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-work-area-controls span{padding:0 5px;color:#00a4ef;font-size:9px;white-space:nowrap;font-variant-numeric:tabular-nums}
