@@ -522,3 +522,23 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .dvs-effects-footer span,.dvs-format-note{font-size:10px;color:#9299ad}
 .dvs-format-note{line-height:1.55;margin:12px 0 0;padding:9px 10px;border-radius:7px;background:#ffffff05;border:1px solid #ffffff0d}
 .dvs-preview video{transform-origin:center;max-width:100%;max-height:100%}
+
+
+/* DaVideo Studio multitrack audio lane */
+.dvs-audio-tracks{margin-top:14px;padding:12px;border:1px solid #ffffff14;border-radius:9px;background:#090c14}
+.dvs-audio-track-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.dvs-audio-track-heading strong{display:flex;align-items:center;gap:6px;font-size:12px}
+.dvs-audio-track-heading span{font-size:10px;color:#9299ad}
+.dvs-audio-track{display:grid;grid-template-columns:minmax(110px,1.3fr) minmax(90px,1fr) 92px minmax(115px,1.2fr) auto auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #ffffff0c}
+.dvs-audio-track-name{min-width:0;display:flex;align-items:center;gap:7px}
+.dvs-audio-track-name>span{font-size:9px;color:#a78bfa;background:#8b5cf626;padding:4px;border-radius:4px}
+.dvs-audio-track-name strong{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dvs-audio-track-bar{min-width:20px;max-width:100%;height:25px;display:flex;align-items:center;padding:0 7px;overflow:hidden;border-radius:5px;border:1px solid #34d39950;background:repeating-linear-gradient(90deg,#34d39920 0 2px,transparent 2px 5px),#064e3b66}
+.dvs-audio-track-bar span{font-size:9px;color:#a7f3d0;white-space:nowrap}
+.dvs-audio-track label{font-size:9px;color:#aab2c5;display:flex;align-items:center;gap:5px}
+.dvs-audio-track label input[type=number]{width:55px;background:#111521;border:1px solid #ffffff20;border-radius:5px;padding:5px;color:#fff;font-size:10px}
+.dvs-audio-track label input[type=range]{min-width:50px;width:100%}
+.dvs-audio-track label span{font-size:9px;white-space:nowrap}
+.dvs-audio-track>button{padding:5px 7px;font-size:9px;border:1px solid #ffffff1c;border-radius:5px;background:#ffffff08}
+@media(max-width:900px){.dvs-audio-track{grid-template-columns:minmax(100px,1fr) minmax(70px,1fr) 76px minmax(95px,1fr) auto auto;gap:5px}}
+@media(max-width:600px){.dvs-audio-track{grid-template-columns:1fr 1fr;}.dvs-audio-track-bar{display:none}.dvs-audio-track-heading{align-items:flex-start;flex-direction:column}}
