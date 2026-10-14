@@ -658,3 +658,6 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-title-timeline-clip{background:#56391b;border-color:#b8752a;color:#ffdfad}
 .da-video-studio .dvs-overlay-clip.selected{outline:1px solid #fff;outline-offset:-2px;filter:brightness(1.15)}
 .da-video-studio .dvs-sequence-playhead-global{top:0;height:181px}
+
+.da-video-studio .dvs-waveform-bars{height:21px;display:flex;align-items:center;justify-content:space-between;gap:1px;flex:1;min-width:0;overflow:hidden}
+.da-video-studio .dvs-waveform-bars i{display:block;flex:1;min-width:1px;max-width:3px;background:#54d6a0;border-radius:1px;opacity:.9}
