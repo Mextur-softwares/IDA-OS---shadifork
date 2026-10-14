@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Film, Upload, Play, Pause, Scissors, Trash2, Download, Type, SlidersHorizontal, Volume2, Gauge, Crop, RotateCcw, Plus, X, Image as ImageIcon, Save, FolderOpen } from 'lucide-react';
+import { Film, Upload, Play, Pause, Scissors, Trash2, Download, Type, SlidersHorizontal, Volume2, Gauge, Crop, RotateCcw, Plus, X, Image as ImageIcon, Save, FolderOpen, Layers } from 'lucide-react';
 import type { FFmpeg } from '@ffmpeg/ffmpeg';
 
 type Clip = { id:string; file:File; url:string; name:string; duration:number; start:number; end:number; speed:number; volume:number };
