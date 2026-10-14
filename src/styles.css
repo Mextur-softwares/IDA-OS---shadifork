@@ -559,3 +559,59 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 @media(max-width:650px){.dvs-image-track{grid-template-columns:1fr 1fr}.dvs-image-track-bar{display:none}}
 
 .dvs-image-overlay.is-selected{outline:1px dashed #60a5fa;outline-offset:3px;filter:drop-shadow(0 0 5px #60a5fa55)}
+
+
+/* DaVideo Studio: professional charcoal NLE workspace theme */
+.da-video-studio{--dvs-line:#111111;--dvs-muted:#a7a7a7;background:#1e1e1e;color:#e6e6e6;font-family:Inter,Roboto,Helvetica Neue,Arial,sans-serif}
+.da-video-studio .dvs-top{background:#262626;border-bottom:1px solid #111;padding:10px 14px;min-height:58px}
+.da-video-studio .dvs-brand{gap:10px}
+.da-video-studio .dvs-brand strong{font-size:14px;letter-spacing:.1px;color:#fff}
+.da-video-studio .dvs-brand small{color:#aaa;font-size:10px}
+.da-video-studio .dvs-logo{background:#00a4ef;color:#07131a;border-radius:4px;width:30px;height:30px}
+.da-video-studio .dvs-actions{gap:6px}
+.da-video-studio .dvs-actions button,.da-video-studio button{border-radius:3px}
+.da-video-studio .dvs-actions button{background:#343434;border-color:#454545;color:#ddd;padding:7px 10px;font-size:11px}
+.da-video-studio .dvs-actions button:hover{background:#414141;border-color:#00a4ef}
+.da-video-studio .dvs-actions .dvs-export,.da-video-studio .dvs-empty button{background:#007db7;border-color:#00a4ef;color:white}
+.da-video-studio .dvs-workspace{grid-template-columns:172px minmax(0,1fr);background:#1e1e1e}
+.da-video-studio .dvs-tools{background:#252525;border-right:1px solid #111;padding:14px 9px}
+.da-video-studio .dvs-section-title{color:#a7a7a7;letter-spacing:1px}
+.da-video-studio .dvs-tools>button{color:#c6c6c6;background:transparent;border:1px solid transparent}
+.da-video-studio .dvs-tools>button.active{background:#12384a;border-color:#00a4ef55;color:#fff}
+.da-video-studio .dvs-tools>button small{color:#55c7ff}
+.da-video-studio .dvs-tips{background:#202020;border-color:#3b3b3b;border-radius:4px}
+.da-video-studio .dvs-tips strong{color:#55c7ff}
+.da-video-studio .dvs-main{padding:12px;gap:10px;background:#1e1e1e}
+.da-video-studio .dvs-preview-wrap{max-width:1100px}
+.da-video-studio .dvs-preview{border:1px solid #080808;border-radius:2px;background:#080808;max-height:40vh}
+.da-video-studio .dvs-playbar{padding:7px 2px;color:#bdbdbd}
+.da-video-studio .dvs-playbar .dvs-play{background:#007db7;border-color:#00a4ef;border-radius:3px;width:32px;height:30px}
+.da-video-studio .dvs-playbar span{color:#e8e8e8}
+.da-video-studio input[type=range]{accent-color:#00a4ef}
+.da-video-studio .dvs-panel{background:#262626;border:1px solid #111;border-radius:3px;padding:12px;box-shadow:0 1px 0 #ffffff05}
+.da-video-studio .dvs-panel-head{border-bottom:1px solid #3a3a3a;padding-bottom:9px;margin-bottom:10px}
+.da-video-studio .dvs-panel-head strong{color:#f2f2f2;font-size:12px}
+.da-video-studio .dvs-panel-head span{color:#aaa}
+.da-video-studio .dvs-panel-head button{background:#343434;border:1px solid #484848;color:#ddd}
+.da-video-studio .dvs-timeline{gap:5px;padding-bottom:8px}
+.da-video-studio .dvs-clip{background:#303030;border:1px solid #484848;border-radius:3px;padding:7px}
+.da-video-studio .dvs-clip.selected{background:#12384a;border-color:#00a4ef;box-shadow:inset 0 0 0 1px #00a4ef33}
+.da-video-studio .dvs-clip-top{color:#55c7ff}
+.da-video-studio .dvs-wave{border-radius:2px;background:repeating-linear-gradient(90deg,#00a4ef25 0 3px,transparent 3px 8px),#202020}
+.da-video-studio .dvs-wave span{background:#242424;color:#eee}
+.da-video-studio .dvs-clip-time{color:#b8b8b8}
+.da-video-studio .dvs-timeline-empty{border-color:#555;border-radius:3px;color:#bbb}
+.da-video-studio .dvs-trim{border-color:#414141}
+.da-video-studio .dvs-range>span{color:#ccc}
+.da-video-studio .dvs-range b{color:#55c7ff}
+.da-video-studio .dvs-presets button{background:#303030;border-radius:3px;color:#ccc}
+.da-video-studio .dvs-presets button.selected{border-color:#00a4ef;background:#12384a;color:#fff}
+.da-video-studio .dvs-panel textarea,.da-video-studio .dvs-panel select,.da-video-studio .dvs-audio-track label input[type=number],.da-video-studio .dvs-image-track label input[type=number]{background:#1b1b1b;border-color:#494949;border-radius:3px;color:#eee}
+.da-video-studio .dvs-audio-tracks,.da-video-studio .dvs-image-tracks{background:#202020;border-color:#3d3d3d;border-radius:3px}
+.da-video-studio .dvs-audio-track-name>span{background:#12384a;color:#55c7ff}
+.da-video-studio .dvs-audio-track-bar{border-radius:2px;background:repeating-linear-gradient(90deg,#34d39920 0 2px,transparent 2px 5px),#123a2d}
+.da-video-studio .dvs-image-track-bar{border-radius:2px;background:repeating-linear-gradient(135deg,#00a4ef20 0 4px,transparent 4px 8px),#12384a;border-color:#00a4ef55}
+.da-video-studio .dvs-message{background:#262626;border-color:#00a4ef;color:#f3f3f3;border-radius:3px}
+.da-video-studio .dvs-footer{background:#262626;border-color:#111;color:#aaa}
+.da-video-studio .dvs-footer b{background:#12384a;color:#55c7ff;border-radius:2px}
+@media(max-width:900px){.da-video-studio .dvs-workspace{grid-template-columns:1fr}.da-video-studio .dvs-tools{background:#262626}}
