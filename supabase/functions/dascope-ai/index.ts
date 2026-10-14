@@ -61,7 +61,7 @@ Deno.serve(async (req: Request) => {
         "X-Title": "IDA OS DaScope",
       },
       body: JSON.stringify({
-        model: "stealth/space-bunny-alpha",
+        model: "dots-studio/dots-3-note-preview:free",
         messages: [
           {
             role: "system",
