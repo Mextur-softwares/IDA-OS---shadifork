@@ -1375,11 +1375,11 @@ function ControlCenter({ brightness, setBrightness, internetOn, setInternetOn, v
   )
 }
 
-class DaVideoStudioSafe extends Component<{}, {failed:boolean}> {
-  state={failed:false}
-  static getDerivedStateFromError(){return {failed:true}}
-  componentDidCatch(error:Error){console.error('DaVideo Studio crashed:',error)}
-  render(){return this.state.failed?<div className="explorer-empty" style={{height:'100%',minHeight:260}}><Film size={36}/><strong>DaVideo Studio hit an error</strong><span>The rest of IDA is still available. Your project files are not deleted. Close this window and reopen DaVideo Studio, or check the browser console for the error.</span><button type="button" onClick={()=>this.setState({failed:false})} style={{marginTop:12,border:0,borderRadius:9,padding:'9px 14px',cursor:'pointer'}}>Try again</button></div>:<DaVideoStudio/>}
+class DaVideoStudioSafe extends Component<{}, {failed:boolean;error:string;stack:string}> {
+  state={failed:false,error:'',stack:''}
+  static getDerivedStateFromError(error:Error){return {failed:true,error:error?.message||String(error),stack:error?.stack||''}}
+  componentDidCatch(error:Error,info:React.ErrorInfo){console.error('DaVideo Studio crashed:',error,info.componentStack);this.setState({error:error?.message||String(error),stack:[error?.stack||'',info.componentStack||''].filter(Boolean).join('\n')})}
+  render(){return this.state.failed?<div className="explorer-empty" style={{height:'100%',minHeight:260,overflow:'auto',padding:24,alignItems:'center'}}><Film size={36}/><strong>DaVideo Studio hit an error</strong><span>The rest of IDA is still available. Your project files are safe. The exact error is shown below to help diagnose this without guessing.</span><pre style={{maxWidth:'100%',whiteSpace:'pre-wrap',overflowWrap:'anywhere',textAlign:'left',padding:12,borderRadius:8,background:'#11131b',color:'#ffb8bd',fontSize:11}}>{this.state.error||'No error message available'}{this.state.stack?'\n\n'+this.state.stack:''}</pre><div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center'}}><button type="button" onClick={()=>this.setState({failed:false,error:'',stack:''})} style={{marginTop:12,border:0,borderRadius:9,padding:'9px 14px',cursor:'pointer'}}>Try again</button><button type="button" onClick={()=>{void navigator.clipboard?.writeText([this.state.error,this.state.stack].filter(Boolean).join('\n\n'))}} style={{marginTop:12,border:0,borderRadius:9,padding:'9px 14px',cursor:'pointer'}}>Copy error details</button></div></div>:<DaVideoStudio/>}
 }
 
 class DaMusicSafe extends Component<{volume:number},{failed:boolean}> {
