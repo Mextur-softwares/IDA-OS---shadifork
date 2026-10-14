@@ -721,3 +721,38 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-project-name:hover,.da-video-studio .dvs-project-name:focus{background:#1d1d1d;border-color:#00a4ef55;color:#fff}
 .da-video-studio .dvs-project-name::placeholder{color:#888}
 @media(max-width:540px){.da-video-studio .dvs-project-name{width:105px;font-size:9px}}
+
+
+/* DaVideo Studio: dock the timeline inside the editor instead of letting it drift below the window. */
+.da-video-studio{height:100%;min-height:0;overflow:hidden;position:relative}
+.da-video-studio>.dvs-top{flex:0 0 auto}
+.da-video-studio>.dvs-workspace{flex:1 1 0;height:0;min-height:0;overflow:hidden}
+.da-video-studio .dvs-workspace{grid-template-columns:190px minmax(0,1fr)}
+.da-video-studio .dvs-main{display:grid;grid-template-rows:minmax(0,1fr) minmax(230px,40%);gap:8px;padding:10px 12px 0;min-height:0;height:100%;overflow:hidden}
+.da-video-studio .dvs-upper-workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:12px;min-height:0;overflow:auto;overscroll-behavior:contain}
+.da-video-studio .dvs-preview-wrap{width:100%;max-width:none;min-width:0;margin:0;align-self:start}
+.da-video-studio .dvs-preview{min-height:120px;max-height:34vh}
+.da-video-studio .dvs-preview video{max-height:34vh}
+.da-video-studio .dvs-upper-workspace>.dvs-edit-grid{grid-template-columns:minmax(0,1fr);align-content:start;gap:10px;min-width:0}
+.da-video-studio .dvs-upper-workspace .dvs-panel{padding:11px}
+.da-video-studio .dvs-timeline-panel{min-height:0;height:100%;max-height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-color:#4a4a4a #202020}
+.da-video-studio .dvs-timeline-panel>.dvs-panel-head{position:sticky;top:-10px;z-index:6;background:#1f1f1f;padding:7px 0;border-bottom:1px solid #111}
+.da-video-studio .dvs-timeline-layout{min-height:0}
+.da-video-studio .dvs-timeline-scroll{overflow:auto;max-height:190px}
+.da-video-studio .dvs-footer{display:none}
+.da-video-studio .dvs-message{position:absolute;top:58px;right:14px;bottom:auto;z-index:30;margin:0;max-width:min(480px,calc(100% - 28px))}
+.da-video-studio .dvs-bin-assets{min-height:0;max-height:none;flex:1}
+@media(max-width:1000px){
+ .da-video-studio .dvs-workspace{grid-template-columns:155px minmax(0,1fr)}
+ .da-video-studio .dvs-main{grid-template-rows:minmax(0,1fr) minmax(220px,43%)}
+ .da-video-studio .dvs-upper-workspace{grid-template-columns:minmax(0,1fr)}
+ .da-video-studio .dvs-upper-workspace>.dvs-edit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ .da-video-studio .dvs-workspace{grid-template-columns:1fr}
+ .da-video-studio .dvs-tools{display:none}
+ .da-video-studio .dvs-main{grid-template-rows:minmax(0,1fr) minmax(220px,46%);padding:8px}
+ .da-video-studio .dvs-upper-workspace>.dvs-edit-grid{grid-template-columns:minmax(0,1fr)}
+ .da-video-studio .dvs-timeline-tools{justify-content:flex-start}
+ .da-video-studio .dvs-timeline-panel>.dvs-panel-head{align-items:flex-start;flex-direction:column}
+}
