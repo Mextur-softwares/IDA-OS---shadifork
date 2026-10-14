@@ -709,3 +709,6 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-audio-lane-clip .dvs-waveform-bars{height:25px}
 .da-video-studio .dvs-audio-lane-clip .dvs-waveform-bars i{background:#54d6a0}
 .da-video-studio .dvs-audio-lane-clip:hover{border-color:#8be9ba;background:#165b41}
+
+.da-video-studio .dvs-color-grade-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:soft-light}
+.da-video-studio #dvs-look .dvs-range b{font-variant-numeric:tabular-nums}
