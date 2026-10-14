@@ -876,3 +876,70 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 /* DaVideo: keep each inspector tab's content independently scrollable. */
 .da-video-studio .dvs-inspector>div:not(.dvs-inspector-tabs){flex:1 1 0;min-height:0;max-height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#414451 #171922;}
 .da-video-studio .dvs-inspector>div:not(.dvs-inspector-tabs)>:last-child{padding-bottom:12px;}
+
+
+/* DaVideo workspace ergonomics: resizable work areas and a true two-axis timeline viewport. */
+.da-video-studio .dvs-main{
+  grid-template-rows:minmax(180px,1fr) minmax(190px,40%);
+  min-width:0;
+}
+.da-video-studio .dvs-upper-workspace{
+  min-width:0;
+  min-height:180px;
+  resize:vertical;
+  overflow:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#414451 #171922;
+}
+.da-video-studio .dvs-preview-wrap{
+  min-width:220px;
+  min-height:160px;
+}
+.da-video-studio .dvs-inspector{
+  min-width:200px;
+}
+.da-video-studio .dvs-timeline-panel{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:190px;
+  overflow:hidden;
+  resize:vertical;
+}
+.da-video-studio .dvs-timeline-panel>.dvs-panel-head{
+  flex:0 0 auto;
+  min-width:0;
+}
+.da-video-studio .dvs-timeline-layout{
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+  overflow:hidden;
+}
+.da-video-studio .dvs-timeline-scroll{
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+  max-height:none;
+  overflow:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#555 #202020;
+  touch-action:pan-x pan-y;
+}
+.da-video-studio .dvs-timeline-canvas{
+  min-width:max-content;
+}
+@media(max-width:760px){
+  .da-video-studio .dvs-upper-workspace{
+    resize:none;
+    overflow:auto;
+  }
+  .da-video-studio .dvs-timeline-panel{
+    resize:none;
+  }
+  .da-video-studio .dvs-timeline-scroll{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+}
