@@ -813,3 +813,7 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-audio-meter i,.da-video-studio .dvs-audio-lane-meter i{display:block;height:100%;max-width:100%;background:linear-gradient(90deg,#22c55e 0 65%,#eab308 65% 85%,#ef4444 85% 100%);transition:width .09s linear}
 .da-video-studio .dvs-audio-lane-label{height:44px}
 @media(max-width:900px){.da-video-studio .dvs-audio-track-heading{align-items:flex-start;flex-direction:column}.da-video-studio .dvs-audio-track{min-width:1000px}}
+
+.da-video-studio .dvs-audio-lane-label{position:relative}
+.da-video-studio .dvs-audio-lane-label .dvs-audio-lane-meter{position:absolute;top:4px;right:4px;width:22px}
+.da-video-studio .dvs-audio-lane-label .dvs-track-controls{margin-top:0}
