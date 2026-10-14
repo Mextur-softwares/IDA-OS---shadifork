@@ -860,3 +860,7 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-inspector-empty button,.da-video-studio .dvs-inspector-body .dvs-secondary-action{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 10px}
 .da-video-studio .dvs-inspector-body[style*="display: none"]{display:none!important}
 @media(max-width:1000px){.da-video-studio .dvs-inspector-tabs button{font-size:9px;padding:7px 1px}.da-video-studio .dvs-inspector-body{padding:8px}}
+
+.da-video-studio .dvs-property-grid .dvs-text-toggle{display:flex;flex-direction:row;align-items:center;gap:7px;padding:7px;border:1px solid #303442;border-radius:5px;background:#ffffff04}
+.da-video-studio .dvs-property-grid .dvs-text-toggle input{accent-color:#00a4ef}
+.da-video-studio .dvs-inspector-body .dvs-property-grid label{overflow-wrap:anywhere}
