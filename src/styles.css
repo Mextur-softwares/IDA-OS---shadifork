@@ -832,3 +832,9 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-curve-value{display:flex;justify-content:space-between;margin-top:6px;color:#999;font-size:9px}
 .da-video-studio .dvs-curve-value b{color:#00a4ef;font-variant-numeric:tabular-nums}
 @media(max-width:1000px){.da-video-studio .dvs-color-wheel{width:min(100%,78px)}}
+
+.da-video-studio .dvs-audio-track-bar{position:relative}
+.da-video-studio .dvs-audio-keyframe{position:absolute;z-index:2;transform:translate(-50%,50%);min-width:12px;height:12px;padding:0;border:0;background:transparent;color:#fff2a8;text-shadow:0 0 4px #000;font-size:9px;line-height:1;cursor:pointer}
+.da-video-studio .dvs-audio-keyframe:hover{color:#00a4ef;transform:translate(-50%,50%) scale(1.2)}
+.da-video-studio .dvs-tool-selectors button[title^="Slide"]{cursor:move}
+.da-video-studio .dvs-tool-selectors button[title^="Pen"]{font-style:italic}
