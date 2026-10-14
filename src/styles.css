@@ -514,3 +514,48 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 
 /* DaVideo Studio text layers, timeline clips and keyframes */
 .dvs-draggable-text{cursor:move;user-select:none;max-width:90%;z-index:2}.dvs-draggable-text.is-selected{outline:1px dashed #c4b5fd;outline-offset:7px}.dvs-text-layer-list{display:flex;flex-direction:column;gap:7px;margin:8px 0 14px}.dvs-text-layer-row{display:grid;grid-template-columns:minmax(90px,140px) minmax(60px,1fr) 28px;align-items:center;gap:7px}.dvs-text-layer-row.selected .dvs-layer-name{border-color:#a78bfa;color:#ddd6fe}.dvs-layer-name{min-width:0;justify-content:flex-start!important}.dvs-layer-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dvs-layer-track{height:28px;border-radius:6px;background:repeating-linear-gradient(90deg,#ffffff08 0 1px,transparent 1px 10%),#080a10;border:1px solid #ffffff10;position:relative;overflow:hidden}.dvs-layer-bar{position:absolute;top:3px;bottom:3px;min-width:12px;border-radius:4px;background:linear-gradient(90deg,#7c3aed,#a78bfa);display:flex;align-items:center;padding:0 6px;overflow:hidden;cursor:pointer}.dvs-layer-bar span{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:white}.dvs-text-editor{display:flex;flex-direction:column;gap:9px}.dvs-timing-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.dvs-timing-grid label{display:flex;flex-direction:column;gap:5px;color:#bfc4d3;font-size:11px}.dvs-timing-grid input{min-width:0;width:100%;background:#0b0d14;color:#fff;border:1px solid #ffffff20;border-radius:7px;padding:8px}.dvs-timing-grid small{color:#a78bfa}.dvs-keyframe-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.dvs-keyframe-tools button{font-size:11px;background:#8b5cf626;border-color:#a78bfa55}.dvs-keyframe-tools span{font-size:10px;color:#a78bfa;white-space:nowrap}.dvs-keyframe-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.dvs-keyframe-list button{font-size:10px;padding:5px 7px;color:#ddd6fe}.dvs-keyframe-list button span{color:#fca5a5;font-size:14px;margin-left:3px}.dvs-drag-hint{font-size:10px;line-height:1.5;color:#9299ad;margin:10px 0 0}
+
+
+/* DaVideo Studio Pro foundation: expanded effect controls and format guidance */
+.dvs-effects-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--dvs-line);flex-wrap:wrap}
+.dvs-effects-footer button{font-size:11px;background:#ffffff08;border:1px solid #ffffff20;border-radius:7px;padding:7px 10px}
+.dvs-effects-footer span,.dvs-format-note{font-size:10px;color:#9299ad}
+.dvs-format-note{line-height:1.55;margin:12px 0 0;padding:9px 10px;border-radius:7px;background:#ffffff05;border:1px solid #ffffff0d}
+.dvs-preview video{transform-origin:center;max-width:100%;max-height:100%}
+
+
+/* DaVideo Studio multitrack audio lane */
+.dvs-audio-tracks{margin-top:14px;padding:12px;border:1px solid #ffffff14;border-radius:9px;background:#090c14}
+.dvs-audio-track-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.dvs-audio-track-heading strong{display:flex;align-items:center;gap:6px;font-size:12px}
+.dvs-audio-track-heading span{font-size:10px;color:#9299ad}
+.dvs-audio-track{display:grid;grid-template-columns:minmax(110px,1.3fr) minmax(90px,1fr) 92px minmax(115px,1.2fr) auto auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #ffffff0c}
+.dvs-audio-track-name{min-width:0;display:flex;align-items:center;gap:7px}
+.dvs-audio-track-name>span{font-size:9px;color:#a78bfa;background:#8b5cf626;padding:4px;border-radius:4px}
+.dvs-audio-track-name strong{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dvs-audio-track-bar{min-width:20px;max-width:100%;height:25px;display:flex;align-items:center;padding:0 7px;overflow:hidden;border-radius:5px;border:1px solid #34d39950;background:repeating-linear-gradient(90deg,#34d39920 0 2px,transparent 2px 5px),#064e3b66}
+.dvs-audio-track-bar span{font-size:9px;color:#a7f3d0;white-space:nowrap}
+.dvs-audio-track label{font-size:9px;color:#aab2c5;display:flex;align-items:center;gap:5px}
+.dvs-audio-track label input[type=number]{width:55px;background:#111521;border:1px solid #ffffff20;border-radius:5px;padding:5px;color:#fff;font-size:10px}
+.dvs-audio-track label input[type=range]{min-width:50px;width:100%}
+.dvs-audio-track label span{font-size:9px;white-space:nowrap}
+.dvs-audio-track>button{padding:5px 7px;font-size:9px;border:1px solid #ffffff1c;border-radius:5px;background:#ffffff08}
+@media(max-width:900px){.dvs-audio-track{grid-template-columns:minmax(100px,1fr) minmax(70px,1fr) 76px minmax(95px,1fr) auto auto;gap:5px}}
+@media(max-width:600px){.dvs-audio-track{grid-template-columns:1fr 1fr;}.dvs-audio-track-bar{display:none}.dvs-audio-track-heading{align-items:flex-start;flex-direction:column}}
+
+
+/* Image overlay lane and preview composition */
+.dvs-preview{position:relative;overflow:hidden}
+.dvs-image-overlay{position:absolute;max-width:none;max-height:none;height:auto;object-fit:contain;z-index:3;pointer-events:none;user-select:none}
+.dvs-image-tracks{margin-top:14px;padding:12px;border:1px solid #ffffff14;border-radius:9px;background:#090c14}
+.dvs-image-track{display:grid;grid-template-columns:minmax(110px,1.2fr) minmax(85px,1fr) 75px 75px minmax(85px,1fr) minmax(85px,1fr) 75px auto;gap:7px;align-items:center;padding:8px 0;border-top:1px solid #ffffff0c}
+.dvs-image-track-bar{min-width:25px;max-width:100%;height:25px;display:flex;align-items:center;padding:0 7px;overflow:hidden;border-radius:5px;border:1px solid #60a5fa55;background:repeating-linear-gradient(135deg,#60a5fa20 0 4px,transparent 4px 8px),#1e3a8a55}
+.dvs-image-track-bar span{font-size:9px;color:#bfdbfe;white-space:nowrap}
+.dvs-image-track label{font-size:9px;color:#aab2c5;display:flex;align-items:center;gap:4px}
+.dvs-image-track label input[type=number]{width:55px;background:#111521;border:1px solid #ffffff20;border-radius:5px;padding:5px;color:#fff;font-size:10px}
+.dvs-image-track label input[type=range]{width:100%;min-width:40px}
+.dvs-image-track>button{padding:5px 7px;font-size:9px;border:1px solid #ffffff1c;border-radius:5px;background:#ffffff08}
+@media(max-width:1000px){.dvs-image-track{grid-template-columns:minmax(100px,1fr) minmax(70px,1fr) 70px 70px minmax(65px,1fr) minmax(65px,1fr) auto}.dvs-image-track label:nth-of-type(3){display:none}}
+@media(max-width:650px){.dvs-image-track{grid-template-columns:1fr 1fr}.dvs-image-track-bar{display:none}}
+
+.dvs-image-overlay.is-selected{outline:1px dashed #60a5fa;outline-offset:3px;filter:drop-shadow(0 0 5px #60a5fa55)}
