@@ -716,3 +716,8 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 
 .da-video-studio .dvs-audio-track>button.dvs-solo-active{background:#124b36;border-color:#54d6a0;color:#c8f7df}
 .da-video-studio .dvs-audio-track>button.dvs-solo-active:hover{background:#176345}
+
+.da-video-studio .dvs-project-name{display:block;width:180px;max-width:42vw;margin-top:3px;padding:2px 4px;background:transparent;border:1px solid transparent;border-radius:2px;color:#aaa;font-size:10px;outline:none}
+.da-video-studio .dvs-project-name:hover,.da-video-studio .dvs-project-name:focus{background:#1d1d1d;border-color:#00a4ef55;color:#fff}
+.da-video-studio .dvs-project-name::placeholder{color:#888}
+@media(max-width:540px){.da-video-studio .dvs-project-name{width:105px;font-size:9px}}
