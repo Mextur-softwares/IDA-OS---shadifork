@@ -646,3 +646,15 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-sequence-playhead{position:absolute;z-index:4;top:-28px;height:93px;width:1px;background:#00a4ef;pointer-events:none;box-shadow:0 0 4px #00a4ef66}
 .da-video-studio .dvs-sequence-playhead span{position:absolute;top:0;left:-4px;width:9px;height:9px;background:#00a4ef;clip-path:polygon(0 0,100% 0,100% 65%,50% 100%,0 65%)}
 @media(max-width:700px){.da-video-studio .dvs-timeline-tools{justify-content:flex-start}.da-video-studio .dvs-timeline-tools label input[type=range]{width:62px}.da-video-studio .dvs-timeline-layout{grid-template-columns:48px minmax(0,1fr)}.da-video-studio .dvs-track-name{padding:0 5px}}
+
+
+/* V2/V3 overlay lanes are aligned to the same sequence ruler as V1 */
+.da-video-studio .dvs-overlay-track-label{height:44px;border-bottom:1px solid #111}
+.da-video-studio .dvs-multitrack-canvas{min-height:181px}
+.da-video-studio .dvs-overlay-track-row{position:relative;height:44px;border-bottom:1px solid #111;background:repeating-linear-gradient(90deg,transparent 0 49px,#ffffff09 49px 50px),#202020}
+.da-video-studio .dvs-overlay-clip{position:absolute;top:4px;height:36px;display:flex;align-items:center;gap:5px;overflow:hidden;padding:0 7px;border-radius:2px;font-size:9px;white-space:nowrap;cursor:pointer;border:1px solid transparent}
+.da-video-studio .dvs-overlay-clip span{overflow:hidden;text-overflow:ellipsis}
+.da-video-studio .dvs-image-timeline-clip{background:#16405a;border-color:#267eaa;color:#d6f2ff}
+.da-video-studio .dvs-title-timeline-clip{background:#56391b;border-color:#b8752a;color:#ffdfad}
+.da-video-studio .dvs-overlay-clip.selected{outline:1px solid #fff;outline-offset:-2px;filter:brightness(1.15)}
+.da-video-studio .dvs-sequence-playhead-global{top:0;height:181px}
