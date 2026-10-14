@@ -669,3 +669,27 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-playbar>button:not(.dvs-play){border-radius:2px;background:#303030;border:1px solid #484848;padding:6px 8px;font-size:10px;color:#ddd}
 .da-video-studio .dvs-playbar>button:not(.dvs-play):hover{border-color:#00a4ef}
 @media(max-width:600px){.da-video-studio .dvs-monitor-tabs span{display:none}.da-video-studio .dvs-monitor-tabs button{padding:6px 7px}}
+
+.da-video-studio .dvs-sidebar-tabs{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:13px}
+.da-video-studio .dvs-sidebar-tabs button{padding:7px 5px;background:#303030;border:1px solid #414141;color:#bbb;font-size:10px;border-radius:2px}
+.da-video-studio .dvs-sidebar-tabs button.active{background:#12384a;border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-bin-heading{display:flex;flex-direction:column;gap:7px}
+.da-video-studio .dvs-bin-heading>strong{font-size:10px;letter-spacing:1px;color:#c7c7c7}
+.da-video-studio .dvs-bin-heading>div{display:flex;gap:4px}
+.da-video-studio .dvs-bin-heading button{flex:1;padding:5px 3px;font-size:9px;background:#303030;border:1px solid #414141;color:#aaa}
+.da-video-studio .dvs-bin-heading button.active{background:#12384a;border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-bin-search{width:100%;min-width:0;padding:7px 8px;background:#191919;border:1px solid #494949;color:#eee;border-radius:2px;margin:9px 0;font-size:10px}
+.da-video-studio .dvs-bin-assets{display:flex;flex-direction:column;gap:2px;overflow-y:auto;overflow-x:hidden;min-height:90px;max-height:calc(100vh - 330px)}
+.da-video-studio .dvs-bin-assets>button{width:100%;min-width:0;display:grid;grid-template-columns:15px minmax(0,1fr) auto;align-items:center;gap:6px;text-align:left;padding:6px 5px;background:transparent;border:1px solid transparent;border-radius:2px;color:#c9c9c9}
+.da-video-studio .dvs-bin-assets>button:hover{background:#303030}
+.da-video-studio .dvs-bin-assets>button.selected{background:#12384a;border-color:#00a4ef55;color:#fff}
+.da-video-studio .dvs-bin-assets>button svg{color:#55c7ff}
+.da-video-studio .dvs-bin-assets>button span{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.da-video-studio .dvs-bin-assets>button small{font-size:8px;color:#999;white-space:nowrap}
+.da-video-studio .dvs-bin-assets.icon-view{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}
+.da-video-studio .dvs-bin-assets.icon-view>button{grid-template-columns:1fr;justify-items:center;text-align:center;gap:5px;padding:10px 4px;min-height:74px}
+.da-video-studio .dvs-bin-assets.icon-view>button span{width:100%;white-space:normal;overflow-wrap:anywhere;max-height:2.5em}
+.da-video-studio .dvs-bin-empty{font-size:10px;color:#8f8f8f;line-height:1.6;padding:8px 3px}
+.da-video-studio .dvs-bin-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:9px;margin-top:8px;border-top:1px solid #3b3b3b;color:#aaa;font-size:9px}
+.da-video-studio .dvs-bin-footer button{display:flex;align-items:center;gap:3px;padding:5px;background:#303030;border:1px solid #454545;color:#ddd;font-size:9px}
+@media(max-width:900px){.da-video-studio .dvs-tools{display:flex;flex-direction:column;align-items:stretch;overflow-y:auto;overflow-x:hidden;padding:10px;max-height:34vh;border-right:0;border-bottom:1px solid #111}.da-video-studio .dvs-bin-assets{max-height:160px;min-height:45px}.da-video-studio .dvs-sidebar-tabs{margin-bottom:8px}.da-video-studio .dvs-bin-heading{flex-direction:row;align-items:center;justify-content:space-between}.da-video-studio .dvs-bin-heading>div{max-width:120px}}
