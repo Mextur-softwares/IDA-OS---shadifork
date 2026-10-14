@@ -63,5 +63,8 @@
         "AppImage"
       ]
     }
-  }
+  },
+  "version": "1.0.0",
+  "description": "IDA OS — browser-based workspace and creator tools",
+  "author": "Mextur Softwares"
 }
