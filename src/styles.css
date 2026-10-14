@@ -817,3 +817,18 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-audio-lane-label{position:relative}
 .da-video-studio .dvs-audio-lane-label .dvs-audio-lane-meter{position:absolute;top:4px;right:4px;width:22px}
 .da-video-studio .dvs-audio-lane-label .dvs-track-controls{margin-top:0}
+
+.da-video-studio .dvs-color-wheels,.da-video-studio .dvs-curves-panel{margin-top:16px;padding-top:12px;border-top:1px solid #ffffff12}
+.da-video-studio .dvs-color-wheel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.da-video-studio .dvs-color-wheel-card{display:flex;align-items:center;flex-direction:column;gap:6px;color:#aeb5c6;font-size:10px;text-transform:capitalize}
+.da-video-studio .dvs-color-wheel{position:relative;width:min(100%,94px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at center,#777 0 3%,#5550 66%),conic-gradient(#f22,#ff0,#0f0,#0ff,#00f,#f0f,#f22);border:2px solid #3a3a3a;box-shadow:inset 0 0 0 1px #ffffff18,0 4px 12px #0006;touch-action:none;cursor:crosshair}
+.da-video-studio .dvs-color-wheel:after{content:"";position:absolute;inset:19%;border:1px solid #ffffff2a;border-radius:50%;pointer-events:none}
+.da-video-studio .dvs-color-wheel i{position:absolute;width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:#111;box-shadow:0 0 0 1px #000;transform:translate(-50%,-50%);z-index:2;pointer-events:none}
+.da-video-studio .dvs-curves-panel .dvs-panel-head{margin-bottom:8px}
+.da-video-studio .dvs-curves-panel .dvs-panel-head select{width:105px;padding:5px;font-size:10px}
+.da-video-studio .dvs-curve-graph{display:block;width:100%;max-height:190px;aspect-ratio:1;background-color:#141414;background-image:linear-gradient(#ffffff15 1px,transparent 1px),linear-gradient(90deg,#ffffff15 1px,transparent 1px);background-size:10% 10%;border:1px solid #383838;touch-action:none;cursor:crosshair}
+.da-video-studio .dvs-curve-graph path{fill:none;stroke:#00a4ef;stroke-width:1.7;vector-effect:non-scaling-stroke}
+.da-video-studio .dvs-curve-graph circle{fill:#fff;stroke:#00a4ef;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.da-video-studio .dvs-curve-value{display:flex;justify-content:space-between;margin-top:6px;color:#999;font-size:9px}
+.da-video-studio .dvs-curve-value b{color:#00a4ef;font-variant-numeric:tabular-nums}
+@media(max-width:1000px){.da-video-studio .dvs-color-wheel{width:min(100%,78px)}}
