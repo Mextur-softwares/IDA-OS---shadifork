@@ -764,3 +764,13 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-timeline-scroll{cursor:default}
 .da-video-studio .dvs-timeline-scroll:has(.dvs-tool-active[title^="Hand"]) {cursor:grab}
 .da-video-studio .dvs-tool-selectors button:focus-visible{outline:1px solid #00a4ef;outline-offset:1px}
+
+.da-video-studio .dvs-track-name{height:65px;gap:2px;padding:3px 5px}
+.da-video-studio .dvs-track-controls{display:flex;align-items:center;gap:2px;margin-top:2px}
+.da-video-studio .dvs-track-controls button,.da-video-studio .dvs-track-spacer button{min-width:15px;height:15px;padding:0 2px;border:1px solid transparent;border-radius:2px;background:#202020;color:#9c9c9c;font-size:8px;line-height:1}
+.da-video-studio .dvs-track-controls button:hover,.da-video-studio .dvs-track-spacer button:hover{border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-track-controls .dvs-target-active,.da-video-studio .dvs-track-spacer .dvs-target-active{background:#12384a;border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-track-name strong{line-height:1.1}
+.da-video-studio .dvs-track-name span{line-height:1.1}
+.da-video-studio .dvs-track-spacer{display:flex;align-items:center;justify-content:space-between}
+.da-video-studio .dvs-audio-lane-label strong{color:#54d6a0}
