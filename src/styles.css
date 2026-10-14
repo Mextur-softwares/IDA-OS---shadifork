@@ -799,3 +799,17 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-video-overlay-track input[type=range]{width:100%;min-width:0}
 @media(max-width:1050px){.da-video-studio .dvs-video-overlay-track{grid-template-columns:minmax(90px,1fr) repeat(2,minmax(58px,70px)) repeat(2,minmax(58px,70px)) minmax(65px,1fr) minmax(65px,1fr) 28px}.da-video-studio .dvs-video-overlay-track label:nth-of-type(7){display:none}}
 @media(max-width:700px){.da-video-studio .dvs-video-overlay-track{grid-template-columns:minmax(90px,1fr) repeat(2,minmax(60px,1fr)) 28px}.da-video-studio .dvs-video-overlay-track label:nth-of-type(n+3){display:none}}
+
+.da-video-studio .dvs-audio-tracks{overflow-x:auto}
+.da-video-studio .dvs-audio-track{grid-template-columns:minmax(120px,1.2fr) 95px minmax(80px,.9fr) 70px 70px 70px 90px 80px minmax(100px,1fr) auto auto 28px;min-width:1120px}
+.da-video-studio .dvs-audio-track select{width:100%;min-width:0;padding:4px 5px;background:#111;color:#ddd;border:1px solid #444;border-radius:4px;font-size:10px}
+.da-video-studio .dvs-audio-track label{min-width:0}
+.da-video-studio .dvs-audio-track .dvs-normalize-toggle{display:flex;flex-direction:row;align-items:center;gap:4px;font-size:9px;color:#aaa}
+.da-video-studio .dvs-ducking-toggle{display:flex;align-items:center;gap:6px;font-size:10px;color:#bfc4d3}
+.da-video-studio .dvs-ducking-toggle input,.da-video-studio .dvs-normalize-toggle input{accent-color:#00a4ef}
+.da-video-studio .dvs-audio-meter,.da-video-studio .dvs-audio-lane-meter{height:7px;border:1px solid #333;border-radius:2px;overflow:hidden;background:#111}
+.da-video-studio .dvs-audio-meter{width:100%;margin-top:4px}
+.da-video-studio .dvs-audio-lane-meter{width:42px;margin-top:2px}
+.da-video-studio .dvs-audio-meter i,.da-video-studio .dvs-audio-lane-meter i{display:block;height:100%;max-width:100%;background:linear-gradient(90deg,#22c55e 0 65%,#eab308 65% 85%,#ef4444 85% 100%);transition:width .09s linear}
+.da-video-studio .dvs-audio-lane-label{height:44px}
+@media(max-width:900px){.da-video-studio .dvs-audio-track-heading{align-items:flex-start;flex-direction:column}.da-video-studio .dvs-audio-track{min-width:1000px}}
