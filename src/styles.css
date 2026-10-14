@@ -698,3 +698,14 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
 .da-video-studio .dvs-timeline-tools>button:hover:not(:disabled){border-color:#00a4ef;background:#12384a}
 .da-video-studio .dvs-timeline-tools>button:disabled{opacity:.35}
 @media(max-width:900px){.da-video-studio .dvs-timeline-tools{gap:5px}.da-video-studio .dvs-timeline-tools>button{padding:5px}}
+
+.da-video-studio .dvs-audio-lane-label{height:44px;border-bottom:1px solid #111}
+.da-video-studio .dvs-audio-lane-label strong{color:#54d6a0}
+.da-video-studio .dvs-audio-lane-row{position:relative;height:44px;border-bottom:1px solid #111;background:repeating-linear-gradient(90deg,transparent 0 49px,#ffffff09 49px 50px),#1b2924}
+.da-video-studio .dvs-audio-lane-clip{position:absolute;top:4px;height:36px;display:flex;align-items:center;gap:5px;overflow:hidden;padding:0 6px;border:1px solid #2f9a6b;border-radius:2px;background:#124b36;color:#c8f7df;cursor:pointer}
+.da-video-studio .dvs-audio-lane-title{display:flex;align-items:center;gap:4px;min-width:18px;max-width:50%;overflow:hidden}
+.da-video-studio .dvs-audio-lane-title svg{flex:0 0 auto}
+.da-video-studio .dvs-audio-lane-title span{font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.da-video-studio .dvs-audio-lane-clip .dvs-waveform-bars{height:25px}
+.da-video-studio .dvs-audio-lane-clip .dvs-waveform-bars i{background:#54d6a0}
+.da-video-studio .dvs-audio-lane-clip:hover{border-color:#8be9ba;background:#165b41}
