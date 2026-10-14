@@ -756,3 +756,11 @@ svg{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}img,vid
  .da-video-studio .dvs-timeline-tools{justify-content:flex-start}
  .da-video-studio .dvs-timeline-panel>.dvs-panel-head{align-items:flex-start;flex-direction:column}
 }
+
+.da-video-studio .dvs-tool-selectors{display:flex;gap:3px;align-items:center;padding:2px;border:1px solid #333;border-radius:5px;background:#191919}
+.da-video-studio .dvs-tool-selectors button{min-width:25px;height:25px;padding:2px 6px;border:1px solid transparent;border-radius:3px;background:transparent;color:#bbb;font-size:10px;font-weight:800}
+.da-video-studio .dvs-tool-selectors button.dvs-tool-active,.da-video-studio .dvs-tool-selectors button[aria-pressed=true]{background:#12384a;border-color:#00a4ef;color:#fff}
+.da-video-studio .dvs-timeline-clip.multi-selected{border-color:#00a4ef;box-shadow:inset 0 0 0 1px #00a4ef;background:#173448}
+.da-video-studio .dvs-timeline-scroll{cursor:default}
+.da-video-studio .dvs-timeline-scroll:has(.dvs-tool-active[title^="Hand"]) {cursor:grab}
+.da-video-studio .dvs-tool-selectors button:focus-visible{outline:1px solid #00a4ef;outline-offset:1px}
