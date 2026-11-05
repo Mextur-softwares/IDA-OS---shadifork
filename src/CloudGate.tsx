@@ -231,7 +231,7 @@ function AccountSetup({ selectedApps, onCreated, onSkip }: { selectedApps:string
   </div>
 }
 
-function ExistingAccount({ onSignedIn, title='Sign in to IDA', initialName='', compact=false }: { onSignedIn:(session:IdaSession)=>void; title?:string; initialName?:string; compact?:boolean }) {
+function ExistingAccount({ onSignedIn, onCreateAccount, title='Sign in to IDA', initialName='', compact=false }: { onSignedIn:(session:IdaSession)=>void; onCreateAccount?:()=>void; title?:string; initialName?:string; compact?:boolean }) {
   const [name,setName]=useState(initialName); const [password,setPassword]=useState(''); const [busy,setBusy]=useState(false); const [message,setMessage]=useState('')
   const submit=async()=>{setBusy(true);setMessage('');const {data,error}=await supabase.rpc('ida_sign_in',{p_name:name.trim(),p_password:password});setBusy(false);if(error)setMessage(error.message);else if(data?.account_id&&data?.session_token){const next={accountId:data.account_id,sessionToken:data.session_token,displayName:data.display_name||name.trim()};writeIdaSession(next);onSignedIn(next)}}
   return <div style={{width:'100%'}}>
@@ -241,6 +241,7 @@ function ExistingAccount({ onSignedIn, title='Sign in to IDA', initialName='', c
     <label style={{display:'block',fontSize:11,opacity:.55,marginTop:14}}>PASSWORD</label><input value={password} onChange={e=>setPassword(e.target.value)} type="password" autoFocus style={inputStyle} onKeyDown={e=>{if(e.key==='Enter')void submit()}}/>
     <button disabled={busy||!name||!password} onClick={()=>void submit()} style={{...buttonStyle,opacity:(busy||!name||!password) ? .5 : 1}}>{busy?'Checking…':'Continue'}</button>
     {message&&<div style={{marginTop:13,padding:12,borderRadius:10,background:'rgba(255,255,255,.055)',fontSize:12}}>{message}</div>}
+    {!compact&&onCreateAccount&&<button type="button" onClick={onCreateAccount} style={{...switchStyle,marginTop:12,opacity:1,border:'1px solid rgba(255,255,255,.2)',borderRadius:10,padding:'12px 14px',fontWeight:650}}>Create an account</button>}
   </div>
 }
 function playLockWelcomeChime(){try{const AudioContextClass=window.AudioContext||(window as any).webkitAudioContext;if(!AudioContextClass)return;const ctx=new AudioContextClass();const start=ctx.currentTime;const master=ctx.createGain();const lowpass=ctx.createBiquadFilter();lowpass.type='lowpass';lowpass.frequency.setValueAtTime(1800,start);master.gain.setValueAtTime(0.0001,start);master.gain.linearRampToValueAtTime(0.22,start+0.32);master.gain.exponentialRampToValueAtTime(0.0001,start+2.25);lowpass.connect(master);master.connect(ctx.destination);const notes=[{f:392,t:0,d:1.65,v:.26},{f:523.25,t:.18,d:1.7,v:.19},{f:659.25,t:.42,d:1.45,v:.11}];for(const n of notes){const osc=ctx.createOscillator();const env=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(n.f,start+n.t);osc.frequency.exponentialRampToValueAtTime(n.f*.997,start+n.t+n.d);env.gain.setValueAtTime(.0001,start+n.t);env.gain.linearRampToValueAtTime(n.v,start+n.t+.22);env.gain.exponentialRampToValueAtTime(.0001,start+n.t+n.d);osc.connect(env);env.connect(lowpass);osc.start(start+n.t);osc.stop(start+n.t+n.d+.03)}void ctx.resume().catch(()=>{});window.setTimeout(()=>{void ctx.close().catch(()=>{})},2800)}catch{}}
@@ -466,7 +467,7 @@ export function CloudGate() {
     if(bootStage==='guide')return <FullscreenGuide step={guideStep} onNext={()=>setGuideStep(s=>s+1)} onBack={()=>setGuideStep(0)} onContinue={()=>setBootStage('choices')}/>
     if(bootStage==='choices')return <AppChoiceScreen selected={selectedApps} setSelected={setSelectedApps} onContinue={startInstall}/>
     if(bootStage==='account')return <AccountSetup selectedApps={selectedApps} onCreated={finishNewAccount} onSkip={()=>{try{clearLocalState();localStorage.setItem('ida-language',selectedLanguage);localStorage.setItem('ida-firstboot-complete-v3','1');localStorage.setItem(GUEST_LOCK_KEY,'1');localStorage.setItem('ida-desktop-apps',JSON.stringify(['DAPP','DaFile Explorer','DaSettings','DaTrash',...selectedApps]));localStorage.setItem('ida-taskbar',JSON.stringify(['DaSettings']))}catch{};writeIdaSession(null);setSession({accountId:'',sessionToken:'',displayName:'IDA User'});setDesktopOpen(false);lockDesktop()}}/>
-    return <ExistingAccount onSignedIn={next=>{try{localStorage.setItem('ida-firstboot-complete-v3','1')}catch{};writeIdaSession(next);setSession(next);void loadUser(next);lockDesktop()}}/>
+    return <ExistingAccount onCreateAccount={()=>{setFirstBoot(true);setGuideStep(0);setBootStage('loading');window.setTimeout(()=>setBootStage('hi'),1200)}} onSignedIn={next=>{try{localStorage.setItem('ida-firstboot-complete-v3','1')}catch{};writeIdaSession(next);setSession(next);void loadUser(next);lockDesktop()}}/>
   }
   if(!ready)return <BootScreen stage="install"/>
   if(!desktopOpen)return <LockScreen session={session} onUnlock={async next=>{try{localStorage.removeItem(GUEST_LOCK_KEY)}catch{};writeIdaSession(next);await loadUser(next);setSession(next);openDesktop()}}/>
