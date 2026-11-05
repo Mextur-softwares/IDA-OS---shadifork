@@ -241,12 +241,12 @@ function ExistingAccount({ onSignedIn, onCreateAccount, title='Sign in to IDA', 
     <label style={{display:'block',fontSize:11,opacity:.55,marginTop:14}}>PASSWORD</label><input value={password} onChange={e=>setPassword(e.target.value)} type="password" autoFocus style={inputStyle} onKeyDown={e=>{if(e.key==='Enter')void submit()}}/>
     <button disabled={busy||!name||!password} onClick={()=>void submit()} style={{...buttonStyle,opacity:(busy||!name||!password) ? .5 : 1}}>{busy?'Checking…':'Continue'}</button>
     {message&&<div style={{marginTop:13,padding:12,borderRadius:10,background:'rgba(255,255,255,.055)',fontSize:12}}>{message}</div>}
-    {!compact&&onCreateAccount&&<button type="button" onClick={onCreateAccount} style={{...switchStyle,marginTop:12,opacity:1,border:'1px solid rgba(255,255,255,.2)',borderRadius:10,padding:'12px 14px',fontWeight:650}}>Create an account</button>}
+    {onCreateAccount&&<button type="button" onClick={onCreateAccount} style={{...switchStyle,marginTop:12,opacity:1,border:'1px solid rgba(255,255,255,.2)',borderRadius:10,padding:'12px 14px',fontWeight:650}}>Create an account</button>}
   </div>
 }
 function playLockWelcomeChime(){try{const AudioContextClass=window.AudioContext||(window as any).webkitAudioContext;if(!AudioContextClass)return;const ctx=new AudioContextClass();const start=ctx.currentTime;const master=ctx.createGain();const lowpass=ctx.createBiquadFilter();lowpass.type='lowpass';lowpass.frequency.setValueAtTime(1800,start);master.gain.setValueAtTime(0.0001,start);master.gain.linearRampToValueAtTime(0.22,start+0.32);master.gain.exponentialRampToValueAtTime(0.0001,start+2.25);lowpass.connect(master);master.connect(ctx.destination);const notes=[{f:392,t:0,d:1.65,v:.26},{f:523.25,t:.18,d:1.7,v:.19},{f:659.25,t:.42,d:1.45,v:.11}];for(const n of notes){const osc=ctx.createOscillator();const env=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(n.f,start+n.t);osc.frequency.exponentialRampToValueAtTime(n.f*.997,start+n.t+n.d);env.gain.setValueAtTime(.0001,start+n.t);env.gain.linearRampToValueAtTime(n.v,start+n.t+.22);env.gain.exponentialRampToValueAtTime(.0001,start+n.t+n.d);osc.connect(env);env.connect(lowpass);osc.start(start+n.t);osc.stop(start+n.t+n.d+.03)}void ctx.resume().catch(()=>{});window.setTimeout(()=>{void ctx.close().catch(()=>{})},2800)}catch{}}
 
-function LockScreen({ session, onUnlock }: { session:IdaSession; onUnlock:(next:IdaSession)=>void }) {
+function LockScreen({ session, onUnlock, onCreateAccount }: { session:IdaSession; onUnlock:(next:IdaSession)=>void; onCreateAccount:()=>void }) {
   useEffect(()=>{playLockWelcomeChime()},[])
   const [now,setNow]=useState(new Date())
   const [wifiOn,setWifiOn]=useState(()=>{try{return localStorage.getItem('ida-internet-on')!=='0'}catch{return true}})
@@ -263,7 +263,7 @@ function LockScreen({ session, onUnlock }: { session:IdaSession; onUnlock:(next:
     .ida-unlock-card{position:relative;width:min(390px,calc(100vw - 34px));padding:30px 34px 26px;border-radius:18px;background:transparent;border:0;box-shadow:none;backdrop-filter:none;animation:idaUnlockIn .55s cubic-bezier(.2,.8,.2,1) both}
   `}</style><div className="ida-unlock-bg"/><div className="ida-unlock-card">
     <div style={{textAlign:'center',marginBottom:22}}><div style={{width:72,height:72,borderRadius:'50%',background:'rgba(0,0,0,.38)',border:'1px solid rgba(255,255,255,.4)',display:'grid',placeItems:'center',margin:'0 auto'}}><Hilal small/></div><div style={{fontSize:20,marginTop:13}}>{name}</div><div style={{fontSize:12,opacity:.58,marginTop:5}}>Enter your IDA password</div></div>
-    <ExistingAccount title="Unlock IDA" initialName={name} compact onSignedIn={onUnlock}/>
+    <ExistingAccount title="Unlock IDA" initialName={name} compact onCreateAccount={onCreateAccount} onSignedIn={onUnlock}/>
   </div></div>
   return <div onClick={()=>setUnlocking(true)} style={{position:'fixed',inset:0,zIndex:999999,overflow:'hidden',background:'#05070b',color:'#fff',fontFamily:'Segoe UI,system-ui,sans-serif',cursor:'default'}}>
     <style>{`
@@ -470,6 +470,6 @@ export function CloudGate() {
     return <ExistingAccount onCreateAccount={()=>{setFirstBoot(true);setGuideStep(0);setBootStage('loading');window.setTimeout(()=>setBootStage('hi'),1200)}} onSignedIn={next=>{try{localStorage.setItem('ida-firstboot-complete-v3','1')}catch{};writeIdaSession(next);setSession(next);void loadUser(next);lockDesktop()}}/>
   }
   if(!ready)return <BootScreen stage="install"/>
-  if(!desktopOpen)return <LockScreen session={session} onUnlock={async next=>{try{localStorage.removeItem(GUEST_LOCK_KEY)}catch{};writeIdaSession(next);await loadUser(next);setSession(next);openDesktop()}}/>
+  if(!desktopOpen)return <LockScreen session={session} onCreateAccount={()=>{try{clearLocalState();localStorage.removeItem(GUEST_LOCK_KEY);localStorage.removeItem("ida-firstboot-complete-v3")}catch{};writeIdaSession(null);setSession(null);setFirstBoot(true);setGuideStep(0);setBootStage("loading");window.setTimeout(()=>setBootStage("hi"),1200)}} onUnlock={async next=>{try{localStorage.removeItem(GUEST_LOCK_KEY)}catch{};writeIdaSession(next);await loadUser(next);setSession(next);openDesktop()}}/>
   return <><IdaDesktopBoundary><DaApps onRestartToLock={lockDesktop}/></IdaDesktopBoundary>{error&&<div style={{position:'fixed',right:10,bottom:60,zIndex:99998,padding:'8px 12px',borderRadius:10,background:'rgba(150,30,30,.85)',color:'#fff',font:'12px system-ui'}}>Cloud save error: {error}</div>}</>
 }
